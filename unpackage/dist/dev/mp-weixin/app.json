@@ -1,0 +1,38 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/about/about"
+  ],
+  "subPackages": [
+    {
+      "root": "subpkg",
+      "pages": [
+        "sakura_arms/sakura_arms"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "桌游小工具",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "selectedColor": "c00000",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "static/tab_icons/home.png",
+        "selectedIconPath": "static/tab_icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/about/about",
+        "text": "关于",
+        "iconPath": "static/tab_icons/my.png",
+        "selectedIconPath": "static/tab_icons/my-active.png"
+      }
+    ]
+  },
+  "usingComponents": {}
+}
