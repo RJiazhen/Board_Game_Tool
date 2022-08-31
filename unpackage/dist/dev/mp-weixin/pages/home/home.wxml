@@ -1,1 +1,0 @@
-<view class="container"><view class="game-item" bindtap="{{a}}"><image src="/static/sakura_arms_icon.jpg" mode="aspectFit"></image><text>散樱乱武</text></view></view>
