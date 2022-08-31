@@ -1,51 +1,59 @@
 "use strict";
+var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
-      player1: {
-        life: 10,
-        life_limit: 10,
-        aura: 3,
-        aura_limit: 5,
-        flare: 0,
-        flare_limit: null
-      },
-      shared: {
-        distance: 10,
-        distance_limit: 10,
-        shadow: 0,
-        shadow_limit: null
-      },
-      player2: {
-        life: 10,
-        life_limit: 10,
-        aura: 3,
-        aura_limit: 5,
-        flare: 0,
-        flare_limit: null
-      }
+      targetPlayer: "player1"
     };
   },
-  methods: {
-    forWardMovement(e) {
-      console.log(e.currentTarget.parentNode);
+  computed: {},
+  methods: __spreadProps(__spreadValues({}, common_vendor.mapMutations("m_sa", ["resetState", "getFromStorage"])), {
+    reset() {
+      this.resetState();
     }
+  }),
+  onLoad() {
+    this.getFromStorage();
   }
 };
+if (!Array) {
+  const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
+  const _easycom_SA_player12 = common_vendor.resolveComponent("SA_player1");
+  const _easycom_SA_shared2 = common_vendor.resolveComponent("SA_shared");
+  (_easycom_uni_icons2 + _easycom_SA_player12 + _easycom_SA_shared2)();
+}
+const _easycom_uni_icons = () => "../../uni_modules/uni-icons/components/uni-icons/uni-icons.js";
+const _easycom_SA_player1 = () => "../../components/SA_player1/SA_player1.js";
+const _easycom_SA_shared = () => "../../components/SA_shared/SA_shared.js";
+if (!Math) {
+  (_easycom_uni_icons + _easycom_SA_player1 + _easycom_SA_shared)();
+}
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
-    a: common_vendor.o(($event) => $options.forWardMovement($event)),
-    b: common_vendor.t($data.player1.aura),
-    c: common_vendor.t($data.player1.aura_limit),
-    d: common_vendor.t($data.player1.flare),
-    e: common_vendor.t($data.player1.flare_limit || "\u221E"),
-    f: common_vendor.t($data.player1.life),
-    g: common_vendor.t($data.player1.life_limit),
-    h: common_vendor.t($data.shared.distance),
-    i: common_vendor.t($data.shared.distance_limit),
-    j: common_vendor.t($data.shared.shadow),
-    k: common_vendor.t($data.shared.shadow_limit)
+    a: common_vendor.o($options.reset),
+    b: common_vendor.p({
+      type: "loop",
+      size: "50"
+    })
   };
 }
 var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/OneDrive/200-Learning/220-Computer/2-Front_End/3-MyProject/Board_Game_Tool/subpkg/sakura_arms/sakura_arms.vue"]]);

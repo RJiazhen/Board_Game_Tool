@@ -1,0 +1,1 @@
+<view class="shared"><view class="distance" data-region="distance"><text class="area-title">距：</text><text class="sakura-token-count">{{a}}</text><text class="sakura-token-limit">/{{b}}</text></view><view class="shadow" data-region="shadow"><text class="area-title">虚：</text><text class="sakura-token-count">{{c}}</text><text class="sakura-token-limit">/{{d}}</text></view></view>

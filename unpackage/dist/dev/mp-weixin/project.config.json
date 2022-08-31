@@ -18,14 +18,21 @@
   "appid": "wx74108acbe04e4cbb",
   "projectname": "Board_Game_Tool",
   "condition": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
+      "list": []
+    },
+    "game": {
+      "current": -1,
+      "list": []
+    },
     "miniprogram": {
-      "list": [
-        {
-          "name": "pages/home/home",
-          "pathName": "pages/home/home",
-          "query": ""
-        }
-      ]
+      "current": -1,
+      "list": []
     }
   },
   "editorSetting": {

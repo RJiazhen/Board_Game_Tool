@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports[Symbol.toStringTag] = "Module";
 var common_vendor = require("./common/vendor.js");
+var store_index = require("./store/index.js");
+require("./store/sakura_arms.js");
 if (!Math) {
   "./pages/home/home.js";
   "./pages/about/about.js";
@@ -9,7 +11,6 @@ if (!Math) {
 }
 const _sfc_main = {
   onLaunch: function() {
-    console.warn("\u5F53\u524D\u7EC4\u4EF6\u4EC5\u652F\u6301 uni_modules \u76EE\u5F55\u7ED3\u6784 \uFF0C\u8BF7\u5347\u7EA7 HBuilderX \u5230 3.1.0 \u7248\u672C\u4EE5\u4E0A\uFF01");
     console.log("App Launch");
   },
   onShow: function() {
@@ -22,6 +23,7 @@ const _sfc_main = {
 var App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/OneDrive/200-Learning/220-Computer/2-Front_End/3-MyProject/Board_Game_Tool/App.vue"]]);
 function createApp() {
   const app = common_vendor.createSSRApp(App);
+  app.use(store_index.store);
   return {
     app
   };
