@@ -23,7 +23,8 @@ const _sfc_main = {
   name: "SA_player1",
   data() {
     return {
-      areaName: "player1"
+      areaName: "player1",
+      advanceHold: false
     };
   },
   computed: __spreadValues({}, common_vendor.mapState("m_sa", ["player1"])),
@@ -81,20 +82,23 @@ const _sfc_main = {
   })
 };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return {
-    a: common_vendor.o(($event) => $options.advance()),
-    b: common_vendor.o(($event) => $options.breakaway()),
-    c: common_vendor.o(($event) => $options.retreat()),
-    d: common_vendor.o(($event) => $options.recover()),
-    e: common_vendor.o(($event) => $options.focus()),
-    f: common_vendor.t(_ctx.player1.aura),
-    g: common_vendor.t(_ctx.player1.aura_limit),
-    h: common_vendor.t(_ctx.player1.flare),
-    i: common_vendor.t(_ctx.player1.flare_limit || "\u221E"),
-    j: common_vendor.t(_ctx.player1.life),
-    k: common_vendor.t(_ctx.player1.life_limit),
-    l: common_vendor.o((...args) => _ctx.changeTargetPlayer && _ctx.changeTargetPlayer(...args))
-  };
+  return common_vendor.e({
+    a: common_vendor.t(_ctx.player1.aura),
+    b: common_vendor.t(_ctx.player1.aura_limit),
+    c: common_vendor.t(_ctx.player1.flare),
+    d: common_vendor.t(_ctx.player1.flare_limit || "\u221E"),
+    e: common_vendor.t(_ctx.player1.life),
+    f: common_vendor.t(_ctx.player1.life_limit),
+    g: common_vendor.o(($event) => $options.advance()),
+    h: $data.advanceHold
+  }, $data.advanceHold ? {
+    i: common_vendor.o(($event) => $options.breakaway())
+  } : {}, {
+    j: common_vendor.o(($event) => $options.retreat()),
+    k: common_vendor.o(($event) => $options.recover()),
+    l: common_vendor.o(($event) => $options.focus()),
+    m: common_vendor.o((...args) => _ctx.changeTargetPlayer && _ctx.changeTargetPlayer(...args))
+  });
 }
 var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/OneDrive/200-Learning/220-Computer/2-Front_End/3-MyProject/Board_Game_Tool/components/SA_player1/SA_player1.vue"]]);
 wx.createComponent(Component);

@@ -45,8 +45,9 @@
   .container {
     height: 100vh;
     position: relative;
-
+    background-color: #dddddd;
     // 临时内容
+
     .tem {
       position: absolute;
       top: 0;
@@ -62,16 +63,17 @@
 
       .player2 {
         width: 100%;
-        height: 40%;
+        height: 40vh;
         background-color: #8a8a8a
       }
 
       .shared {
-        height: 20%;
+        height: 20vh;
       }
 
       .player1 {
-        height: 40%;
+        height: 40vh;
+
       }
     }
   }

@@ -1,0 +1,70 @@
+/* 水平间距 */
+/* 水平间距 */
+.personal-status {
+  height: 14vh;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.5vh;
+}
+.personal-status .area {
+  background-color: #fff;
+  width: 32%;
+  height: 13.5vh;
+  position: relative;
+  border-radius: 5px;
+  box-shadow: 7px 7px 6px rgba(0, 0, 0, 0.4), -7px -7px 12px rgba(255, 255, 255, 0.9);
+}
+.personal-status .area .area-title {
+  position: absolute;
+  font-size: 30px;
+  right: 5%;
+  bottom: 3%;
+}
+.personal-status .area .area-token-num {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+}
+.personal-status .area .area-token-num .area-token-count {
+  font-size: 55px;
+}
+.personal-status .area .area-token-num .area-token-limit {
+  font-size: 10px;
+  color: #0f0f0f;
+}
+.action {
+  display: flex;
+  height: 26vh;
+  padding: 0 1vw;
+}
+.action .action-button {
+  height: 11vh;
+  font-size: 23px;
+  text-align: center;
+  line-height: 11vh;
+  margin-top: 5px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 7px 7px 6px rgba(0, 0, 0, 0.4), -7px -7px 12px rgba(255, 255, 255, 0.9);
+}
+.action .basic-action {
+  width: 60vw;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+.action .basic-action .action-button {
+  width: 28vw;
+}
+.action .other-action {
+  width: 39vw;
+  margin-left: 1vw;
+}
+.action .other-action .danger {
+  background-color: #D9534F;
+  color: #fff;
+  border: solid 2px #D43F3A;
+  box-sizing: border-box;
+}

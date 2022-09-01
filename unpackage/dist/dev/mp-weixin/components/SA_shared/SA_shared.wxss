@@ -19,7 +19,7 @@
   width: 33%;
   position: relative;
   border-radius: 20px;
-  border: outset 3px;
+  box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.4), -7px -7px 12px rgba(255, 255, 255, 0.9);
   background-color: #fff;
 }
 .shared .distance .for-player1 {

@@ -25,9 +25,10 @@
   }
 
   /* #endif */
-  .example-info {
-    font-size: 14px;
-    color: #333;
-    padding: 10px;
+
+  view {
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
   }
 </style>

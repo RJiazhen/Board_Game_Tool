@@ -79,9 +79,11 @@
       width: 33%;
       position: relative;
       border-radius: 20px;
-      // border-left: #0f0f0f 1px;
-      // border-right: #0f0f0f 1px;
-      border: outset 3px;
+      // border: solid 1px #a2a2a2;
+      box-shadow:
+        // 立体阴影
+        7px 7px 12px rgba(0, 0, 0, .4),
+        -7px -7px 12px rgba(255, 255, 255, .9);
       background-color: #fff;
 
       .for-player1 {
