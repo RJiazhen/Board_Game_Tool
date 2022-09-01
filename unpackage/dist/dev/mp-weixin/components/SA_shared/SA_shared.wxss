@@ -1,0 +1,50 @@
+/* 水平间距 */
+/* 水平间距 */
+.shared {
+  display: flex;
+  justify-content: space-between;
+  background-color: #dddddd;
+}
+.shared .area-title {
+  font-size: 30px;
+}
+.shared .sakura-token-count {
+  font-size: 40px;
+}
+.shared .sakura-token-limit {
+  font-size: 10px;
+  color: #0f0f0f;
+}
+.shared .distance {
+  width: 33%;
+  position: relative;
+  border-radius: 20px;
+  border: outset 3px;
+  background-color: #fff;
+}
+.shared .distance .for-player1 {
+  position: absolute;
+  left: 5%;
+  top: 3%;
+  transform: rotate(180deg);
+}
+.shared .distance .for-player2 {
+  position: absolute;
+  right: 5%;
+  bottom: 3%;
+}
+.shared .shadow-container {
+  width: 33%;
+  position: relative;
+}
+.shared .shadow-container .right-shadow {
+  position: absolute;
+  right: 5%;
+  bottom: 3%;
+}
+.shared .shadow-container .left-shadow {
+  position: absolute;
+  left: 5%;
+  top: 3%;
+  rotate: 180deg;
+}

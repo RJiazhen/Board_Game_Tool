@@ -37,15 +37,15 @@ const _sfc_main = {
 };
 if (!Array) {
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
-  const _easycom_SA_player12 = common_vendor.resolveComponent("SA_player1");
   const _easycom_SA_shared2 = common_vendor.resolveComponent("SA_shared");
-  (_easycom_uni_icons2 + _easycom_SA_player12 + _easycom_SA_shared2)();
+  const _easycom_SA_player12 = common_vendor.resolveComponent("SA_player1");
+  (_easycom_uni_icons2 + _easycom_SA_shared2 + _easycom_SA_player12)();
 }
 const _easycom_uni_icons = () => "../../uni_modules/uni-icons/components/uni-icons/uni-icons.js";
-const _easycom_SA_player1 = () => "../../components/SA_player1/SA_player1.js";
 const _easycom_SA_shared = () => "../../components/SA_shared/SA_shared.js";
+const _easycom_SA_player1 = () => "../../components/SA_player1/SA_player1.js";
 if (!Math) {
-  (_easycom_uni_icons + _easycom_SA_player1 + _easycom_SA_shared)();
+  (_easycom_uni_icons + _easycom_SA_shared + _easycom_SA_player1)();
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {

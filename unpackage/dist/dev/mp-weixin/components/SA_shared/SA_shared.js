@@ -29,10 +29,14 @@ const _sfc_main = {
 };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
-    a: common_vendor.t(_ctx.shared.distance),
-    b: common_vendor.t(_ctx.shared.distance_limit),
-    c: common_vendor.t(_ctx.shared.shadow),
-    d: common_vendor.t(_ctx.shared.shadow_limit)
+    a: common_vendor.t(_ctx.shared.shadow),
+    b: common_vendor.t(_ctx.shared.shadow_limit ? _ctx.shared.shadow_limit : "\u221E"),
+    c: common_vendor.t(_ctx.shared.distance),
+    d: common_vendor.t(_ctx.shared.distance_limit),
+    e: common_vendor.t(_ctx.shared.distance),
+    f: common_vendor.t(_ctx.shared.distance_limit),
+    g: common_vendor.t(_ctx.shared.shadow),
+    h: common_vendor.t(_ctx.shared.shadow_limit ? _ctx.shared.shadow_limit : "\u221E")
   };
 }
 var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/OneDrive/200-Learning/220-Computer/2-Front_End/3-MyProject/Board_Game_Tool/components/SA_shared/SA_shared.vue"]]);

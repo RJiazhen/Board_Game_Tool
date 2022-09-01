@@ -2,7 +2,7 @@
   "enablePullDownRefresh": false,
   "usingComponents": {
     "uni-icons": "../../uni_modules/uni-icons/components/uni-icons/uni-icons",
-    "s-a_player1": "../../components/SA_player1/SA_player1",
-    "s-a_shared": "../../components/SA_shared/SA_shared"
+    "s-a_shared": "../../components/SA_shared/SA_shared",
+    "s-a_player1": "../../components/SA_player1/SA_player1"
   }
 }

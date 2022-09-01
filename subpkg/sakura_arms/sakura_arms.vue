@@ -1,14 +1,17 @@
 <template>
-  <view>
-    <uni-icons type="loop" @click="reset" size="50"></uni-icons>
+  <view class="container">
+    <uni-icons class="tem" type="loop" @click="reset" size="50"></uni-icons>
     <!-- 菜单 -->
     <view class="menu"></view>
     <!-- 游戏版图 -->
     <view class="game-board">
-      <!-- 玩家一 -->
-      <SA_player1></SA_player1>
+      <!-- 玩家二 -->
+      <view class="player2">
+      </view>
       <!-- 公共区域 -->
       <SA_shared></SA_shared>
+      <!-- 玩家一 -->
+      <SA_player1></SA_player1>
     </view>
   </view>
 </template>
@@ -39,5 +42,37 @@
 </script>
 
 <style lang="scss">
+  .container {
+    height: 100vh;
+    position: relative;
 
+    // 临时内容
+    .tem {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .menu {}
+
+    // 游戏版图
+    .game-board {
+      height: 100%;
+      width: 100%;
+
+      .player2 {
+        width: 100%;
+        height: 40%;
+        background-color: #8a8a8a
+      }
+
+      .shared {
+        height: 20%;
+      }
+
+      .player1 {
+        height: 40%;
+      }
+    }
+  }
 </style>
