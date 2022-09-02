@@ -9,9 +9,9 @@
       <view class="player2">
       </view>
       <!-- 公共区域 -->
-      <SA_shared></SA_shared>
+      <SA_shared TopAreaName="shared"></SA_shared>
       <!-- 玩家一 -->
-      <SA_player1></SA_player1>
+      <SA_player1 TopAreaName="player1"></SA_player1>
     </view>
   </view>
 </template>
@@ -23,10 +23,7 @@
   } from 'vuex'
   export default {
     data() {
-      return {
-        // 事件的指向玩家
-        targetPlayer: "player1",
-      };
+      return {};
     },
     computed: {},
     methods: {

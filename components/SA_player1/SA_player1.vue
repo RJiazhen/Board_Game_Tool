@@ -1,9 +1,9 @@
 <template>
-  <view class="player1" data-player="player1" @click="changeTargetPlayer">
+  <view class="player1" data-player="player1" @click="playerClick">
     <!-- 樱花结晶面板 -->
     <view class="personal-status">
       <!-- 装 -->
-      <view class="aura area" data-region="aura">
+      <view class="aura area" data-area="aura" @click="areaClick">
         <view class="area-token-num">
           <text class="area-token-count">{{player1.aura}}</text>
           <text class="area-token-limit">/{{player1.aura_limit}}</text>
@@ -11,7 +11,7 @@
         <view class="area-title">装</view>
       </view>
       <!-- 气 -->
-      <view class="flare area" data-region="flare">
+      <view class="flare area" data-area="flare" @click="areaClick">
         <view class="area-token-num">
           <text class="area-token-count">{{player1.flare}}</text>
           <text class="area-token-limit">/{{player1.flare_limit||"∞"}}</text>
@@ -19,7 +19,7 @@
         <view class="area-title">气</view>
       </view>
       <!-- 命 -->
-      <view class="life area" data-region="life">
+      <view class="life area" data-area="life" @click="areaClick">
         <view class="area-token-num">
           <text class="area-token-count">{{player1.life}}</text>
           <text class="area-token-limit">/{{player1.life_limit}}</text>
@@ -27,6 +27,7 @@
         <view class="area-title">命</view>
       </view>
     </view>
+    <!-- 动作 -->
     <view class="action">
       <!-- 基础动作 -->
       <view class="basic-action" data-test="test">
@@ -56,71 +57,85 @@
     name: "SA_player1",
     data() {
       return {
-        areaName: 'player1',
         // 控制脱离按钮是否显示
         advanceHold: false,
       }
     },
+    props: {
+      TopAreaName: {
+        type: String,
+      }
+    },
     computed: {
-      ...mapState('m_sa', ['player1']),
+      ...mapState('m_sa', ['player1', 'movementParas']),
 
     },
     methods: {
-      ...mapMutations('m_sa', ['moveSakuraToken', 'test']),
+      ...mapMutations('m_sa', ['moveSakuraToken', 'resetMovementParas']),
+
+      // 区域点击
+      areaClick(e) {
+        // 如果和上一次点击的区域相同
+        if (this.movementParas.from1 == this.TopAreaName && this.movementParas.from2 == e.currentTarget.dataset.area) {
+          this.resetMovementParas()
+          return
+        }
+        // 如果已经准备移动token
+        if (this.movementParas.isReadyToMove) {
+          this.movementParas.to1 = this.TopAreaName;
+          this.movementParas.to2 = e.currentTarget.dataset.area;
+          this.moveSakuraToken()
+          return
+        }
+        this.movementParas.from1 = this.TopAreaName;
+        this.movementParas.from2 = e.currentTarget.dataset.area;
+        this.movementParas.amount = 1
+        this.movementParas.isReadyToMove = true
+      },
       // 前进
       advance() {
-        const para = {
-          from1: 'shared',
-          from2: 'distance',
-          to1: this.areaName,
-          to2: 'aura',
-          amount: 1
-        }
-        this.moveSakuraToken(para)
+        this.movementParas.from1 = 'shared';
+        this.movementParas.from2 = 'distance';
+        this.movementParas.to1 = this.TopAreaName;
+        this.movementParas.to2 = 'aura';
+        this.movementParas.amount = 1;
+        this.moveSakuraToken()
       },
       // 脱离
       breakaway() {
-        const para = {
-          from1: 'shared',
-          from2: 'shadow',
-          to1: 'shared',
-          to2: 'distance',
-          amount: 1
-        }
-        this.moveSakuraToken(para)
+        this.movementParas.from1 = 'shared';
+        this.movementParas.from2 = 'shadow';
+        this.movementParas.to1 = 'shared';
+        this.movementParas.to2 = 'distance';
+        this.movementParas.amount = 1;
+        this.moveSakuraToken()
       },
       // 后退
       retreat() {
-        const para = {
-          from1: this.areaName,
-          from2: 'aura',
-          to1: 'shared',
-          to2: 'distance',
-          amount: 1
-        }
-        this.moveSakuraToken(para)
+        this.movementParas.from1 = this.TopAreaName;
+        this.movementParas.from2 = 'aura';
+        this.movementParas.to1 = 'shared';
+        this.movementParas.to2 = 'distance';
+        this.movementParas.amount = 1;
+        this.moveSakuraToken()
       },
       // 装附
       recover() {
-        const para = {
-          from1: 'shared',
-          from2: 'shadow',
-          to1: this.areaName,
-          to2: 'aura',
-          amount: 1
-        }
-        this.moveSakuraToken(para)
+        this.movementParas.from1 = 'shared';
+        this.movementParas.from2 = 'shadow';
+        this.movementParas.to1 = this.TopAreaName;
+        this.movementParas.to2 = 'aura';
+        this.movementParas.amount = 1;
+        this.moveSakuraToken()
       },
       // 聚气
       focus() {
-        const para = {
-          from1: this.areaName,
-          from2: 'aura',
-          to1: this.areaName,
-          to2: 'flare',
-          amount: 1
-        }
-        this.moveSakuraToken(para)
+        this.movementParas.from1 = this.TopAreaName;
+        this.movementParas.from2 = 'aura';
+        this.movementParas.to1 = this.TopAreaName;
+        this.movementParas.to2 = 'flare';
+        this.movementParas.amount = 1;
+        this.moveSakuraToken()
       },
       // 结束回合
       // 重铸牌库

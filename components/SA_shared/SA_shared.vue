@@ -1,7 +1,7 @@
 <template>
   <view class="shared">
     <!-- 左侧「虚」 -->
-    <view class="shadow-container" data-region="shadow">
+    <view class="shadow-container" data-area="shadow" @click="areaClick">
       <view class="left-shadow">
         <text class="sakura-token-count">{{shared.shadow}}</text>
         <text class="sakura-token-limit">/{{shared.shadow_limit?shared.shadow_limit:"∞"}}</text>
@@ -9,7 +9,7 @@
       </view>
     </view>
     <!-- 「距」 -->
-    <view class="distance" data-region="distance">
+    <view class="distance" data-area="distance" @click="areaClick">
       <view class="for-player1">
         <text class="sakura-token-count">{{shared.distance}}</text>
         <text class="sakura-token-limit">/{{shared.distance_limit}}</text>
@@ -22,7 +22,7 @@
       </view>
     </view>
     <!-- 右侧「虚」 -->
-    <view class="shadow-container" data-region="shadow">
+    <view class="shadow-container" data-area="shadow" @click="areaClick">
       <view class="right-shadow">
         <text class="sakura-token-count">{{shared.shadow}}</text>
         <text class="sakura-token-limit">/{{shared.shadow_limit?shared.shadow_limit:"∞"}}</text>
@@ -45,11 +45,36 @@
         to: ''
       }
     },
+    props: {
+      TopAreaName: {
+        type: String,
+      }
+    },
     computed: {
-      ...mapState('m_sa', ['shared'])
+      ...mapState('m_sa', ['shared', 'movementParas'])
     },
     methods: {
-      ...mapMutations('m_sa', ['moveSakuraToken'])
+      ...mapMutations('m_sa', ['moveSakuraToken', 'resetMovementParas']),
+
+      // 区域点击
+      areaClick(e) {
+        // 如果和上一次点击的区域相同
+        if (this.movementParas.from1 == this.TopAreaName && this.movementParas.from2 == e.currentTarget.dataset.area) {
+          this.resetMovementParas()
+          return
+        }
+        // 如果已经准备移动token
+        if (this.movementParas.isReadyToMove) {
+          this.movementParas.to1 = this.TopAreaName;
+          this.movementParas.to2 = e.currentTarget.dataset.area;
+          this.moveSakuraToken()
+          return
+        }
+        this.movementParas.from1 = this.TopAreaName;
+        this.movementParas.from2 = e.currentTarget.dataset.area;
+        this.movementParas.amount = 1
+        this.movementParas.isReadyToMove = true
+      },
     }
   }
 </script>

@@ -23,61 +23,71 @@ const _sfc_main = {
   name: "SA_player1",
   data() {
     return {
-      areaName: "player1",
       advanceHold: false
     };
   },
-  computed: __spreadValues({}, common_vendor.mapState("m_sa", ["player1"])),
-  methods: __spreadProps(__spreadValues({}, common_vendor.mapMutations("m_sa", ["moveSakuraToken", "test"])), {
+  props: {
+    TopAreaName: {
+      type: String
+    }
+  },
+  computed: __spreadValues({}, common_vendor.mapState("m_sa", ["player1", "movementParas"])),
+  methods: __spreadProps(__spreadValues({}, common_vendor.mapMutations("m_sa", ["moveSakuraToken", "resetMovementParas"])), {
+    areaClick(e) {
+      if (this.movementParas.from1 == this.TopAreaName && this.movementParas.from2 == e.currentTarget.dataset.area) {
+        this.resetMovementParas();
+        return;
+      }
+      if (this.movementParas.isReadyToMove) {
+        this.movementParas.to1 = this.TopAreaName;
+        this.movementParas.to2 = e.currentTarget.dataset.area;
+        this.moveSakuraToken();
+        return;
+      }
+      this.movementParas.from1 = this.TopAreaName;
+      this.movementParas.from2 = e.currentTarget.dataset.area;
+      this.movementParas.amount = 1;
+      this.movementParas.isReadyToMove = true;
+    },
     advance() {
-      const para = {
-        from1: "shared",
-        from2: "distance",
-        to1: this.areaName,
-        to2: "aura",
-        amount: 1
-      };
-      this.moveSakuraToken(para);
+      this.movementParas.from1 = "shared";
+      this.movementParas.from2 = "distance";
+      this.movementParas.to1 = this.TopAreaName;
+      this.movementParas.to2 = "aura";
+      this.movementParas.amount = 1;
+      this.moveSakuraToken();
     },
     breakaway() {
-      const para = {
-        from1: "shared",
-        from2: "shadow",
-        to1: "shared",
-        to2: "distance",
-        amount: 1
-      };
-      this.moveSakuraToken(para);
+      this.movementParas.from1 = "shared";
+      this.movementParas.from2 = "shadow";
+      this.movementParas.to1 = "shared";
+      this.movementParas.to2 = "distance";
+      this.movementParas.amount = 1;
+      this.moveSakuraToken();
     },
     retreat() {
-      const para = {
-        from1: this.areaName,
-        from2: "aura",
-        to1: "shared",
-        to2: "distance",
-        amount: 1
-      };
-      this.moveSakuraToken(para);
+      this.movementParas.from1 = this.TopAreaName;
+      this.movementParas.from2 = "aura";
+      this.movementParas.to1 = "shared";
+      this.movementParas.to2 = "distance";
+      this.movementParas.amount = 1;
+      this.moveSakuraToken();
     },
     recover() {
-      const para = {
-        from1: "shared",
-        from2: "shadow",
-        to1: this.areaName,
-        to2: "aura",
-        amount: 1
-      };
-      this.moveSakuraToken(para);
+      this.movementParas.from1 = "shared";
+      this.movementParas.from2 = "shadow";
+      this.movementParas.to1 = this.TopAreaName;
+      this.movementParas.to2 = "aura";
+      this.movementParas.amount = 1;
+      this.moveSakuraToken();
     },
     focus() {
-      const para = {
-        from1: this.areaName,
-        from2: "aura",
-        to1: this.areaName,
-        to2: "flare",
-        amount: 1
-      };
-      this.moveSakuraToken(para);
+      this.movementParas.from1 = this.TopAreaName;
+      this.movementParas.from2 = "aura";
+      this.movementParas.to1 = this.TopAreaName;
+      this.movementParas.to2 = "flare";
+      this.movementParas.amount = 1;
+      this.moveSakuraToken();
     }
   })
 };
@@ -85,19 +95,22 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
     a: common_vendor.t(_ctx.player1.aura),
     b: common_vendor.t(_ctx.player1.aura_limit),
-    c: common_vendor.t(_ctx.player1.flare),
-    d: common_vendor.t(_ctx.player1.flare_limit || "\u221E"),
-    e: common_vendor.t(_ctx.player1.life),
-    f: common_vendor.t(_ctx.player1.life_limit),
-    g: common_vendor.o(($event) => $options.advance()),
-    h: $data.advanceHold
+    c: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args)),
+    d: common_vendor.t(_ctx.player1.flare),
+    e: common_vendor.t(_ctx.player1.flare_limit || "\u221E"),
+    f: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args)),
+    g: common_vendor.t(_ctx.player1.life),
+    h: common_vendor.t(_ctx.player1.life_limit),
+    i: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args)),
+    j: common_vendor.o(($event) => $options.advance()),
+    k: $data.advanceHold
   }, $data.advanceHold ? {
-    i: common_vendor.o(($event) => $options.breakaway())
+    l: common_vendor.o(($event) => $options.breakaway())
   } : {}, {
-    j: common_vendor.o(($event) => $options.retreat()),
-    k: common_vendor.o(($event) => $options.recover()),
-    l: common_vendor.o(($event) => $options.focus()),
-    m: common_vendor.o((...args) => _ctx.changeTargetPlayer && _ctx.changeTargetPlayer(...args))
+    m: common_vendor.o(($event) => $options.retreat()),
+    n: common_vendor.o(($event) => $options.recover()),
+    o: common_vendor.o(($event) => $options.focus()),
+    p: common_vendor.o((...args) => _ctx.playerClick && _ctx.playerClick(...args))
   });
 }
 var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/OneDrive/200-Learning/220-Computer/2-Front_End/3-MyProject/Board_Game_Tool/components/SA_player1/SA_player1.vue"]]);

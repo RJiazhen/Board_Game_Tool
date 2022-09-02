@@ -1,5 +1,7 @@
 "use strict";
 var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
@@ -15,6 +17,7 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   name: "SA_shared",
@@ -24,19 +27,44 @@ const _sfc_main = {
       to: ""
     };
   },
-  computed: __spreadValues({}, common_vendor.mapState("m_sa", ["shared"])),
-  methods: __spreadValues({}, common_vendor.mapMutations("m_sa", ["moveSakuraToken"]))
+  props: {
+    TopAreaName: {
+      type: String
+    }
+  },
+  computed: __spreadValues({}, common_vendor.mapState("m_sa", ["shared", "movementParas"])),
+  methods: __spreadProps(__spreadValues({}, common_vendor.mapMutations("m_sa", ["moveSakuraToken", "resetMovementParas"])), {
+    areaClick(e) {
+      if (this.movementParas.from1 == this.TopAreaName && this.movementParas.from2 == e.currentTarget.dataset.area) {
+        this.resetMovementParas();
+        return;
+      }
+      if (this.movementParas.isReadyToMove) {
+        this.movementParas.to1 = this.TopAreaName;
+        this.movementParas.to2 = e.currentTarget.dataset.area;
+        this.moveSakuraToken();
+        return;
+      }
+      this.movementParas.from1 = this.TopAreaName;
+      this.movementParas.from2 = e.currentTarget.dataset.area;
+      this.movementParas.amount = 1;
+      this.movementParas.isReadyToMove = true;
+    }
+  })
 };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
     a: common_vendor.t(_ctx.shared.shadow),
     b: common_vendor.t(_ctx.shared.shadow_limit ? _ctx.shared.shadow_limit : "\u221E"),
-    c: common_vendor.t(_ctx.shared.distance),
-    d: common_vendor.t(_ctx.shared.distance_limit),
-    e: common_vendor.t(_ctx.shared.distance),
-    f: common_vendor.t(_ctx.shared.distance_limit),
-    g: common_vendor.t(_ctx.shared.shadow),
-    h: common_vendor.t(_ctx.shared.shadow_limit ? _ctx.shared.shadow_limit : "\u221E")
+    c: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args)),
+    d: common_vendor.t(_ctx.shared.distance),
+    e: common_vendor.t(_ctx.shared.distance_limit),
+    f: common_vendor.t(_ctx.shared.distance),
+    g: common_vendor.t(_ctx.shared.distance_limit),
+    h: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args)),
+    i: common_vendor.t(_ctx.shared.shadow),
+    j: common_vendor.t(_ctx.shared.shadow_limit ? _ctx.shared.shadow_limit : "\u221E"),
+    k: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args))
   };
 }
 var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/OneDrive/200-Learning/220-Computer/2-Front_End/3-MyProject/Board_Game_Tool/components/SA_shared/SA_shared.vue"]]);

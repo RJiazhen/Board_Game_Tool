@@ -5,10 +5,18 @@ var moduleSakuraArms = {
   state: () => ({
     player1: {},
     shared: {},
-    player2: {}
+    player2: {},
+    movementParas: {
+      isReadyToMove: false,
+      from1: "",
+      from2: "",
+      to1: "",
+      to2: "",
+      amount: 1
+    }
   }),
   mutations: {
-    resetState() {
+    resetState(state) {
       common_vendor.index.removeStorage({
         key: "sa_player1",
         success: () => {
@@ -24,7 +32,6 @@ var moduleSakuraArms = {
       this.commit("m_sa/getFromStorage");
     },
     saveToStorage(state) {
-      console.log("save");
       common_vendor.index.setStorageSync("sa_player1", JSON.stringify(state.player1));
       common_vendor.index.setStorageSync("sa_shared", JSON.stringify(state.shared));
     },
@@ -44,13 +51,24 @@ var moduleSakuraArms = {
         flare_limit: null
       };
     },
-    moveSakuraToken(state, payload) {
-      state[payload.from1][payload.from2] -= payload.amount;
-      state[payload.to1][payload.to2] += payload.amount;
+    moveSakuraToken(state) {
+      state[state.movementParas.from1][state.movementParas.from2] -= state.movementParas.amount;
+      state[state.movementParas.to1][state.movementParas.to2] += state.movementParas.amount;
       this.commit("m_sa/saveToStorage");
+      this.commit("m_sa/resetMovementParas");
+    },
+    resetMovementParas(state) {
+      state.movementParas = {
+        isReadyToMove: false,
+        from1: "",
+        from2: "",
+        to1: "",
+        to2: "",
+        amount: 1
+      };
     },
     checkSakuraTokenAmount(state, payload) {
-      return state[payload.to1][payload.to2] + payload.amount > state[payload.to1][payload.to2 + "_limit"] ? common_vendor.index.$showMsg("fail") : true;
+      return state[state.movementParas.to1][state.movementParas.to2] + state.movementParas.amount > state[state.movementParas.to1][state.movementParas.to2 + "_limit"] ? common_vendor.index.$showMsg("fail") : true;
     }
   }
 };

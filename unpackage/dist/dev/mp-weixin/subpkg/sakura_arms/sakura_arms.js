@@ -21,9 +21,7 @@ var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
-    return {
-      targetPlayer: "player1"
-    };
+    return {};
   },
   computed: {},
   methods: __spreadProps(__spreadValues({}, common_vendor.mapMutations("m_sa", ["resetState", "getFromStorage"])), {
@@ -53,6 +51,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     b: common_vendor.p({
       type: "loop",
       size: "50"
+    }),
+    c: common_vendor.p({
+      TopAreaName: "shared"
+    }),
+    d: common_vendor.p({
+      TopAreaName: "player1"
     })
   };
 }
