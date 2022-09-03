@@ -39,23 +39,30 @@ var moduleSakuraArms = {
       state.shared = common_vendor.index.getStorageSync("sa_shared").length != 0 ? JSON.parse(common_vendor.index.getStorageSync("sa_shared")) : {
         distance: 10,
         distance_limit: 10,
+        distance_class: "",
         shadow: 0,
-        shadow_limit: null
+        shadow_limit: null,
+        shadow_class: ""
       };
       state.player1 = common_vendor.index.getStorageSync("sa_player1").length != 0 ? JSON.parse(common_vendor.index.getStorageSync("sa_player1")) : {
         life: 10,
         life_limit: 10,
+        life_class: "",
         aura: 3,
         aura_limit: 5,
+        aura_class: "",
         flare: 0,
-        flare_limit: null
+        flare_limit: null,
+        flare_class: ""
       };
+      this.commit("m_sa/saveToStorage");
     },
     moveSakuraToken(state) {
       state[state.movementParas.from1][state.movementParas.from2] -= state.movementParas.amount;
       state[state.movementParas.to1][state.movementParas.to2] += state.movementParas.amount;
-      this.commit("m_sa/saveToStorage");
       this.commit("m_sa/resetMovementParas");
+      this.commit("m_sa/resetClass");
+      this.commit("m_sa/saveToStorage");
     },
     resetMovementParas(state) {
       state.movementParas = {
@@ -66,6 +73,16 @@ var moduleSakuraArms = {
         to2: "",
         amount: 1
       };
+    },
+    resetClass(state) {
+      state.shared.distance_class = "";
+      state.shared.shadow_class = "";
+      state.player1.aura_class = "";
+      state.player1.flare_class = "";
+      state.player1.life_class = "";
+      state.player2.aura_class = "";
+      state.player2.flare_class = "";
+      state.player2.life_class = "";
     },
     checkSakuraTokenAmount(state, payload) {
       return state[state.movementParas.to1][state.movementParas.to2] + state.movementParas.amount > state[state.movementParas.to1][state.movementParas.to2 + "_limit"] ? common_vendor.index.$showMsg("fail") : true;

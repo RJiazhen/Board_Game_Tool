@@ -33,16 +33,23 @@ const _sfc_main = {
     }
   },
   computed: __spreadValues({}, common_vendor.mapState("m_sa", ["shared", "movementParas"])),
-  methods: __spreadProps(__spreadValues({}, common_vendor.mapMutations("m_sa", ["moveSakuraToken", "resetMovementParas"])), {
+  methods: __spreadProps(__spreadValues({}, common_vendor.mapMutations("m_sa", ["moveSakuraToken", "resetMovementParas", "resetClass", "saveToStorage"])), {
     areaClick(e) {
+      const classIndex = e.currentTarget.dataset.area + "_class";
+      this.shared[classIndex] = "active";
       if (this.movementParas.from1 == this.TopAreaName && this.movementParas.from2 == e.currentTarget.dataset.area) {
         this.resetMovementParas();
+        this.resetClass();
+        this.saveToStorage();
         return;
       }
       if (this.movementParas.isReadyToMove) {
         this.movementParas.to1 = this.TopAreaName;
         this.movementParas.to2 = e.currentTarget.dataset.area;
-        this.moveSakuraToken();
+        let timer = setTimeout(() => {
+          this.moveSakuraToken();
+          clearTimeout(timer);
+        }, 300);
         return;
       }
       this.movementParas.from1 = this.TopAreaName;
@@ -56,15 +63,19 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
     a: common_vendor.t(_ctx.shared.shadow),
     b: common_vendor.t(_ctx.shared.shadow_limit ? _ctx.shared.shadow_limit : "\u221E"),
-    c: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args)),
-    d: common_vendor.t(_ctx.shared.distance),
-    e: common_vendor.t(_ctx.shared.distance_limit),
-    f: common_vendor.t(_ctx.shared.distance),
-    g: common_vendor.t(_ctx.shared.distance_limit),
-    h: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args)),
-    i: common_vendor.t(_ctx.shared.shadow),
-    j: common_vendor.t(_ctx.shared.shadow_limit ? _ctx.shared.shadow_limit : "\u221E"),
-    k: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args))
+    c: common_vendor.n(_ctx.shared.shadow_class),
+    d: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args)),
+    e: common_vendor.t(_ctx.shared.distance),
+    f: common_vendor.t(_ctx.shared.distance_limit),
+    g: common_vendor.t(_ctx.shared.distance),
+    h: common_vendor.t(_ctx.shared.distance_limit),
+    i: common_vendor.n(_ctx.shared.distance_class),
+    j: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args)),
+    k: common_vendor.t(_ctx.shared.shadow),
+    l: common_vendor.t(_ctx.shared.shadow_limit ? _ctx.shared.shadow_limit : "\u221E"),
+    m: common_vendor.n(_ctx.shared.shadow_class),
+    n: common_vendor.o((...args) => $options.areaClick && $options.areaClick(...args)),
+    o: common_vendor.n(_ctx.shared.shadow_class)
   };
 }
 var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/OneDrive/200-Learning/220-Computer/2-Front_End/3-MyProject/Board_Game_Tool/components/SA_shared/SA_shared.vue"]]);

@@ -3,7 +3,7 @@
     <!-- 樱花结晶面板 -->
     <view class="personal-status">
       <!-- 装 -->
-      <view class="aura area" data-area="aura" @click="areaClick">
+      <view class="aura area" :class="player1.aura_class" data-area="aura" @click="areaClick">
         <view class="area-token-num">
           <text class="area-token-count">{{player1.aura}}</text>
           <text class="area-token-limit">/{{player1.aura_limit}}</text>
@@ -11,7 +11,7 @@
         <view class="area-title">装</view>
       </view>
       <!-- 气 -->
-      <view class="flare area" data-area="flare" @click="areaClick">
+      <view class="flare area" :class="player1.flare_class" data-area="flare" @click="areaClick">
         <view class="area-token-num">
           <text class="area-token-count">{{player1.flare}}</text>
           <text class="area-token-limit">/{{player1.flare_limit||"∞"}}</text>
@@ -19,7 +19,7 @@
         <view class="area-title">气</view>
       </view>
       <!-- 命 -->
-      <view class="life area" data-area="life" @click="areaClick">
+      <view class="life area" :class="player1.life_class" data-area="life" @click="areaClick">
         <view class="area-token-num">
           <text class="area-token-count">{{player1.life}}</text>
           <text class="area-token-limit">/{{player1.life_limit}}</text>
@@ -43,7 +43,6 @@
         <view class="action-button danger" size="mini">结束回合</view>
         <!-- <view class="action-button" size="mini">重铸牌库</view> -->
       </view>
-
     </view>
   </view>
 </template>
@@ -59,6 +58,8 @@
       return {
         // 控制脱离按钮是否显示
         advanceHold: false,
+        isActive: true,
+        areaClass: ""
       }
     },
     props: {
@@ -68,23 +69,31 @@
     },
     computed: {
       ...mapState('m_sa', ['player1', 'movementParas']),
-
     },
     methods: {
-      ...mapMutations('m_sa', ['moveSakuraToken', 'resetMovementParas']),
-
+      ...mapMutations('m_sa', ['moveSakuraToken', 'resetMovementParas', 'resetClass', 'saveToStorage']),
       // 区域点击
       areaClick(e) {
+        // 修改样式
+        const classIndex = e.currentTarget.dataset.area + "_class"
+        this.player1[classIndex] = "active"
         // 如果和上一次点击的区域相同
         if (this.movementParas.from1 == this.TopAreaName && this.movementParas.from2 == e.currentTarget.dataset.area) {
+          // 重置移动参数和Class
           this.resetMovementParas()
+          this.resetClass()
+          this.saveToStorage()
           return
         }
         // 如果已经准备移动token
         if (this.movementParas.isReadyToMove) {
           this.movementParas.to1 = this.TopAreaName;
           this.movementParas.to2 = e.currentTarget.dataset.area;
-          this.moveSakuraToken()
+          // 延时移动token，以防样式变化太快
+          let timer = setTimeout(() => {
+            this.moveSakuraToken()
+            clearTimeout(timer)
+          }, 300)
           return
         }
         this.movementParas.from1 = this.TopAreaName;
@@ -145,15 +154,16 @@
 </script>
 
 <style lang="scss">
-  // 状态区
+  .active {
+    background-color: #f7e887 !important;
+  }
+
   .personal-status {
     height: 14vh;
     display: flex;
     justify-content: space-between;
     padding-top: 0.5vh;
-    // padding-bottom: 1vh;
 
-    // background-color: #dddddd;
     .area {
       background-color: #fff;
       width: 32%;
@@ -161,10 +171,12 @@
       position: relative;
       border-radius: 5px;
       // border: solid 1px #a2a2a2;
-      box-shadow:
-        // 立体阴影
+      transition: .1s all;
+      box-shadow: // 立体阴影
         7px 7px 6px rgba(0, 0, 0, .4),
         -7px -7px 12px rgba(255, 255, 255, .9);
+      // 控制激活时样式变化效果
+      transition: 1s all;
 
 
       .area-title {

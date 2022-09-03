@@ -3,7 +3,9 @@
 .shared {
   display: flex;
   justify-content: space-between;
-  background-color: #dddddd;
+}
+.shared.active {
+  background-color: #f7e887;
 }
 .shared .area-title {
   font-size: 30px;
@@ -13,7 +15,6 @@
 }
 .shared .sakura-token-limit {
   font-size: 10px;
-  color: #0f0f0f;
 }
 .shared .distance {
   width: 33%;
@@ -21,6 +22,11 @@
   border-radius: 20px;
   box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.4), -7px -7px 12px rgba(255, 255, 255, 0.9);
   background-color: #fff;
+  overflow: hidden;
+  transition: 0.5s all;
+}
+.shared .distance.active {
+  background-color: #f7e887;
 }
 .shared .distance .for-player1 {
   position: absolute;
@@ -36,6 +42,9 @@
 .shared .shadow-container {
   width: 33%;
   position: relative;
+}
+.shared .shadow-container.active {
+  background-color: #f7e887;
 }
 .shared .shadow-container .right-shadow {
   position: absolute;
