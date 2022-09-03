@@ -54,18 +54,63 @@
   box-shadow: 7px 7px 6px rgba(0, 0, 0, 0.4), -7px -7px 12px rgba(255, 255, 255, 0.9);
 }
 .action .basic-action {
-  width: 60vw;
+  width: 40vw;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   align-content: flex-start;
 }
 .action .basic-action .action-button {
-  width: 28vw;
+  width: 19vw;
 }
 .action .other-action {
-  width: 39vw;
-  margin-left: 1vw;
+  width: 59vw;
+  margin-left: 2px;
+}
+.action .other-action .enhancement {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.action .other-action .enhancement .enhancement-cards {
+  display: flex;
+  background-color: #689766;
+}
+.action .other-action .enhancement .enhancement-cards .enhancement-card {
+  position: relative;
+  align-content: flex-start;
+  box-sizing: border-box;
+  border-right: 1px solid #595959;
+  width: 7vw;
+}
+.action .other-action .enhancement .enhancement-cards .enhancement-card .token-count {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 25px;
+  line-height: 25px;
+  font-size: 25px;
+}
+.action .other-action .enhancement .enhancement-cards .enhancement-card .card-num {
+  position: absolute;
+  bottom: 3px;
+  right: 1px;
+  height: 15px;
+  line-height: 15px;
+  font-size: 15px;
+}
+.action .other-action .enhancement .plus-button {
+  width: 100%;
+  position: relative;
+}
+.action .other-action .enhancement .plus-button .tips {
+  position: absolute;
+  bottom: 10px;
+  right: 50%;
+  transform: translateX(50%);
+  font-size: 10px;
+  line-height: 10px;
 }
 .action .other-action .danger {
   background-color: #D9534F;

@@ -25,7 +25,7 @@ const _sfc_main = {
     return {
       advanceHold: false,
       isActive: true,
-      areaClass: ""
+      addEnhancementClicked: false
     };
   },
   props: {
@@ -97,9 +97,33 @@ const _sfc_main = {
       this.movementParas.to2 = "flare";
       this.movementParas.amount = 1;
       this.moveSakuraToken();
+    },
+    addEnhancement() {
+      if (this.addEnhancementClicked) {
+        this.addEnhancementClicked = !this.addEnhancementClicked;
+        return;
+      }
+      this.addEnhancementClicked = !this.addEnhancementClicked;
+      const enhancement = this.player1.enhancement;
+      for (let cardIndex in enhancement) {
+        if (enhancement[cardIndex] === 0) {
+          enhancement[cardIndex] = 1;
+          break;
+        }
+      }
+      console.log("player1:", this.player1.enhancement);
+      console.log("test:", enhancement);
     }
   })
 };
+if (!Array) {
+  const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
+  _easycom_uni_icons2();
+}
+const _easycom_uni_icons = () => "../../uni_modules/uni-icons/components/uni-icons/uni-icons.js";
+if (!Math) {
+  _easycom_uni_icons();
+}
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
     a: common_vendor.t(_ctx.player1.aura),
@@ -122,7 +146,36 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     p: common_vendor.o(($event) => $options.retreat()),
     q: common_vendor.o(($event) => $options.recover()),
     r: common_vendor.o(($event) => $options.focus()),
-    s: common_vendor.o((...args) => _ctx.playerClick && _ctx.playerClick(...args))
+    s: common_vendor.f(this.player1.enhancement, (tokenCount, cardIndex, i0) => {
+      return common_vendor.e({
+        a: tokenCount > 0
+      }, tokenCount > 0 ? {
+        b: common_vendor.t(tokenCount),
+        c: common_vendor.t(cardIndex)
+      } : {}, {
+        d: cardIndex
+      });
+    }),
+    t: !$data.addEnhancementClicked
+  }, !$data.addEnhancementClicked ? {
+    v: common_vendor.p({
+      type: "plus",
+      size: "35",
+      color: "#32527F"
+    })
+  } : {}, {
+    w: !$data.addEnhancementClicked
+  }, !$data.addEnhancementClicked ? {} : {}, {
+    x: $data.addEnhancementClicked
+  }, $data.addEnhancementClicked ? {
+    y: common_vendor.p({
+      type: "checkbox",
+      size: "35",
+      color: "green"
+    })
+  } : {}, {
+    z: common_vendor.o((...args) => $options.addEnhancement && $options.addEnhancement(...args)),
+    A: common_vendor.o((...args) => _ctx.playerClick && _ctx.playerClick(...args))
   });
 }
 var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/OneDrive/200-Learning/220-Computer/2-Front_End/3-MyProject/Board_Game_Tool/components/SA_player1/SA_player1.vue"]]);

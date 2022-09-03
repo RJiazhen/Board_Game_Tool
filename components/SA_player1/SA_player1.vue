@@ -39,7 +39,20 @@
       </view>
       <!-- 其他动作 -->
       <view class="other-action">
-        <view class="action-button" size="mini">打出付与牌</view>
+        <view class="enhancement action-button">
+          <!-- 循环遍历生成付与牌 -->
+          <view v-for="(tokenCount,cardIndex) in this.player1.enhancement" :key="cardIndex" class="enhancement-cards">
+            <view class="enhancement-card" v-if="tokenCount>0">
+              <text class="token-count">{{tokenCount}}</text>
+              <text class="card-num">{{cardIndex}}</text>
+            </view>
+          </view>
+          <view class="plus-button" @click="addEnhancement">
+            <uni-icons v-if="!addEnhancementClicked" type="plus" size="35" color="#32527F"></uni-icons>
+            <text v-if="!addEnhancementClicked" class="tips">打出付与牌</text>
+            <uni-icons v-if="addEnhancementClicked" type="checkbox" size="35" color="green"></uni-icons>
+          </view>
+        </view>
         <view class="action-button danger" size="mini">结束回合</view>
         <!-- <view class="action-button" size="mini">重铸牌库</view> -->
       </view>
@@ -59,7 +72,7 @@
         // 控制脱离按钮是否显示
         advanceHold: false,
         isActive: true,
-        areaClass: ""
+        addEnhancementClicked: false,
       }
     },
     props: {
@@ -149,6 +162,22 @@
       // 结束回合
       // 重铸牌库
       // 打出付与牌
+      addEnhancement() {
+        if (this.addEnhancementClicked) {
+          this.addEnhancementClicked = !this.addEnhancementClicked
+          return
+        }
+        this.addEnhancementClicked = !this.addEnhancementClicked
+        const enhancement = this.player1.enhancement
+        for (let cardIndex in enhancement) {
+          if (enhancement[cardIndex] === 0) {
+            enhancement[cardIndex] = 1
+            break
+          }
+        }
+        console.log('player1:', this.player1.enhancement);
+        console.log('test:', enhancement);
+      },
     },
   }
 </script>
@@ -230,21 +259,74 @@
 
     // 基本动作
     .basic-action {
-      width: 60vw;
+      width: 40vw;
       display: flex;
       justify-content: space-around;
       flex-wrap: wrap;
       align-content: flex-start;
 
       .action-button {
-        width: 28vw;
+        width: 19vw;
       }
     }
 
     // 其他动作
     .other-action {
-      width: 39vw;
-      margin-left: 1vw;
+      width: 59vw;
+      margin-left: 2px;
+
+      .enhancement {
+        display: flex;
+        justify-content: space-between;
+        overflow: hidden;
+
+        .enhancement-cards {
+          display: flex;
+          background-color: #689766;
+
+          .enhancement-card {
+            position: relative;
+            align-content: flex-start;
+            box-sizing: border-box;
+            border-right: 1px solid #595959;
+            width: 7vw;
+
+            .token-count {
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              height: 25px;
+              line-height: 25px;
+              font-size: 25px;
+            }
+
+            .card-num {
+              position: absolute;
+              bottom: 3px;
+              right: 1px;
+              height: 15px;
+              line-height: 15px;
+              font-size: 15px;
+
+            }
+          }
+        }
+
+        .plus-button {
+          width: 100%;
+          position: relative;
+
+          .tips {
+            position: absolute;
+            bottom: 10px;
+            right: 50%;
+            transform: translateX(50%);
+            font-size: 10px;
+            line-height: 10px;
+          }
+        }
+      }
 
       .danger {
         background-color: #D9534F;

@@ -53,7 +53,16 @@ var moduleSakuraArms = {
         aura_class: "",
         flare: 0,
         flare_limit: null,
-        flare_class: ""
+        flare_class: "",
+        enhancement: {
+          A: 0,
+          B: 0,
+          C: 0,
+          D: 0,
+          E: 0,
+          F: 0,
+          G: 0
+        }
       };
       this.commit("m_sa/saveToStorage");
     },

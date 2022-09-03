@@ -76,6 +76,15 @@ export default {
           flare_class: "",
 
           // 付与牌
+          enhancement: {
+            A: 0,
+            B: 0,
+            C: 0,
+            D: 0,
+            E: 0,
+            F: 0,
+            G: 0
+          }
         }
 
       // 更新本地存储
