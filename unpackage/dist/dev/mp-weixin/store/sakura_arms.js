@@ -58,8 +58,23 @@ var moduleSakuraArms = {
       this.commit("m_sa/saveToStorage");
     },
     moveSakuraToken(state) {
-      state[state.movementParas.from1][state.movementParas.from2] -= state.movementParas.amount;
-      state[state.movementParas.to1][state.movementParas.to2] += state.movementParas.amount;
+      console.log("move");
+      if (state[state.movementParas.from1][state.movementParas.from2] < state.movementParas.amount) {
+        console.log("notEn");
+        common_vendor.index.showToast({
+          title: "token\u6570\u91CF\u4E0D\u8DB3",
+          icon: "error"
+        });
+      } else if (state[state.movementParas.to1][state.movementParas.to2 + "_limit"] != null && state[state.movementParas.to1][state.movementParas.to2 + "_limit"] < state[state.movementParas.to1][state.movementParas.to2] + state.movementParas.amount) {
+        console.log("overLimit");
+        common_vendor.index.showToast({
+          title: "token\u8D85\u8FC7\u4E0A\u9650",
+          icon: "error"
+        });
+      } else {
+        state[state.movementParas.from1][state.movementParas.from2] -= state.movementParas.amount;
+        state[state.movementParas.to1][state.movementParas.to2] += state.movementParas.amount;
+      }
       this.commit("m_sa/resetMovementParas");
       this.commit("m_sa/resetClass");
       this.commit("m_sa/saveToStorage");

@@ -84,8 +84,30 @@ export default {
 
     // 移动樱花指示物
     moveSakuraToken(state) {
-      state[state.movementParas.from1][state.movementParas.from2] -= state.movementParas.amount
-      state[state.movementParas.to1][state.movementParas.to2] += state.movementParas.amount
+      console.log('move');
+      // 如果来源区域没有有足够的token数量
+      if (state[state.movementParas.from1][state.movementParas.from2] < state.movementParas.amount) {
+        console.log('notEn');
+        uni.showToast({
+          title: 'token数量不足',
+          icon: "error"
+        })
+      }
+      // 如果移动后是否超过目标区域的token上限
+      else if (state[state.movementParas.to1][state.movementParas.to2 + '_limit'] != null &&
+        state[state.movementParas.to1][state.movementParas.to2 + '_limit'] <
+        (state[state.movementParas.to1][state.movementParas.to2] + state.movementParas.amount)) {
+        console.log('overLimit');
+        uni.showToast({
+          title: 'token超过上限',
+          icon: "error"
+        })
+      }
+      // 上述检查均通过后
+      else {
+        state[state.movementParas.from1][state.movementParas.from2] -= state.movementParas.amount
+        state[state.movementParas.to1][state.movementParas.to2] += state.movementParas.amount
+      }
       // 重置移动相关的参数
       this.commit('m_sa/resetMovementParas')
       // 重置样式
