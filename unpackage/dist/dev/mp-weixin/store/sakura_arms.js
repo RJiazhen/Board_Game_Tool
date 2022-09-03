@@ -3,6 +3,38 @@ var common_vendor = require("../common/vendor.js");
 var moduleSakuraArms = {
   namespaced: true,
   state: () => ({
+    initialState: {
+      shared: {
+        distance: 10,
+        distance_limit: 10,
+        distance_class: "",
+        shadow: 0,
+        shadow_limit: null,
+        shadow_class: ""
+      },
+      player1: {
+        life: 10,
+        life_limit: 10,
+        life_class: "",
+        aura: 3,
+        aura_limit: 5,
+        aura_class: "",
+        flare: 0,
+        flare_limit: null,
+        flare_class: "",
+        enhancement: {
+          A: {
+            count: 0
+          },
+          B: 0,
+          C: 0,
+          D: 0,
+          E: 0,
+          F: 0,
+          G: 0
+        }
+      }
+    },
     player1: {},
     shared: {},
     player2: {},
@@ -36,34 +68,8 @@ var moduleSakuraArms = {
       common_vendor.index.setStorageSync("sa_shared", JSON.stringify(state.shared));
     },
     getFromStorage(state) {
-      state.shared = common_vendor.index.getStorageSync("sa_shared").length != 0 ? JSON.parse(common_vendor.index.getStorageSync("sa_shared")) : {
-        distance: 10,
-        distance_limit: 10,
-        distance_class: "",
-        shadow: 0,
-        shadow_limit: null,
-        shadow_class: ""
-      };
-      state.player1 = common_vendor.index.getStorageSync("sa_player1").length != 0 ? JSON.parse(common_vendor.index.getStorageSync("sa_player1")) : {
-        life: 10,
-        life_limit: 10,
-        life_class: "",
-        aura: 3,
-        aura_limit: 5,
-        aura_class: "",
-        flare: 0,
-        flare_limit: null,
-        flare_class: "",
-        enhancement: {
-          A: 0,
-          B: 0,
-          C: 0,
-          D: 0,
-          E: 0,
-          F: 0,
-          G: 0
-        }
-      };
+      state.shared = common_vendor.index.getStorageSync("sa_shared").length != 0 ? JSON.parse(common_vendor.index.getStorageSync("sa_shared")) : JSON.parse(JSON.stringify(state.initialState.shared));
+      state.player1 = common_vendor.index.getStorageSync("sa_player1").length != 0 ? JSON.parse(common_vendor.index.getStorageSync("sa_player1")) : JSON.parse(JSON.stringify(state.initialState.player1));
       this.commit("m_sa/saveToStorage");
     },
     moveSakuraToken(state) {

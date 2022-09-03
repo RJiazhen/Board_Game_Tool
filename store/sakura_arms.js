@@ -1,10 +1,51 @@
 export default {
   namespaced: true,
   state: () => ({
-    // 玩家一的相关数值
+    // 初始状态数据
+    initialState: {
+      shared: {
+        distance: 10,
+        distance_limit: 10,
+        distance_class: '',
+        shadow: 0,
+        shadow_limit: null,
+        shadow_class: '',
+      },
+      player1: {
+        // 命
+        life: 10,
+        life_limit: 10,
+        life_class: "",
+        // 装
+        aura: 3,
+        aura_limit: 5,
+        aura_class: "",
+
+        // 气
+        flare: 0,
+        flare_limit: null,
+        flare_class: "",
+
+        // 付与牌
+        enhancement: {
+          A: {
+            count: 0,
+
+          },
+          B: 0,
+          C: 0,
+          D: 0,
+          E: 0,
+          F: 0,
+          G: 0
+        }
+      }
+    },
+    // 玩家一
     player1: {},
     // 公用区域
     shared: {},
+    // 玩家二
     player2: {},
     // 移动token时的相关参数
     movementParas: {
@@ -48,44 +89,14 @@ export default {
 
     // 从本地获取state数据，如无数据则设定为默认值
     getFromStorage(state) {
-      // 公用区域相关数据
+      // 获取公用区域相关数据
       state.shared = uni.getStorageSync('sa_shared').length != 0 ?
-        JSON.parse(uni.getStorageSync('sa_shared')) : {
-          distance: 10,
-          distance_limit: 10,
-          distance_class: '',
-          shadow: 0,
-          shadow_limit: null,
-          shadow_class: '',
-        }
-      // player1相关数据
+        JSON.parse(uni.getStorageSync('sa_shared')) :
+        JSON.parse(JSON.stringify(state.initialState.shared))
+      // 获取player1相关数据
       state.player1 = uni.getStorageSync('sa_player1').length != 0 ?
-        JSON.parse(uni.getStorageSync('sa_player1')) : {
-          // 命
-          life: 10,
-          life_limit: 10,
-          life_class: "",
-          // 装
-          aura: 3,
-          aura_limit: 5,
-          aura_class: "",
-
-          // 气
-          flare: 0,
-          flare_limit: null,
-          flare_class: "",
-
-          // 付与牌
-          enhancement: {
-            A: 0,
-            B: 0,
-            C: 0,
-            D: 0,
-            E: 0,
-            F: 0,
-            G: 0
-          }
-        }
+        JSON.parse(uni.getStorageSync('sa_player1')) :
+        JSON.parse(JSON.stringify(state.initialState.player1))
 
       // 更新本地存储
       this.commit('m_sa/saveToStorage')
