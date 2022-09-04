@@ -1,32 +1,32 @@
 <template>
   <!-- 因为「虚」区域是使用外层容器的背景，所以当「虚」区域处于激活状态时改变外层容器的样式 -->
-  <view class="shared" :class="shared.shadow_class">
+  <view class="shared" :class="shared.shadow.class">
     <!-- 左侧「虚」 -->
-    <view class="shadow-container" :class="shared.shadow_class" data-area="shadow" @click="areaClick">
+    <view class="shadow-container" :class="shared.shadow.class" data-area="shadow" @click="areaClick">
       <view class="left-shadow">
-        <text class="sakura-token-count">{{shared.shadow}}</text>
-        <text class="sakura-token-limit">/{{shared.shadow_limit?shared.shadow_limit:"∞"}}</text>
+        <text class="sakura-token-count">{{shared.shadow.count}}</text>
+        <text class="sakura-token-limit">/{{shared.shadow.limit?shared.shadow.limit:"∞"}}</text>
         <text class="area-title">虚</text>
       </view>
     </view>
     <!-- 「距」 -->
-    <view class="distance" :class="shared.distance_class" data-area="distance" @click="areaClick">
+    <view class="distance" :class="shared.distance.class" data-area="distance" @click="areaClick">
       <view class="for-player1">
-        <text class="sakura-token-count">{{shared.distance}}</text>
-        <text class="sakura-token-limit">/{{shared.distance_limit}}</text>
+        <text class="sakura-token-count">{{shared.distance.count}}</text>
+        <text class="sakura-token-limit">/{{shared.distance.limit}}</text>
         <text class="area-title">距</text>
       </view>
       <view class="for-player2">
-        <text class="sakura-token-count">{{shared.distance}}</text>
-        <text class="sakura-token-limit">/{{shared.distance_limit}}</text>
+        <text class="sakura-token-count">{{shared.distance.count}}</text>
+        <text class="sakura-token-limit">/{{shared.distance.limit}}</text>
         <text class="area-title">距</text>
       </view>
     </view>
     <!-- 右侧「虚」 -->
-    <view class="shadow-container" :class="shared.shadow_class" data-area="shadow" @click="areaClick">
+    <view class="shadow-container" :class="shared.shadow.class" data-area="shadow" @click="areaClick">
       <view class="right-shadow">
-        <text class="sakura-token-count">{{shared.shadow}}</text>
-        <text class="sakura-token-limit">/{{shared.shadow_limit?shared.shadow_limit:"∞"}}</text>
+        <text class="sakura-token-count">{{shared.shadow.count}}</text>
+        <text class="sakura-token-limit">/{{shared.shadow.limit?shared.shadow.limit:"∞"}}</text>
         <text class="area-title">虚</text>
       </view>
     </view>
@@ -74,9 +74,15 @@
   .shared {
     display: flex;
     justify-content: space-between;
+    transition: 1.5s all;
 
     &.active {
       background-color: #f7e887;
+    }
+
+    // 要打出付与牌时的区域样式
+    &.move-to-enhancement {
+      background-color: #689766;
     }
 
     .area-title {
@@ -104,7 +110,7 @@
         -7px -7px 12px rgba(255, 255, 255, .9);
       background-color: #fff;
       overflow: hidden;
-      transition: 0.5s all;
+      // transition: 0.5s all;
 
       &.active {
         background-color: #f7e887;
@@ -132,7 +138,11 @@
 
       &.active {
         background-color: #f7e887;
+      }
 
+      // 要打出付与牌时的区域样式
+      &.move-to-enhancement {
+        background-color: #689766;
       }
 
       .right-shadow {

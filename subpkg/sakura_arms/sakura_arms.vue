@@ -11,7 +11,7 @@
       <!-- 公共区域 -->
       <SA_shared TopAreaName="shared"></SA_shared>
       <!-- 玩家一 -->
-      <SA_player1 TopAreaName="player1"></SA_player1>
+      <SA_player TopAreaName="player1"></SA_player>
     </view>
   </view>
 </template>
@@ -32,6 +32,7 @@
         this.resetState()
       }
     },
+    // 加载时从本地存储获取数据
     onLoad() {
       this.getFromStorage()
     }

@@ -1,28 +1,28 @@
 <template>
-  <view class="player1" data-player="player1" @click="playerClick">
+  <view class="player" data-player="player">
     <!-- 樱花结晶面板 -->
     <view class="personal-status">
       <!-- 装 -->
-      <view class="aura area" :class="player1.aura_class" data-area="aura" @click="areaClick">
+      <view class="aura area" :class="player.aura.class" data-area="aura" @click="areaClick">
         <view class="area-token-num">
-          <text class="area-token-count">{{player1.aura}}</text>
-          <text class="area-token-limit">/{{player1.aura_limit}}</text>
+          <text class="area-token-count">{{player.aura.count}}</text>
+          <text class="area-token-limit">/{{player.aura.limit}}</text>
         </view>
         <view class="area-title">装</view>
       </view>
       <!-- 气 -->
-      <view class="flare area" :class="player1.flare_class" data-area="flare" @click="areaClick">
+      <view class="flare area" :class="player.flare.class" data-area="flare" @click="areaClick">
         <view class="area-token-num">
-          <text class="area-token-count">{{player1.flare}}</text>
-          <text class="area-token-limit">/{{player1.flare_limit||"∞"}}</text>
+          <text class="area-token-count">{{player.flare.count}}</text>
+          <text class="area-token-limit">/{{player.flare.limit||"∞"}}</text>
         </view>
         <view class="area-title">气</view>
       </view>
       <!-- 命 -->
-      <view class="life area" :class="player1.life_class" data-area="life" @click="areaClick">
+      <view class="life area" :class="player.life.class" data-area="life" @click="areaClick">
         <view class="area-token-num">
-          <text class="area-token-count">{{player1.life}}</text>
-          <text class="area-token-limit">/{{player1.life_limit}}</text>
+          <text class="area-token-count">{{player.life.count}}</text>
+          <text class="area-token-limit">/{{player.life.limit}}</text>
         </view>
         <view class="area-title">命</view>
       </view>
@@ -41,8 +41,9 @@
       <view class="other-action">
         <view class="enhancement action-button">
           <!-- 循环遍历生成付与牌 -->
-          <view v-for="(cardState,cardIndex) in this.player1.enhancement" :key="cardIndex" class="enhancement-cards">
-            <view class="enhancement-card" v-if="cardState.count>0 || cardState.show">
+          <view v-for="(cardState,cardIndex) in player.enhancement" :key="cardIndex" class="enhancement-cards">
+            <view class="enhancement-card" :class="player.enhancement[cardIndex]['class']"
+              v-if="cardState.count>0 || cardState.show" @click="areaClick" :data-area="'enhancement.'+cardIndex">
               <text class="token-count">{{cardState.count}}</text>
               <text class="card-num">{{cardIndex}}</text>
             </view>
@@ -71,7 +72,7 @@
   import _ from "lodash"
   export default {
     mixins: [saMixin],
-    name: "SA_player1",
+    name: "SA_player",
     data() {
       return {
         // 控制脱离按钮是否显示
@@ -86,12 +87,16 @@
       }
     },
     computed: {
-      ...mapState('m_sa', ['player1', 'movementParas']),
+      ...mapState('m_sa', ['shared', 'movementParas']),
+      player() {
+        return this.$store.state.m_sa[this.TopAreaName]
+      }
     },
     methods: {
-      ...mapMutations('m_sa', ['moveSakuraToken']),
+      ...mapMutations('m_sa', ['moveSakuraToken', 'resetEnhancementShow', 'resetMovementParas']),
       // 区域点击
       areaClick(e) {
+        console.log('click');
         // 调用混入的saAreaClick方法
         this.saAreaClick(e)
       },
@@ -134,21 +139,35 @@
       // 重铸牌库
       // 打出付与牌
       addEnhancement() {
+        // 在按下的状态下再按下则重置相关状态
         if (this.addEnhancementClicked) {
+          // 重置按钮样式以及「虚」和「装」的样式
           this.addEnhancementClicked = !this.addEnhancementClicked
+          this.shared.shadow.class = ''
+          this.player.aura.class = ''
+          // 重置付与牌的show为false
+          this.resetEnhancementShow()
+          // 重置移动参数
+          this.resetMovementParas()
           return
         }
+        // 更新按下的状态变量
         this.addEnhancementClicked = !this.addEnhancementClicked
-        for (let cardIndex in this.player1.enhancement) {
+        // 变换按钮样式以及「虚」和「装」的样式
+        this.shared.shadow.class = 'move-to-enhancement'
+        this.player.aura.class = 'move-to-enhancement'
+        for (let cardIndex in this.player.enhancement) {
           // 显示编号最靠前的，且count为0的付与牌
-          if (this.player1.enhancement[cardIndex]['count'] === 0) {
-            this.player1.enhancement[cardIndex]['show'] = true
-            this.movementParas.to1 = this.TopAreaName;
-            // this.movementParas.to2 =
+          console.log('cardIndex:', cardIndex);
+          console.log(this.player.enhancement[cardIndex]);
+          if (this.player.enhancement[cardIndex]['count'] === 0) {
+            this.player.enhancement[cardIndex]['show'] = true
+            // 修改移动token的相关变量为该附与牌
+            this.movementParas.to = `${this.TopAreaName}.enhancement.${cardIndex}.count`;
+            this.movementParas.isReadyToMove = true
             break
           }
         }
-        console.log('player1:', this.player1.enhancement);
       },
     },
   }
@@ -159,11 +178,18 @@
     background-color: #f7e887 !important;
   }
 
+  .move-to-enhancement {
+    background-color: #689766 !important;
+  }
+
+  // 个人状态
   .personal-status {
     height: 14vh;
     display: flex;
     justify-content: space-between;
     padding-top: 0.5vh;
+    // 控制激活时样式变化效果
+    transition: 1s all;
 
     .area {
       background-color: #fff;
@@ -176,8 +202,6 @@
       box-shadow: // 立体阴影
         7px 7px 6px rgba(0, 0, 0, .4),
         -7px -7px 12px rgba(255, 255, 255, .9);
-      // 控制激活时样式变化效果
-      transition: 1s all;
 
 
       .area-title {
@@ -255,6 +279,7 @@
         .enhancement-cards {
           display: flex;
           background-color: #689766;
+
 
           .enhancement-card {
             position: relative;

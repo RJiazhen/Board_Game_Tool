@@ -5,57 +5,72 @@ export default {
     // 初始状态数据
     initialState: {
       shared: {
-        distance: 10,
-        distance_limit: 10,
-        distance_class: '',
-        shadow: 0,
-        shadow_limit: null,
-        shadow_class: '',
+        distance: {
+          count: 10,
+          limit: 10,
+          class: '',
+        },
+        shadow: {
+          count: 0,
+          limit: null,
+          class: '',
+        }
       },
-      player1: {
-        // 命
-        life: 10,
-        life_limit: 10,
-        life_class: "",
+      player: {
         // 装
-        aura: 3,
-        aura_limit: 5,
-        aura_class: "",
-
+        aura: {
+          count: 3,
+          limit: 5,
+          class: ""
+        },
+        // 命
+        life: {
+          count: 10,
+          limit: 10,
+          class: '',
+        },
         // 气
-        flare: 0,
-        flare_limit: null,
-        flare_class: "",
-
+        flare: {
+          count: 0,
+          limit: null,
+          class: '',
+        },
         // 付与牌
         enhancement: {
           A: {
             count: 0,
             show: false,
+            class: "",
           },
           B: {
             count: 0,
             show: false,
+            class: "",
           },
           C: {
             count: 0,
             show: false,
+            class: "",
           },
           D: {
             count: 0,
             show: false,
+            class: "",
           },
           E: {
             count: 0,
             show: false,
+            class: "",
           },
           F: {
             count: 0,
             show: false,
+            class: "",
           },
           G: {
             count: 0,
             show: false,
+            class: "",
           },
         }
       }
@@ -72,10 +87,6 @@ export default {
       from: '',
       to: '',
       isReadyToMove: false,
-      from1: '',
-      from2: '',
-      to1: '',
-      to2: '',
       amount: 1,
     },
   }),
@@ -90,9 +101,14 @@ export default {
           return
         }
       })
-      // uni.setStorageSync('sa_player2', JSON.stringify(state.player2))
       uni.removeStorage({
         key: 'sa_shared',
+        success: () => {
+          return
+        }
+      })
+      uni.removeStorage({
+        key: 'sa_player2',
         success: () => {
           return
         }
@@ -104,7 +120,7 @@ export default {
     // 把state存储到本地
     saveToStorage(state) {
       uni.setStorageSync('sa_player1', JSON.stringify(state.player1))
-      // uni.setStorageSync('sa_player2', JSON.stringify(state.player2))
+      uni.setStorageSync('sa_player2', JSON.stringify(state.player2))
       uni.setStorageSync('sa_shared', JSON.stringify(state.shared))
     },
 
@@ -117,8 +133,11 @@ export default {
       // 获取player1相关数据
       state.player1 = uni.getStorageSync('sa_player1').length != 0 ?
         JSON.parse(uni.getStorageSync('sa_player1')) :
-        JSON.parse(JSON.stringify(state.initialState.player1))
-
+        JSON.parse(JSON.stringify(state.initialState.player))
+      // 获取player2相关数据
+      state.player2 = uni.getStorageSync('sa_player2').length != 0 ?
+        JSON.parse(uni.getStorageSync('sa_player2')) :
+        JSON.parse(JSON.stringify(state.initialState.player))
       // 更新本地存储
       this.commit('m_sa/saveToStorage')
     },
@@ -131,7 +150,7 @@ export default {
       const toAreaTokenCount = _.get(state, state.movementParas.to) // 目标区域的token数量
       const toAreaTokenLimit = _.get(state, state.movementParas.to + '_limit') // 目标区域的token上限
 
-      console.log(fromAreaTokenCount, toAreaTokenCount, toAreaTokenLimit);
+      // console.log(fromAreaTokenCount, toAreaTokenCount, toAreaTokenLimit);
       // 如果来源区域没有有足够的token数量
       if (fromAreaTokenCount < moveTokenAmout) {
         console.log('notEn');
@@ -153,10 +172,14 @@ export default {
         _.update(state, state.movementParas.from, (n) => n - state.movementParas.amount)
         _.update(state, state.movementParas.to, (n) => n + state.movementParas.amount)
       }
-      // 重置移动相关的参数
-      this.commit('m_sa/resetMovementParas')
-      // 重置样式
-      this.commit('m_sa/resetClass')
+
+      // 当不是移动付与牌的状态时才能重置参数
+      if (state.shared.shadow.class != 'move-to-enhancement') {
+        // 重置移动相关的参数
+        this.commit('m_sa/resetMovementParas')
+        // 重置样式
+        this.commit('m_sa/resetClass')
+      }
       // 存储数据到本地
       this.commit('m_sa/saveToStorage')
     },
@@ -165,24 +188,41 @@ export default {
     resetMovementParas(state) {
       state.movementParas = {
         isReadyToMove: false,
-        from1: '',
-        from2: '',
-        to1: '',
-        to2: '',
+        from: '',
+        to: '',
         amount: 1,
       }
     },
 
     // 重置样式相关数据
     resetClass(state) {
-      state.shared.distance_class = ''
-      state.shared.shadow_class = ''
-      state.player1.aura_class = ''
-      state.player1.flare_class = ''
-      state.player1.life_class = ''
-      state.player2.aura_class = ''
-      state.player2.flare_class = ''
-      state.player2.life_class = ''
+      state.shared.distance.class = ''
+      state.shared.shadow.class = ''
+      state.player1.aura.class = ''
+      state.player1.flare.class = ''
+      state.player1.life.class = ''
+      state.player2.aura.class = ''
+      state.player2.flare.class = ''
+      state.player2.life.class = ''
+      console.log(state.player1.enhancement);
+      for (let cardIndex in state.player1.enhancement) {
+        console.log('card', state.player1.enhancement[cardIndex]);
+        state.player1.enhancement[cardIndex]['class'] = ''
+      }
+      for (let cardIndex in state.player2.enhancement) {
+        console.log('card', state.player1.enhancement[cardIndex]);
+        state.player1.enhancement[cardIndex]['class'] = ''
+      }
+    },
+
+    // 重置付与牌的show为false
+    resetEnhancementShow(state) {
+      for (let cardIndex in state.player1.enhancement) {
+        state.player1.enhancement[cardIndex]['show'] = false
+      }
+      for (let cardIndex in state.player2.enhancement) {
+        state.player2.enhancement[cardIndex]['show'] = false
+      }
     },
   }
 }
