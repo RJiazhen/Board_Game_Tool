@@ -78,7 +78,6 @@
         // 控制脱离按钮是否显示
         advanceHold: false,
         isActive: true,
-        addEnhancementClicked: false,
       }
     },
     props: {
@@ -90,7 +89,11 @@
       ...mapState('m_sa', ['shared', 'movementParas']),
       player() {
         return this.$store.state.m_sa[this.TopAreaName]
-      }
+      },
+      // 根据「装」和「虚」的class判断目前是否为添加付与牌的状态
+      addEnhancementClicked() {
+        return this.player.aura.class === 'move-to-enhancement' && this.shared.shadow.class === 'move-to-enhancement'
+      },
     },
     methods: {
       ...mapMutations('m_sa', ['moveSakuraToken', 'resetEnhancementShow', 'resetMovementParas',
@@ -148,8 +151,7 @@
       addEnhancement() {
         // 在按下的状态下再按下则重置相关状态
         if (this.addEnhancementClicked) {
-          // 重置按钮样式以及「虚」和「装」的样式
-          this.addEnhancementClicked = !this.addEnhancementClicked
+          // 重置「虚」和「装」的样式，按钮样式也会跟着重置
           this.shared.shadow.class = ''
           this.player.aura.class = ''
           // 重置付与牌的show为false
@@ -158,9 +160,7 @@
           this.resetMovementParas()
           return
         }
-        // 更新按下的状态变量
-        this.addEnhancementClicked = !this.addEnhancementClicked
-        // 变换按钮样式以及「虚」和「装」的样式
+        // 变换「虚」和「装」的样式，按钮样式也会跟着改变
         this.shared.shadow.class = 'move-to-enhancement'
         this.player.aura.class = 'move-to-enhancement'
         for (let cardIndex in this.player.enhancement) {
