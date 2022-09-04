@@ -31,10 +31,10 @@
     <view class="action">
       <!-- 基础动作 -->
       <view class="basic-action" data-test="test">
-        <view class="action-button advance" @click="advance()" data-player="test">前进</view>
-        <view class="action-button" @click="retreat()">后退</view>
-        <view class="action-button" @click="recover()">装附</view>
-        <view class="action-button" @click="focus()">聚气</view>
+        <view class="action-button" data-action='advance' @click="baseAction">前进</view>
+        <view class="action-button" data-action='retreat' @click="baseAction">后退</view>
+        <view class="action-button" data-action='recover' @click="baseAction">装附</view>
+        <view class="action-button" data-action='focus' @click="baseAction">聚气</view>
       </view>
       <!-- 其他动作 -->
       <view class="other-action">
@@ -55,7 +55,7 @@
           </view>
         </view>
         <!-- 脱离 -->
-        <view class="action-button breakaway" @click="breakaway()">脱离</view>
+        <view class="action-button breakaway" data-action='breakaway' @click="baseAction">脱离</view>
         <!-- 结束回合 -->
         <view class="action-button endTurn" size="mini" @click="endTurn">结束回合</view>
         <!-- <view class="action-button" size="mini">重铸牌库</view> -->
@@ -81,6 +81,40 @@
         // 控制脱离按钮是否显示
         advanceHold: false,
         isActive: true,
+        // 基本动作的相关参数
+        baseActionParas: {
+          // 前进
+          advance: {
+            from: 'shared.distance.count',
+            to: `${this.TopAreaName}.aura.count`,
+            amount: 1,
+          },
+          // 脱离
+          breakaway: {
+            from: 'shared.shadow.count',
+            to: 'shared.distance.count',
+            amount: 1,
+          },
+          // 后退
+          retreat: {
+            from: `${this.TopAreaName}.aura.count`,
+            to: 'shared.distance.count',
+            amount: 1,
+          },
+          // 装附
+          recover: {
+            from: 'shared.shadow.count',
+            to: `${this.TopAreaName}.aura.count`,
+            amount: 1,
+          },
+          // 聚气
+          focus: {
+            from: `${this.TopAreaName}.aura.count`,
+            to: `${this.TopAreaName}.flare.count`,
+            amount: 1,
+          },
+
+        },
       }
     },
     props: {
@@ -105,43 +139,16 @@
       ]),
       // 区域点击
       areaClick(e) {
-        console.log('click');
         // 调用混入的saAreaClick方法
         this.saAreaClick(e)
       },
-      // 前进
-      advance() {
-        this.movementParas.from = 'shared.distance.count'
-        this.movementParas.to = `${this.TopAreaName}.aura.count`
-        this.movementParas.amount = 1;
-        this.moveSakuraToken()
-      },
-      // 脱离
-      breakaway() {
-        this.movementParas.from = 'shared.shadow.count'
-        this.movementParas.to = 'shared.distance.count'
-        this.movementParas.amount = 1;
-        this.moveSakuraToken()
-      },
-      // 后退
-      retreat() {
-        this.movementParas.from = `${this.TopAreaName}.aura.count`
-        this.movementParas.to = 'shared.distance.count'
-        this.movementParas.amount = 1;
-        this.moveSakuraToken()
-      },
-      // 装附
-      recover() {
-        this.movementParas.from = 'shared.shadow.count'
-        this.movementParas.to = `${this.TopAreaName}.aura.count`
-        this.movementParas.amount = 1;
-        this.moveSakuraToken()
-      },
-      // 聚气
-      focus() {
-        this.movementParas.from = `${this.TopAreaName}.aura.count`
-        this.movementParas.to = `${this.TopAreaName}.flare.count`
-        this.movementParas.amount = 1;
+      // 基本动作
+      baseAction(e) {
+        const actionName = e.currentTarget.dataset.action;
+        this.movementParas.from = this.baseActionParas[actionName]['from']
+        this.movementParas.to = this.baseActionParas[actionName]['to']
+        this.movementParas.amount = this.baseActionParas[actionName]['amount']
+        // console.log(this.movementParas);
         this.moveSakuraToken()
       },
       // 结束回合
@@ -168,7 +175,6 @@
         this.player.aura.class = 'move-to-enhancement'
         for (let cardIndex in this.player.enhancement) {
           // 显示编号最靠前的，且count为0的付与牌
-          console.log(this.player.enhancement[cardIndex]);
           if (this.player.enhancement[cardIndex]['count'] === 0) {
             this.player.enhancement[cardIndex]['show'] = true
             // 修改移动token的相关变量为该附与牌
