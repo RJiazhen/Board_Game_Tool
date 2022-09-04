@@ -32,14 +32,14 @@
       <!-- 基础动作 -->
       <view class="basic-action" data-test="test">
         <view class="action-button advance" @click="advance()" data-player="test">前进</view>
-        <view class="action-button breakaway" @click="breakaway()" v-if="advanceHold">脱离</view>
         <view class="action-button" @click="retreat()">后退</view>
         <view class="action-button" @click="recover()">装附</view>
         <view class="action-button" @click="focus()">聚气</view>
       </view>
       <!-- 其他动作 -->
       <view class="other-action">
-        <view class="enhancement action-button">
+        <!-- 打出付与牌 -->
+        <view class="action-button enhancement">
           <!-- 循环遍历生成付与牌 -->
           <view v-for="(cardState,cardIndex) in player.enhancement" :key="cardIndex" class="enhancement-cards">
             <view class="enhancement-card" :class="player.enhancement[cardIndex]['class']"
@@ -54,7 +54,10 @@
             <uni-icons v-if="addEnhancementClicked" type="checkbox" size="35" color="green"></uni-icons>
           </view>
         </view>
-        <view class="action-button danger" size="mini" @click="endTurn">结束回合</view>
+        <!-- 脱离 -->
+        <view class="action-button breakaway" @click="breakaway()">脱离</view>
+        <!-- 结束回合 -->
+        <view class="action-button endTurn" size="mini" @click="endTurn">结束回合</view>
         <!-- <view class="action-button" size="mini">重铸牌库</view> -->
       </view>
     </view>
@@ -92,7 +95,8 @@
       },
       // 根据「装」和「虚」的class判断目前是否为添加付与牌的状态
       addEnhancementClicked() {
-        return this.player.aura.class === 'move-to-enhancement' && this.shared.shadow.class === 'move-to-enhancement'
+        return this.player.aura.class === 'move-to-enhancement' &&
+          this.shared.shadow.class === 'move-to-enhancement'
       },
     },
     methods: {
@@ -107,36 +111,36 @@
       },
       // 前进
       advance() {
-        this.movementParas.from = 'shared.distance'
-        this.movementParas.to = `${this.TopAreaName}.aura`
+        this.movementParas.from = 'shared.distance.count'
+        this.movementParas.to = `${this.TopAreaName}.aura.count`
         this.movementParas.amount = 1;
         this.moveSakuraToken()
       },
       // 脱离
       breakaway() {
-        this.movementParas.from = 'shared.shadow'
-        this.movementParas.to = 'shared.distance'
+        this.movementParas.from = 'shared.shadow.count'
+        this.movementParas.to = 'shared.distance.count'
         this.movementParas.amount = 1;
         this.moveSakuraToken()
       },
       // 后退
       retreat() {
-        this.movementParas.from = `${this.TopAreaName}.aura`
-        this.movementParas.to = 'shared.distance'
+        this.movementParas.from = `${this.TopAreaName}.aura.count`
+        this.movementParas.to = 'shared.distance.count'
         this.movementParas.amount = 1;
         this.moveSakuraToken()
       },
       // 装附
       recover() {
-        this.movementParas.from = 'shared.shadow'
-        this.movementParas.to = `${this.TopAreaName}.aura`
+        this.movementParas.from = 'shared.shadow.count'
+        this.movementParas.to = `${this.TopAreaName}.aura.count`
         this.movementParas.amount = 1;
         this.moveSakuraToken()
       },
       // 聚气
       focus() {
-        this.movementParas.from = `${this.TopAreaName}.aura`
-        this.movementParas.to = `${this.TopAreaName}.flare`
+        this.movementParas.from = `${this.TopAreaName}.aura.count`
+        this.movementParas.to = `${this.TopAreaName}.flare.count`
         this.movementParas.amount = 1;
         this.moveSakuraToken()
       },
@@ -278,8 +282,13 @@
     .other-action {
       width: 59vw;
       margin-left: 2px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start; // 清除换行产生的空隙
+
 
       .enhancement {
+        width: 100%;
         display: flex;
         justify-content: space-between;
         overflow: hidden;
@@ -333,14 +342,19 @@
         }
       }
 
-      .danger {
+      // 脱离按钮
+      .breakaway {
+        width: 19vw;
+      }
+
+      .endTurn {
         background-color: #D9534F;
         color: #fff;
         border: solid 2px #D43F3A;
         box-sizing: border-box;
+        width: 39vw;
       }
 
-      .action-button {}
     }
   }
 </style>

@@ -144,16 +144,13 @@ export default {
 
     // 移动樱花指示物
     moveSakuraToken(state) {
-      console.log('move');
       const moveTokenAmout = state.movementParas.amount //要移动的token数量
       const fromAreaTokenCount = _.get(state, state.movementParas.from) // 移出区域的token数量
       const toAreaTokenCount = _.get(state, state.movementParas.to) // 目标区域的token数量
-      const toAreaTokenLimit = _.get(state, state.movementParas.to + '_limit') // 目标区域的token上限
+      const toAreaTokenLimit = _.get(state, state.movementParas.to.replace('count', 'limit')) // 目标区域的token上限
 
-      // console.log(fromAreaTokenCount, toAreaTokenCount, toAreaTokenLimit);
       // 如果来源区域没有有足够的token数量
       if (fromAreaTokenCount < moveTokenAmout) {
-        console.log('notEn');
         uni.showToast({
           title: 'token数量不足',
           icon: "error"
@@ -161,7 +158,6 @@ export default {
       }
       // 如果移动后是否超过目标区域的token上限
       else if (toAreaTokenLimit != null && toAreaTokenLimit < (toAreaTokenCount + moveTokenAmout)) {
-        console.log('overLimit');
         uni.showToast({
           title: 'token超过上限',
           icon: "error"
@@ -204,7 +200,6 @@ export default {
       state.player2.aura.class = ''
       state.player2.flare.class = ''
       state.player2.life.class = ''
-      console.log(state.player1.enhancement);
       for (let cardIndex in state.player1.enhancement) {
         state.player1.enhancement[cardIndex]['class'] = ''
       }
