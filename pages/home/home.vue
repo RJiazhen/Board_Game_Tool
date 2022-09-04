@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <view class="game-item" v-on:click="gotoTool('sakura_arms')">
-      <image src="../../static/sakura_arms_icon.jpg" mode="aspectFit"></image>
+      <image src="../../static/sakura_arms_icon.png" mode="aspectFit"></image>
       <text>散樱乱武</text>
     </view>
   </view>
@@ -37,8 +37,12 @@
       // border-radius: 15rpx;
 
       image {
-        height: 90%;
-        width: 90%;
+        height: 40vw;
+      }
+
+      text {
+        font-weight: bold;
+        font-size: 6vw;
       }
     }
   }
