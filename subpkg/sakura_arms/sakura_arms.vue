@@ -1,17 +1,18 @@
 <template>
   <view class="container">
-    <uni-icons class="tem" type="loop" @click="reset" size="50"></uni-icons>
+    <uni-icons class="reset" type="loop" @click="reset" size="50px"></uni-icons>
     <!-- 菜单 -->
     <view class="menu"></view>
     <!-- 游戏版图 -->
     <view class="game-board">
       <!-- 玩家二 -->
-      <view class="player2">
+      <view class="player1">
+        <SA_player TopAreaName="player1"></SA_player>
       </view>
       <!-- 公共区域 -->
       <SA_shared TopAreaName="shared"></SA_shared>
       <!-- 玩家一 -->
-      <SA_player TopAreaName="player1"></SA_player>
+      <SA_player TopAreaName="player2"></SA_player>
     </view>
   </view>
 </template>
@@ -29,7 +30,12 @@
     methods: {
       ...mapMutations('m_sa', ['resetState', 'getFromStorage']),
       reset() {
-        this.resetState()
+        uni.showModal({
+          content: '是否重置所有数值？',
+          success: () => {
+            this.resetState()
+          }
+        })
       }
     },
     // 加载时从本地存储获取数据
@@ -46,10 +52,12 @@
     background-color: #dddddd;
     // 临时内容
 
-    .tem {
+    .reset {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 50%;
+      left: -10px;
+      transform: translateY(-50%);
+      z-index: 999999;
     }
 
     .menu {}
@@ -59,20 +67,19 @@
       height: 100%;
       width: 100%;
 
-      .player2 {
-        width: 100%;
+      .player1 {
         height: 40vh;
-        background-color: #8a8a8a
+        transform: rotate(180deg);
+      }
+
+      .player2 {
+        height: 40vh;
       }
 
       .shared {
         height: 20vh;
       }
 
-      .player1 {
-        height: 40vh;
-
-      }
     }
   }
 </style>

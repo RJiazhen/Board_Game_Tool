@@ -147,7 +147,6 @@
       // 结束回合
       endTurn() {
         // 所有付与牌count-1
-        console.log('end');
         this.enhancementCountMinusOne()
       },
       // 重铸牌库
@@ -169,7 +168,6 @@
         this.player.aura.class = 'move-to-enhancement'
         for (let cardIndex in this.player.enhancement) {
           // 显示编号最靠前的，且count为0的付与牌
-          console.log('cardIndex:', cardIndex);
           console.log(this.player.enhancement[cardIndex]);
           if (this.player.enhancement[cardIndex]['count'] === 0) {
             this.player.enhancement[cardIndex]['show'] = true
