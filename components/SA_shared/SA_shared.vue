@@ -38,12 +38,18 @@
     mapState,
     mapMutations
   } from "vuex"
+
+  import {
+    saMixin
+  } from '@/common/saAreaClick.js'
   export default {
+    mixins: [saMixin],
     name: "SA_shared",
     data() {
       return {
         from: '',
-        to: ''
+        to: '',
+        self: this,
       }
     },
     props: {
@@ -52,40 +58,14 @@
       }
     },
     computed: {
-      ...mapState('m_sa', ['shared', 'movementParas'])
+      // 获取shared数据给混入的saAreaClick方法用
+      ...mapState('m_sa', ['shared'])
     },
     methods: {
-      ...mapMutations('m_sa', ['moveSakuraToken', 'resetMovementParas', 'resetClass', 'saveToStorage']),
-
-      // 区域点击
       areaClick(e) {
-        // 修改样式
-        const classIndex = e.currentTarget.dataset.area + "_class"
-        this.shared[classIndex] = "active"
-        // 如果和上一次点击的区域相同
-        if (this.movementParas.from1 == this.TopAreaName && this.movementParas.from2 == e.currentTarget.dataset.area) {
-          // 重置移动参数和Class
-          this.resetMovementParas()
-          this.resetClass()
-          this.saveToStorage()
-          return
-        }
-        // 如果已经准备移动token
-        if (this.movementParas.isReadyToMove) {
-          this.movementParas.to1 = this.TopAreaName;
-          this.movementParas.to2 = e.currentTarget.dataset.area;
-          // 延时移动token，以防样式变化太快
-          let timer = setTimeout(() => {
-            this.moveSakuraToken()
-            clearTimeout(timer)
-          }, 300)
-          return
-        }
-        this.movementParas.from1 = this.TopAreaName;
-        this.movementParas.from2 = e.currentTarget.dataset.area;
-        this.movementParas.amount = 1
-        this.movementParas.isReadyToMove = true
-      },
+        // 调用混入的saAreaClick方法
+        this.saAreaClick(e)
+      }
     }
   }
 </script>

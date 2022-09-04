@@ -1,3 +1,4 @@
+import _ from "lodash"
 export default {
   namespaced: true,
   state: () => ({
@@ -30,14 +31,32 @@ export default {
         enhancement: {
           A: {
             count: 0,
-
+            show: false,
           },
-          B: 0,
-          C: 0,
-          D: 0,
-          E: 0,
-          F: 0,
-          G: 0
+          B: {
+            count: 0,
+            show: false,
+          },
+          C: {
+            count: 0,
+            show: false,
+          },
+          D: {
+            count: 0,
+            show: false,
+          },
+          E: {
+            count: 0,
+            show: false,
+          },
+          F: {
+            count: 0,
+            show: false,
+          },
+          G: {
+            count: 0,
+            show: false,
+          },
         }
       }
     },
@@ -50,6 +69,8 @@ export default {
     // 移动token时的相关参数
     movementParas: {
       // 控制token在下次点击时是否应该移动
+      from: '',
+      to: '',
       isReadyToMove: false,
       from1: '',
       from2: '',
@@ -57,8 +78,8 @@ export default {
       to2: '',
       amount: 1,
     },
-
   }),
+
 
   mutations: {
     // 恢复初始状态
@@ -105,8 +126,14 @@ export default {
     // 移动樱花指示物
     moveSakuraToken(state) {
       console.log('move');
+      const moveTokenAmout = state.movementParas.amount //要移动的token数量
+      const fromAreaTokenCount = _.get(state, state.movementParas.from) // 移出区域的token数量
+      const toAreaTokenCount = _.get(state, state.movementParas.to) // 目标区域的token数量
+      const toAreaTokenLimit = _.get(state, state.movementParas.to + '_limit') // 目标区域的token上限
+
+      console.log(fromAreaTokenCount, toAreaTokenCount, toAreaTokenLimit);
       // 如果来源区域没有有足够的token数量
-      if (state[state.movementParas.from1][state.movementParas.from2] < state.movementParas.amount) {
+      if (fromAreaTokenCount < moveTokenAmout) {
         console.log('notEn');
         uni.showToast({
           title: 'token数量不足',
@@ -114,9 +141,7 @@ export default {
         })
       }
       // 如果移动后是否超过目标区域的token上限
-      else if (state[state.movementParas.to1][state.movementParas.to2 + '_limit'] != null &&
-        state[state.movementParas.to1][state.movementParas.to2 + '_limit'] <
-        (state[state.movementParas.to1][state.movementParas.to2] + state.movementParas.amount)) {
+      else if (toAreaTokenLimit != null && toAreaTokenLimit < (toAreaTokenCount + moveTokenAmout)) {
         console.log('overLimit');
         uni.showToast({
           title: 'token超过上限',
@@ -125,8 +150,8 @@ export default {
       }
       // 上述检查均通过后
       else {
-        state[state.movementParas.from1][state.movementParas.from2] -= state.movementParas.amount
-        state[state.movementParas.to1][state.movementParas.to2] += state.movementParas.amount
+        _.update(state, state.movementParas.from, (n) => n - state.movementParas.amount)
+        _.update(state, state.movementParas.to, (n) => n + state.movementParas.amount)
       }
       // 重置移动相关的参数
       this.commit('m_sa/resetMovementParas')
@@ -159,12 +184,5 @@ export default {
       state.player2.flare_class = ''
       state.player2.life_class = ''
     },
-    // 检查目标区域樱花指示物是否达到上限
-    checkSakuraTokenAmount(state, payload) {
-      return state[state.movementParas.to1][state.movementParas.to2] + state.movementParas.amount > state[state
-          .movementParas.to1][state.movementParas.to2 + '_limit'] ?
-        uni.$showMsg('fail') :
-        true
-    }
   }
 }

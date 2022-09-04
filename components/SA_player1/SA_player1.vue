@@ -41,9 +41,9 @@
       <view class="other-action">
         <view class="enhancement action-button">
           <!-- 循环遍历生成付与牌 -->
-          <view v-for="(tokenCount,cardIndex) in this.player1.enhancement" :key="cardIndex" class="enhancement-cards">
-            <view class="enhancement-card" v-if="tokenCount>0">
-              <text class="token-count">{{tokenCount}}</text>
+          <view v-for="(cardState,cardIndex) in this.player1.enhancement" :key="cardIndex" class="enhancement-cards">
+            <view class="enhancement-card" v-if="cardState.count>0 || cardState.show">
+              <text class="token-count">{{cardState.count}}</text>
               <text class="card-num">{{cardIndex}}</text>
             </view>
           </view>
@@ -65,7 +65,12 @@
     mapState,
     mapMutations
   } from "vuex"
+  import {
+    saMixin
+  } from '@/common/saAreaClick.js'
+  import _ from "lodash"
   export default {
+    mixins: [saMixin],
     name: "SA_player1",
     data() {
       return {
@@ -84,78 +89,44 @@
       ...mapState('m_sa', ['player1', 'movementParas']),
     },
     methods: {
-      ...mapMutations('m_sa', ['moveSakuraToken', 'resetMovementParas', 'resetClass', 'saveToStorage']),
+      ...mapMutations('m_sa', ['moveSakuraToken']),
       // 区域点击
       areaClick(e) {
-        // 修改样式
-        const classIndex = e.currentTarget.dataset.area + "_class"
-        this.player1[classIndex] = "active"
-        // 如果和上一次点击的区域相同
-        if (this.movementParas.from1 == this.TopAreaName && this.movementParas.from2 == e.currentTarget.dataset.area) {
-          // 重置移动参数和Class
-          this.resetMovementParas()
-          this.resetClass()
-          this.saveToStorage()
-          return
-        }
-        // 如果已经准备移动token
-        if (this.movementParas.isReadyToMove) {
-          this.movementParas.to1 = this.TopAreaName;
-          this.movementParas.to2 = e.currentTarget.dataset.area;
-          // 延时移动token，以防样式变化太快
-          let timer = setTimeout(() => {
-            this.moveSakuraToken()
-            clearTimeout(timer)
-          }, 300)
-          return
-        }
-        this.movementParas.from1 = this.TopAreaName;
-        this.movementParas.from2 = e.currentTarget.dataset.area;
-        this.movementParas.amount = 1
-        this.movementParas.isReadyToMove = true
+        // 调用混入的saAreaClick方法
+        this.saAreaClick(e)
       },
       // 前进
       advance() {
-        this.movementParas.from1 = 'shared';
-        this.movementParas.from2 = 'distance';
-        this.movementParas.to1 = this.TopAreaName;
-        this.movementParas.to2 = 'aura';
+        this.movementParas.from = 'shared.distance'
+        this.movementParas.to = `${this.TopAreaName}.aura`
         this.movementParas.amount = 1;
         this.moveSakuraToken()
       },
       // 脱离
       breakaway() {
-        this.movementParas.from1 = 'shared';
-        this.movementParas.from2 = 'shadow';
-        this.movementParas.to1 = 'shared';
-        this.movementParas.to2 = 'distance';
+        this.movementParas.from = 'shared.shadow'
+        this.movementParas.to = 'shared.distance'
         this.movementParas.amount = 1;
         this.moveSakuraToken()
       },
       // 后退
       retreat() {
-        this.movementParas.from1 = this.TopAreaName;
-        this.movementParas.from2 = 'aura';
-        this.movementParas.to1 = 'shared';
-        this.movementParas.to2 = 'distance';
+        this.movementParas.from = `${this.TopAreaName}.aura`
+        this.movementParas.to = 'shared.distance'
         this.movementParas.amount = 1;
         this.moveSakuraToken()
       },
       // 装附
       recover() {
-        this.movementParas.from1 = 'shared';
-        this.movementParas.from2 = 'shadow';
-        this.movementParas.to1 = this.TopAreaName;
-        this.movementParas.to2 = 'aura';
+        this.movementParas.from = 'shared.shadow'
+        this.movementParas.to = `${this.TopAreaName}.aura`
         this.movementParas.amount = 1;
         this.moveSakuraToken()
       },
       // 聚气
       focus() {
-        this.movementParas.from1 = this.TopAreaName;
-        this.movementParas.from2 = 'aura';
-        this.movementParas.to1 = this.TopAreaName;
-        this.movementParas.to2 = 'flare';
+        this.movementParas.from = `${this.TopAreaName}.aura`
+        this.movementParas.to = `${this.TopAreaName}.flare`
         this.movementParas.amount = 1;
         this.moveSakuraToken()
       },
@@ -168,15 +139,16 @@
           return
         }
         this.addEnhancementClicked = !this.addEnhancementClicked
-        const enhancement = this.player1.enhancement
-        for (let cardIndex in enhancement) {
-          if (enhancement[cardIndex] === 0) {
-            enhancement[cardIndex] = 1
+        for (let cardIndex in this.player1.enhancement) {
+          // 显示编号最靠前的，且count为0的付与牌
+          if (this.player1.enhancement[cardIndex]['count'] === 0) {
+            this.player1.enhancement[cardIndex]['show'] = true
+            this.movementParas.to1 = this.TopAreaName;
+            // this.movementParas.to2 =
             break
           }
         }
         console.log('player1:', this.player1.enhancement);
-        console.log('test:', enhancement);
       },
     },
   }
