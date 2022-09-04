@@ -206,11 +206,9 @@ export default {
       state.player2.life.class = ''
       console.log(state.player1.enhancement);
       for (let cardIndex in state.player1.enhancement) {
-        console.log('card', state.player1.enhancement[cardIndex]);
         state.player1.enhancement[cardIndex]['class'] = ''
       }
       for (let cardIndex in state.player2.enhancement) {
-        console.log('card', state.player1.enhancement[cardIndex]);
         state.player1.enhancement[cardIndex]['class'] = ''
       }
     },
@@ -223,6 +221,32 @@ export default {
       for (let cardIndex in state.player2.enhancement) {
         state.player2.enhancement[cardIndex]['show'] = false
       }
+      // 更新本地存储
+      this.commit('m_sa/saveToStorage')
     },
+    // 全部付与牌的count-1
+    enhancementCountMinusOne(state) {
+      for (let cardIndex in state.player1.enhancement) {
+        // 只有count大于0才会减1
+        if (state.player1.enhancement[cardIndex]['count'] > 0) {
+          state.player1.enhancement[cardIndex]['count'] -= 1
+
+          // 减去的token由「虚」接收
+          state.shared.shadow['count'] += 1
+        }
+      }
+      for (let cardIndex in state.player2.enhancement) {
+        // 只有count大于0才会减1
+        if (state.player2.enhancement[cardIndex]['count'] > 0) {
+          state.player2.enhancement[cardIndex]['count'] -= 1
+
+          // 减去的token由「虚」接收
+          state.shared.shadow['count'] += 1
+        }
+      }
+      // 更新本地存储
+      this.commit('m_sa/saveToStorage')
+
+    }
   }
 }

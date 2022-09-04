@@ -54,7 +54,7 @@
             <uni-icons v-if="addEnhancementClicked" type="checkbox" size="35" color="green"></uni-icons>
           </view>
         </view>
-        <view class="action-button danger" size="mini">结束回合</view>
+        <view class="action-button danger" size="mini" @click="endTurn">结束回合</view>
         <!-- <view class="action-button" size="mini">重铸牌库</view> -->
       </view>
     </view>
@@ -93,7 +93,9 @@
       }
     },
     methods: {
-      ...mapMutations('m_sa', ['moveSakuraToken', 'resetEnhancementShow', 'resetMovementParas']),
+      ...mapMutations('m_sa', ['moveSakuraToken', 'resetEnhancementShow', 'resetMovementParas',
+        'enhancementCountMinusOne'
+      ]),
       // 区域点击
       areaClick(e) {
         console.log('click');
@@ -136,6 +138,11 @@
         this.moveSakuraToken()
       },
       // 结束回合
+      endTurn() {
+        // 所有付与牌count-1
+        console.log('end');
+        this.enhancementCountMinusOne()
+      },
       // 重铸牌库
       // 打出付与牌
       addEnhancement() {
@@ -169,6 +176,7 @@
           }
         }
       },
+
     },
   }
 </script>
