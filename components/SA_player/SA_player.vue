@@ -57,7 +57,7 @@
         <!-- 脱离 -->
         <view class="action-button breakaway" data-action='breakaway' @click="baseAction">脱离</view>
         <!-- 结束回合 -->
-        <view class="action-button endTurn" size="mini" @click="endTurn">结束回合</view>
+        <button class="endTurn" type="warn" @click="endTurn" :disabled="turn!=TopAreaName">结束回合</button>
         <!-- <view class="action-button" size="mini">重铸牌库</view> -->
       </view>
     </view>
@@ -123,7 +123,7 @@
       }
     },
     computed: {
-      ...mapState('m_sa', ['shared', 'movementParas']),
+      ...mapState('m_sa', ['shared', 'movementParas', 'turn']),
       player() {
         return this.$store.state.m_sa[this.TopAreaName]
       },
@@ -135,7 +135,7 @@
     },
     methods: {
       ...mapMutations('m_sa', ['moveSakuraToken', 'resetEnhancementShow', 'resetMovementParas',
-        'enhancementCountMinusOne'
+        'enhancementCountMinusOne', 'changeTurn'
       ]),
       // 区域点击
       areaClick(e) {
@@ -155,7 +155,10 @@
       endTurn() {
         // 所有付与牌count-1
         this.enhancementCountMinusOne()
+        // 更改turn为对方回合
+        this.changeTurn()
       },
+
       // 重铸牌库
       // 打出付与牌
       addEnhancement() {
@@ -182,6 +185,7 @@
             this.movementParas.isReadyToMove = true
             break
           }
+
         }
       },
 
@@ -352,11 +356,22 @@
       }
 
       .endTurn {
-        background-color: #D9534F;
-        color: #fff;
-        border: solid 2px #D43F3A;
-        box-sizing: border-box;
+        // background-color: #D9534F;
+        // color: #fff;
+        // border: solid 2px #D43F3A;
+        // box-sizing: border-box;
         width: 39vw;
+        height: 11vh;
+        font-size: 23px;
+        text-align: center;
+        line-height: 11vh;
+        margin-top: 5px;
+        // background-color: #fff;
+        border-radius: 20px;
+        // 立体阴影
+        box-shadow:
+          7px 7px 6px rgba(0, 0, 0, .4),
+          -7px -7px 12px rgba(255, 255, 255, .9);
       }
 
     }

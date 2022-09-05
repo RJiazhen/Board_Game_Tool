@@ -4,6 +4,8 @@ export default {
   state: () => ({
     // 初始状态数据
     initialState: {
+      // 当前回合
+      turn: "player2",
       shared: {
         distance: {
           count: 10,
@@ -75,6 +77,8 @@ export default {
         }
       }
     },
+    // 当前回合
+    turn: '',
     // 玩家一
     player1: {},
     // 公用区域
@@ -113,6 +117,12 @@ export default {
           return
         }
       })
+      uni.removeStorage({
+        key: 'sa_turn',
+        success: () => {
+          return
+        }
+      })
 
       this.commit('m_sa/getFromStorage')
     },
@@ -122,6 +132,7 @@ export default {
       uni.setStorageSync('sa_player1', JSON.stringify(state.player1))
       uni.setStorageSync('sa_player2', JSON.stringify(state.player2))
       uni.setStorageSync('sa_shared', JSON.stringify(state.shared))
+      uni.setStorageSync('sa_turn', JSON.stringify(state.turn))
     },
 
     // 从本地获取state数据，如无数据则设定为默认值
@@ -138,6 +149,10 @@ export default {
       state.player2 = uni.getStorageSync('sa_player2').length != 0 ?
         JSON.parse(uni.getStorageSync('sa_player2')) :
         JSON.parse(JSON.stringify(state.initialState.player))
+      // 获取turn相关数据
+      state.turn = uni.getStorageSync('sa_turn').length != 0 ?
+        JSON.parse(uni.getStorageSync('sa_turn')) :
+        JSON.parse(JSON.stringify(state.initialState.turn))
       // 更新本地存储
       this.commit('m_sa/saveToStorage')
     },
@@ -218,6 +233,12 @@ export default {
       }
       // 更新本地存储
       this.commit('m_sa/saveToStorage')
+    },
+    // 变更回合
+    changeTurn(state) {
+      console.log('endTurn');
+      state.turn = state.turn === 'player1' ? 'player2' : 'player1'
+      console.log(state.turn);
     },
     // 全部付与牌的count-1
     enhancementCountMinusOne(state) {
