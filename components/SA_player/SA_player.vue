@@ -233,13 +233,17 @@
       }
 
       .area-token-num {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: baseline;
         position: absolute;
         top: 40%;
         left: 40%;
         transform: translate(-50%, -50%);
 
+
         .area-token-count {
-          font-size: 55px;
+          font-size: 50px;
 
         }
 
