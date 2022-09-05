@@ -74,7 +74,7 @@
   .shared {
     display: flex;
     justify-content: space-between;
-    transition: 1.5s all;
+    transition: 1s all;
 
     &.active {
       background-color: #f7e887;
@@ -103,14 +103,12 @@
       width: 33%;
       position: relative;
       border-radius: 20px;
-      // border: solid 1px #a2a2a2;
       box-shadow:
         // 立体阴影
         7px 7px 12px rgba(0, 0, 0, .4),
         -7px -7px 12px rgba(255, 255, 255, .9);
       background-color: #fff;
       overflow: hidden;
-      // transition: 0.5s all;
 
       &.active {
         background-color: #f7e887;

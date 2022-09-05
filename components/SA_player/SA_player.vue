@@ -153,6 +153,14 @@
       },
       // 结束回合
       endTurn() {
+        // 如果现在还未确认付与牌的打出，则无法进行后续操作
+        if (this.shared.shadow.class === 'move-to-enhancement') {
+          uni.showToast({
+            title: '请先确认完成',
+            icon: "error"
+          })
+          return
+        }
         // 所有付与牌count-1
         this.enhancementCountMinusOne()
         // 更改turn为对方回合
@@ -162,6 +170,14 @@
       // 重铸牌库
       // 打出付与牌
       addEnhancement() {
+        // 如果当前对方在处理付与牌的打出，则无法进行后续操作
+        if (this.player.aura.class != 'move-to-enhancement' && this.shared.shadow.class === 'move-to-enhancement') {
+          uni.showToast({
+            title: '请先确认完成',
+            icon: "error"
+          })
+          return
+        }
         // 在按下的状态下再按下则重置相关状态
         if (this.addEnhancementClicked) {
           // 重置「虚」和「装」的样式，按钮样式也会跟着重置
@@ -218,7 +234,6 @@
       position: relative;
       border-radius: 5px;
       // border: solid 1px #a2a2a2;
-      transition: .1s all;
       box-shadow: // 立体阴影
         7px 7px 6px rgba(0, 0, 0, .4),
         -7px -7px 12px rgba(255, 255, 255, .9);

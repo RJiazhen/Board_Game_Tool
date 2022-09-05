@@ -234,6 +234,7 @@ export default {
       // 更新本地存储
       this.commit('m_sa/saveToStorage')
     },
+
     // 变更回合
     changeTurn(state) {
       console.log('endTurn');

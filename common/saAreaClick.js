@@ -56,7 +56,7 @@ export const saMixin = {
         let timer = setTimeout(() => {
           this.moveSakuraToken()
           clearTimeout(timer)
-        }, 300)
+        }, 50)
         return
       }
       // 如果是首次点击该区域
