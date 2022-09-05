@@ -11,7 +11,10 @@
     </view>
     <view class="more-info">
       <view>同时，本小程序遵循GPLv3协议进行开源，你可以扫描下方二维码了解未来更新计划</view>
-      <image class="qr-code" src="../../static/github_QR_code.png" mode="widthFix"></image>
+      <image :show-menu-by-longpress="true" class="qr-code" src="../../static/github_QR_code.png" mode="widthFix">
+      </image>
+      <uni-link href="https://github.com/RJiazhen/Board_Game_Tool" text="点击复制项目网址">
+      </uni-link>
     </view>
   </view>
 </template>
@@ -58,7 +61,8 @@
     .more-info {
       margin-top: 2vh;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
       flex-wrap: wrap;
 
       image {
