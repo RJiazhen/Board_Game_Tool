@@ -225,7 +225,7 @@
     justify-content: space-between;
     padding-top: 0.5vh;
     // 控制激活时样式变化效果
-    transition: 1s all;
+    transition: .1s all;
 
     .area {
       background-color: #fff;

@@ -74,7 +74,7 @@
   .shared {
     display: flex;
     justify-content: space-between;
-    transition: 1s all;
+    transition: .1s all;
 
     &.active {
       background-color: #f7e887;

@@ -52,11 +52,7 @@ export const saMixin = {
       // 如果已经准备移动token
       if (this.movementParas.isReadyToMove) {
         this.movementParas.to = countIndex;
-        // 延时移动token，以防样式变化太快
-        let timer = setTimeout(() => {
-          this.moveSakuraToken()
-          clearTimeout(timer)
-        }, 50)
+        this.moveSakuraToken()
         return
       }
       // 如果是首次点击该区域

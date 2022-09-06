@@ -32,8 +32,10 @@
       reset() {
         uni.showModal({
           content: '是否重置所有数值？',
-          success: () => {
-            this.resetState()
+          success: (res) => { // success是只要接口调用成功都会执行
+            if (res.confirm) { // res.confirm才是点击确认才执行
+              this.resetState()
+            }
           }
         })
       }
