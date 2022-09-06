@@ -90,12 +90,11 @@
     }
 
     .sakura-token-count {
-      font-size: 40px;
-
+      font-size: calc(30px + 5vw);
     }
 
     .sakura-token-limit {
-      font-size: 10px;
+      font-size: calc(10px + 2vw)
     }
 
     // 距区域

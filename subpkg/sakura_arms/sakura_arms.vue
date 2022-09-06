@@ -50,7 +50,7 @@
 <style lang="scss">
   .container {
     height: 100vh;
-    position: relative;
+    position: fixed;
     background-color: #dddddd;
     // 临时内容
 

@@ -258,12 +258,11 @@
 
 
         .area-token-count {
-          font-size: 50px;
-
+          font-size: calc(30px + 6vw);
         }
 
         .area-token-limit {
-          font-size: 10px;
+          font-size: calc(5px + 2vw);
           color: #0f0f0f;
         }
       }
@@ -280,7 +279,7 @@
     // 动作按钮
     .action-button {
       height: 11vh;
-      font-size: 23px;
+      font-size: 5vw;
       text-align: center;
       line-height: 11vh;
       margin-top: 5px;
@@ -337,9 +336,9 @@
               left: 50%;
               top: 50%;
               transform: translate(-50%, -50%);
-              height: 25px;
-              line-height: 25px;
-              font-size: 25px;
+              height: calc(20px + 6vw);
+              line-height: calc(20px + 6vw);
+              font-size: calc(20px + 6vw);
             }
 
             .card-num {
@@ -363,7 +362,7 @@
             bottom: 10px;
             right: 50%;
             transform: translateX(50%);
-            font-size: 10px;
+            font-size: 2vw;
             line-height: 10px;
           }
         }
@@ -381,7 +380,7 @@
         // box-sizing: border-box;
         width: 39vw;
         height: 11vh;
-        font-size: 23px;
+        font-size: 5vw;
         text-align: center;
         line-height: 11vh;
         margin-top: 5px;
