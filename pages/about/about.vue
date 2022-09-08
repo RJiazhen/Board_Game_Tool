@@ -3,7 +3,7 @@
     <view class="title">关于</view>
     <view class="intro">
       <image class="avatar" src="../../static/avatar.png" mode="widthFix"></image>
-      <text class="time">&nbsp;&nbsp;&nbsp;2022年9月5日</text>
+      <view class="time">&nbsp;&nbsp;&nbsp;2022年9月5日</view>
     </view>
     <view>你好，我是小程序的作者开开，希望你喜欢我制作的工具，如有问题和建议可以点击下方按钮进行反馈</view>
     <view class="feedback">
@@ -40,6 +40,11 @@
     }
 
     .intro {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-right: 5px;
+
       .avatar {
         display: inline-block;
         width: 10vw;
