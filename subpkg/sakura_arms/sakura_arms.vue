@@ -14,8 +14,7 @@
           <view><text class="bold">4. 结束回合</text><text>：直接点击“结束回合”，所有付与牌会-1</text></view>
           <view><text class="bold">5. 重置游戏面板</text><text>：点击左侧中央重置按钮</text>
 
-            <uni-icons class="reset-icon" type="loop" size="25px" color="#fff" />，<text>并再次确认
-            </text>
+            <uni-icons class="reset-icon" type="loop" size="25px" color="#fff" />，<text>并再次确认</text>
           </view>
           <view class="feedback">
             <text>如有问题和建议可以点击下方按钮进行反馈</text>
@@ -48,7 +47,12 @@
     mapState,
     mapMutations
   } from 'vuex'
+  // 导入并混入添加分享功能
+  import {
+    showShareMenu
+  } from '@/common/showShareMenu.js'
   export default {
+    mixins: [showShareMenu],
     data() {
       return {
         toShowHelp: true
@@ -86,6 +90,10 @@
         this.showHelp()
         uni.setStorageSync('sa_toShowHelp', JSON.stringify(false))
       }
+    },
+    // 点击分享按钮时的事件
+    onShareAppMessage(res) {
+
     }
   }
 </script>

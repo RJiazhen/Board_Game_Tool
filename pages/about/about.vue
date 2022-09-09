@@ -20,12 +20,17 @@
 </template>
 
 <script>
+  // 导入并混入添加分享功能
+  import {
+    showShareMenu
+  } from '@/common/showShareMenu.js'
   export default {
+    mixins: [showShareMenu],
     data() {
-      return {
+      return {};
+    },
 
-      };
-    }
+
   }
 </script>
 
