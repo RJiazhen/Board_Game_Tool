@@ -7,7 +7,16 @@
       </view>
     </view>
     <view class="qr-code">
-      <image :show-menu-by-longpress="true" src="../../static/QR_code.png" mode="aspectFit"></image>
+      <!-- 微信小程序二维码 -->
+      <!-- #ifdef MP-WEIXIN -->
+      <image :show-menu-by-longpress="true" src="../../static/wechat_QR_code.png" mode="aspectFit"></image>
+      <!-- #endif -->
+
+      <!-- QQ小程序二维码 -->
+      <!-- #ifdef MP-QQ -->
+
+      <!-- #endif -->
+
       <view>长按分享小程序</view>
     </view>
   </view>

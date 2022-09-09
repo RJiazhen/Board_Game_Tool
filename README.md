@@ -6,7 +6,10 @@
 来辅助游玩各种桌游的小程序工具
 
 ## 快速上手
+
 使用微信扫描二维码打开小程序体验：
+
+<img src="./static/wechat_QR_code.png" alt="Logo of the project" style="width:100px;">
 
 当前已包含工具：
 * 散樱乱武token计数工具
@@ -14,6 +17,8 @@
 ## 开发须知
 
 本小程序基于[uniapp](https://uniapp.dcloud.net.cn/)框架进行开发，建议使用[HBuilderX](https://www.dcloud.io/hbuilderx.html)进行开发，如果需要编译为微信小程序需下载[微信开发者工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)，可编译为不同平台程序。
+
+clone项目到本地后，运行`npm install`安装依赖包
 
 项目结构如下：
 ```
