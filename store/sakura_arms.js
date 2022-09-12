@@ -28,7 +28,7 @@ export default {
         // 命
         life: {
           count: 10,
-          limit: 10,
+          limit: null,
           class: '',
         },
         // 气

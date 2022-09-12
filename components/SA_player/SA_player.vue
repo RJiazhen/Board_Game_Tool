@@ -22,7 +22,7 @@
       <view class="life area" :class="player.life.class" data-area="life" @click="areaClick">
         <view class="area-token-num">
           <text class="area-token-count">{{player.life.count}}</text>
-          <text class="area-token-limit">/{{player.life.limit}}</text>
+          <text class="area-token-limit">/{{player.flare.limit||"∞"}}</text>
         </view>
         <view class="area-title">命</view>
       </view>
@@ -253,7 +253,7 @@
         align-items: baseline;
         position: absolute;
         top: 40%;
-        left: 40%;
+        left: 35%;
         transform: translate(-50%, -50%);
 
 
