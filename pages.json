@@ -12,6 +12,15 @@
         "enablePullDownRefresh": false
       }
     }
+
+    , {
+      "path": "pages/test/test",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+
+    }
   ],
   "subPackages": [{
     "root": "subpkg",

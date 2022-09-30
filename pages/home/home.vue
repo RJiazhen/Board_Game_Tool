@@ -32,7 +32,7 @@
           url: `/subpkg/${pagename}/${pagename}`
         })
       }
-    }
+    },
   }
 </script>
 

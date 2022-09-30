@@ -171,7 +171,7 @@ export default {
           icon: "error"
         })
       }
-      // 如果移动后是否超过目标区域的token上限
+      // 如果移动后超过目标区域的token上限
       else if (toAreaTokenLimit != null && toAreaTokenLimit < (toAreaTokenCount + moveTokenAmout)) {
         uni.showToast({
           title: 'token超过上限',
