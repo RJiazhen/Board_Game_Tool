@@ -2,7 +2,10 @@
   <view class="slot">
     <!-- 付与牌 -->
     <view class="enhancement-cards">
-      <enhancement-card></enhancement-card>
+      <sa-enhancement-card></sa-enhancement-card>
+      <sa-enhancement-card></sa-enhancement-card>
+      <sa-enhancement-card></sa-enhancement-card>
+      <sa-enhancement-add-btn></sa-enhancement-add-btn>
     </view>
     <!-- 基本动作 -->
     <view class="basic-actions">
@@ -47,25 +50,29 @@
 
 <style scoped lang="scss">
   .container {
-    // width: 100%;
     height: 100%;
-    // background-color: red;
     display: flex;
   }
 
   // 凹槽
   .slot {
     width: 82%;
-    height: 100%;
+    height: 90%;
+    overflow: scroll;
+
     margin-left: 2px;
 
     box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 3px;
     background: #FFFFFF;
 
-    .enhancement-cards {}
+    .enhancement-cards {
+      height: 100%;
+      display: flex;
+    }
 
     .basic-actions {
+      display: none;
 
       .basic-action {}
 
