@@ -1,13 +1,11 @@
 <template>
   <view class="container">
-    <!-- Player1 -->
-
     <!-- 中心菜单 -->
 
     <!-- Player2 -->
 
     <!-- 使用说明弹窗 -->
-    <uni-popup ref="popup" type="top" mask-background-color="rgba(35, 35, 35, 0.8)">
+    <!-- <uni-popup ref="popup" type="top" mask-background-color="rgba(35, 35, 35, 0.8)">
       <view class="help-container">
         <view class="help">
           <view><text class="bold" style="font-size: 20px;">【长按重置按钮</text>
@@ -29,11 +27,11 @@
           <view class="close-tip"><text class="bold">点击空白区域关闭说明</text></view>
         </view>
       </view>
-    </uni-popup>
+    </uni-popup> -->
     <!-- 重置按钮 -->
-    <uni-icons class="reset" type="loop" @click="reset" @longpress="showHelp" size="50px"></uni-icons>
+    <!-- <uni-icons class="reset" type="loop" @click="reset" @longpress="showHelp" size="50px"></uni-icons> -->
     <!-- 菜单 -->
-    <view class="menu"></view>
+    <!-- <view class="menu"></view> -->
     <!-- 游戏版图 -->
     <view class="game-board">
       <!-- 玩家二 -->
@@ -43,7 +41,9 @@
       <!-- 公共区域 -->
       <!-- <SA_shared TopAreaName="shared"></SA_shared> -->
       <!-- 玩家一 -->
-      <SA_player TopAreaName="player2"></SA_player>
+      <!-- <SA_player TopAreaName="player2"></SA_player> -->
+      <!-- Player1 -->
+      <test-player></test-player>
     </view>
   </view>
 </template>
