@@ -1,28 +1,25 @@
 <template>
+
+  <!-- 凹槽 -->
   <view class="slot">
-    <!-- 付与牌 -->
-    <view class="enhancement-cards">
-      <sa-enhancement-card></sa-enhancement-card>
-      <sa-enhancement-card></sa-enhancement-card>
-      <sa-enhancement-card></sa-enhancement-card>
-      <sa-enhancement-add-btn></sa-enhancement-add-btn>
-    </view>
-    <!-- 基本动作 -->
-    <view class="basic-actions">
-      <!-- 前进 -->
-      <view class="basic-action advance">
+
+    <!-- 付与牌和基本动作的容器 -->
+    <view class="enhan-n-action">
+
+      <!-- 付与牌 -->
+      <view class="enhancement-cards" v-show="false">
+        <sa-enhancement-card></sa-enhancement-card>
+        <sa-enhancement-card></sa-enhancement-card>
+        <sa-enhancement-card></sa-enhancement-card>
+        <sa-enhancement-add-btn></sa-enhancement-add-btn>
       </view>
-      <!-- 后退 -->
-      <view class="basic-action retreat">
-      </view>
-      <!-- 聚气 -->
-      <view class="basic-action focus">
-      </view>
-      <!-- 装附 -->
-      <view class="basic-action recover">
-      </view>
-      <!-- 脱离 -->
-      <view class="basic-action breakaway">
+      <!-- 基本动作 -->
+      <view class="basic-actions">
+        <sa-basic-action areaName="advance"></sa-basic-action>
+        <sa-basic-action areaName="retreat"></sa-basic-action>
+        <sa-basic-action areaName="advance"></sa-basic-action>
+        <sa-basic-action areaName="advance"></sa-basic-action>
+        <sa-basic-action areaName="advance"></sa-basic-action>
       </view>
     </view>
   </view>
@@ -49,48 +46,56 @@
 </script>
 
 <style scoped lang="scss">
-  .container {
-    height: 100%;
-    display: flex;
-  }
+  $slogWidth:65vw;
 
   // 凹槽
   .slot {
-    width: 82%;
-    height: 90%;
-    overflow: scroll;
-
+    width: $slogWidth;
+    height: 100%;
     margin-left: 2px;
+
+    position: relative;
+    overflow: hidden;
+
 
     box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 3px;
     background: #FFFFFF;
 
-    .enhancement-cards {
+    .enhan-n-action {
       height: 100%;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateX(-50%);
       display: flex;
-    }
+      flex-wrap: nowrap;
 
-    .basic-actions {
-      display: none;
 
-      .basic-action {}
 
-      .advance {}
+      .enhancement-cards {
+        height: 100%;
+        width: $slogWidth;
+        display: flex;
+        overflow: scroll;
+      }
 
-      .retreat {}
+      .basic-actions {
+        width: $slogWidth;
+        height: 100%;
 
-      .focus {}
-
-      .recover {}
-
-      .breakaway {}
+        display: flex;
+        flex-wrap: nowrap;
+        position: relative;
+        overflow: scroll;
+      }
     }
   }
 
   // 切换按钮
   .switch-btn {
-    width: 44px;
+    width: calc(100% - $slogWidth);
     height: 98%;
     margin-left: 3px;
     border-radius: 11px;
@@ -104,10 +109,8 @@
       writing-mode: vertical-lr;
       white-space: nowrap;
 
-      font-family: 'source-han';
-      font-style: normal;
       font-weight: 100;
-      font-size: 15px;
+      font-size: 16px;
     }
   }
 
