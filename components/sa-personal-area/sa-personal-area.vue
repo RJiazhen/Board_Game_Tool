@@ -40,6 +40,8 @@
       left: 10px;
       bottom: 15px;
 
+      z-index: 1;
+
       font-family: 'Inter';
       font-style: normal;
       font-weight: 400;
@@ -53,6 +55,8 @@
     }
 
     .token {
+      z-index: 1;
+
       font-family: 'Inter';
       font-style: normal;
       font-weight: 400;
@@ -87,6 +91,18 @@
       font-weight: 200;
       font-size: 40px;
       font-family: 'Inter';
+
+      z-index: 2;
+
+      transition: 50ms;
+
+      &:active {
+        z-index: 0;
+
+        color: #8100FF;
+        background-color: rgba(232, 234, 148, .6);
+        transition: 50ms;
+      }
 
       .sub {
         position: absolute;

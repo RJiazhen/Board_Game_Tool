@@ -89,6 +89,15 @@
       font-weight: 200;
       font-size: 40px;
       font-family: 'Inter';
+
+      transition: 50ms;
+
+      &:active {
+        color: #8100FF;
+        background-color: rgba(232, 234, 148, .6);
+        transition: 50ms;
+      }
     }
+
   }
 </style>
