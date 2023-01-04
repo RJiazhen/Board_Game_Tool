@@ -64,148 +64,187 @@
   </view>
 </template>
 
-<script>
+<script setup lang="ts">
   import {
-    mapState,
-    mapMutations
-  } from "vuex"
+    useSakuraArms
+  } from '@/store/sakura_arms.js'
+  // import {
+  //   mapState,
+  //   mapMutations
+  // } from "vuex"
   import {
     saMixin
   } from '@/common/saAreaClick.js'
   import _ from "lodash"
-  export default {
-    mixins: [saMixin],
-    name: "SA_player",
-    data() {
-      return {
-        // 控制脱离按钮是否显示
-        advanceHold: false,
-        isActive: true,
-        // 基本动作的相关参数
-        baseActionParas: {
-          // 前进
-          advance: {
-            from: 'shared.distance.count',
-            to: `${this.TopAreaName}.aura.count`,
-            amount: 1,
-          },
-          // 脱离
-          breakaway: {
-            from: 'shared.shadow.count',
-            to: 'shared.distance.count',
-            amount: 1,
-          },
-          // 后退
-          retreat: {
-            from: `${this.TopAreaName}.aura.count`,
-            to: 'shared.distance.count',
-            amount: 1,
-          },
-          // 装附
-          recover: {
-            from: 'shared.shadow.count',
-            to: `${this.TopAreaName}.aura.count`,
-            amount: 1,
-          },
-          // 聚气
-          focus: {
-            from: `${this.TopAreaName}.aura.count`,
-            to: `${this.TopAreaName}.flare.count`,
-            amount: 1,
-          },
+  import {
+    computed
+  } from "vue"
 
-        },
+  const sakuraArms = useSakuraArms()
+
+  // 接收的参数
+  const props = defineProps({
+    TopAreaName: String
+  })
+
+  // 控制脱离按钮是否显示
+  let advanceHold = false
+  let isActive = true
+  // 基本动作的相关参数
+  let baseActionParas = {
+    // 前进
+    advance: {
+      from: 'shared.distance.count',
+      to: `${props.TopAreaName}.aura.count`,
+      amount: 1,
+    },
+    // 脱离
+    breakaway: {
+      from: 'shared.shadow.count',
+      to: 'shared.distance.count',
+      amount: 1,
+    },
+    // 后退
+    retreat: {
+      from: `${props.TopAreaName}.aura.count`,
+      to: 'shared.distance.count',
+      amount: 1,
+    },
+    // 装附
+    recover: {
+      from: 'shared.shadow.count',
+      to: `${props.TopAreaName}.aura.count`,
+      amount: 1,
+    },
+    // 聚气
+    focus: {
+      from: `${props.TopAreaName}.aura.count`,
+      to: `${props.TopAreaName}.flare.count`,
+      amount: 1,
+    }
+  }
+
+  // ...mapState('m_sa', ['shared', 'movementParas', 'turn']),
+  const player = computed(() => {
+    return sakuraArms[props.TopAreaName]
+  })
+
+  // 根据「装」和「虚」的class判断目前是否为添加付与牌的状态
+  const addEnhancementClicked = computed(() => {
+    return sakuraArms.player.aura.class === 'move-to-enhancement' &&
+      sakuraArms.shared.shadow.class === 'move-to-enhancement'
+  })
+  // ...mapMutations('m_sa', ['moveSakuraToken', 'resetEnhancementShow', 'resetMovementParas',
+  //   'enhancementCountMinusOne', 'changeTurn'
+  // ]),
+  // 区域点击
+  const areaClick = (e) => {
+    // const classIndex = `${props.TopAreaName}.${e.currentTarget.dataset.area}.class`
+    const classIndex = `${e.currentTarget.dataset.area}.class`
+    // const countIndex = `${props.TopAreaName}.${e.currentTarget.dataset.area}.count`
+    const countIndex = `${e.currentTarget.dataset.area}.count`
+    // 如果「虚」的class是move-to-enhancement，则判定为现在的添加附与牌，进行特殊行动
+    if (sakuraArms.shared.shadow.class === 'move-to-enhancement') {
+      // 如果点击的不是class为move-to-enhancement的区域
+      if (_.get(sakuraArms[`${props.TopAreaName}`], classIndex) != 'move-to-enhancement') {
+        uni.showToast({
+          title: '请先确认完成',
+          icon: "error"
+        })
+        return
       }
-    },
-    props: {
-      TopAreaName: {
-        type: String,
+      // 设定移动参数并移动token
+      sakuraArms.movementParas.from = countIndex;
+      sakuraArms.moveSakuraToken()
+      return
+    }
+
+    // 修改样式
+    _.set(this.$store.state.m_sa, classIndex, 'active')
+    console.log(sakuraArms.movementParas);
+
+    // 如果和上一次点击的区域相同
+    if (sakuraArms.movementParas.from === countIndex) {
+      console.log('reset');
+      // 重置移动参数和Class
+      sakuraArms.resetMovementParas()
+      sakuraArms.resetClass()
+      sakuraArms.saveToStorage()
+      console.log(sakuraArms.movementParas);
+      return
+    }
+    // 如果已经准备移动token
+    if (sakuraArms.movementParas.isReadyToMove) {
+      sakuraArms.movementParas.to = countIndex;
+      sakuraArms.moveSakuraToken()
+      return
+    }
+    // 如果是首次点击该区域
+    sakuraArms.movementParas.from = countIndex
+    sakuraArms.movementParas.amount = 1
+    sakuraArms.movementParas.isReadyToMove = true
+  }
+  // 基本动作
+  const baseAction = (e) => {
+    const actionName = e.currentTarget.dataset.action;
+    sakuraArms.movementParas.from = baseActionParas[actionName]['from']
+    sakuraArms.movementParas.to = baseActionParas[actionName]['to']
+    sakuraArms.movementParas.amount = baseActionParas[actionName]['amount']
+    // console.log(sakuraArms.movementParas);
+    sakuraArms.moveSakuraToken()
+  }
+  // 结束回合
+  const endTurn = () => {
+    // 如果现在还未确认付与牌的打出，则无法进行后续操作
+    if (sakuraArms.shared.shadow.class === 'move-to-enhancement') {
+      uni.showToast({
+        title: '请先确认完成',
+        icon: "error"
+      })
+      return
+    }
+    // 所有付与牌count-1
+    sakuraArms.enhancementCountMinusOne()
+    // 更改turn为对方回合
+    sakuraArms.changeTurn()
+  }
+
+  // 重铸牌库
+  // 打出付与牌
+  const addEnhancement = () => {
+    // 如果当前对方在处理付与牌的打出，则无法进行后续操作
+    if (player.aura.class != 'move-to-enhancement' && sakuraArms.shared.shadow.class === 'move-to-enhancement') {
+      uni.showToast({
+        title: '请先确认完成',
+        icon: "error"
+      })
+      return
+    }
+    // 在按下的状态下再按下则重置相关状态
+    if (addEnhancementClicked) {
+      // 重置「虚」和「装」的样式，按钮样式也会跟着重置
+      sakuraArms.shared.shadow.class = ''
+      player.aura.class = ''
+      // 重置付与牌的show为false
+      sakuraArms.resetEnhancementShow()
+      // 重置移动参数
+      sakuraArms.resetMovementParas()
+      return
+    }
+    // 变换「虚」和「装」的样式，按钮样式也会跟着改变
+    sakuraArms.shared.shadow.class = 'move-to-enhancement'
+    player.aura.class = 'move-to-enhancement'
+    for (let cardIndex in this.player.enhancement) {
+      // 显示编号最靠前的，且count为0的付与牌
+      if (this.player.enhancement[cardIndex]['count'] === 0) {
+        this.player.enhancement[cardIndex]['show'] = true
+        // 修改移动token的相关变量为该附与牌
+        sakuraArms.movementParas.to = `${props.TopAreaName}.enhancement.${cardIndex}.count`;
+        sakuraArms.movementParas.isReadyToMove = true
+        break
       }
-    },
-    computed: {
-      ...mapState('m_sa', ['shared', 'movementParas', 'turn']),
-      player() {
-        return this.$store.state.m_sa[this.TopAreaName]
-      },
-      // 根据「装」和「虚」的class判断目前是否为添加付与牌的状态
-      addEnhancementClicked() {
-        return this.player.aura.class === 'move-to-enhancement' &&
-          this.shared.shadow.class === 'move-to-enhancement'
-      },
-    },
-    methods: {
-      ...mapMutations('m_sa', ['moveSakuraToken', 'resetEnhancementShow', 'resetMovementParas',
-        'enhancementCountMinusOne', 'changeTurn'
-      ]),
-      // 区域点击
-      areaClick(e) {
-        // 调用混入的saAreaClick方法
-        this.saAreaClick(e)
-      },
-      // 基本动作
-      baseAction(e) {
-        const actionName = e.currentTarget.dataset.action;
-        this.movementParas.from = this.baseActionParas[actionName]['from']
-        this.movementParas.to = this.baseActionParas[actionName]['to']
-        this.movementParas.amount = this.baseActionParas[actionName]['amount']
-        // console.log(this.movementParas);
-        this.moveSakuraToken()
-      },
-      // 结束回合
-      endTurn() {
-        // 如果现在还未确认付与牌的打出，则无法进行后续操作
-        if (this.shared.shadow.class === 'move-to-enhancement') {
-          uni.showToast({
-            title: '请先确认完成',
-            icon: "error"
-          })
-          return
-        }
-        // 所有付与牌count-1
-        this.enhancementCountMinusOne()
-        // 更改turn为对方回合
-        this.changeTurn()
-      },
 
-      // 重铸牌库
-      // 打出付与牌
-      addEnhancement() {
-        // 如果当前对方在处理付与牌的打出，则无法进行后续操作
-        if (this.player.aura.class != 'move-to-enhancement' && this.shared.shadow.class === 'move-to-enhancement') {
-          uni.showToast({
-            title: '请先确认完成',
-            icon: "error"
-          })
-          return
-        }
-        // 在按下的状态下再按下则重置相关状态
-        if (this.addEnhancementClicked) {
-          // 重置「虚」和「装」的样式，按钮样式也会跟着重置
-          this.shared.shadow.class = ''
-          this.player.aura.class = ''
-          // 重置付与牌的show为false
-          this.resetEnhancementShow()
-          // 重置移动参数
-          this.resetMovementParas()
-          return
-        }
-        // 变换「虚」和「装」的样式，按钮样式也会跟着改变
-        this.shared.shadow.class = 'move-to-enhancement'
-        this.player.aura.class = 'move-to-enhancement'
-        for (let cardIndex in this.player.enhancement) {
-          // 显示编号最靠前的，且count为0的付与牌
-          if (this.player.enhancement[cardIndex]['count'] === 0) {
-            this.player.enhancement[cardIndex]['show'] = true
-            // 修改移动token的相关变量为该附与牌
-            this.movementParas.to = `${this.TopAreaName}.enhancement.${cardIndex}.count`;
-            this.movementParas.isReadyToMove = true
-            break
-          }
-
-        }
-      },
-
-    },
+    }
   }
 </script>
 

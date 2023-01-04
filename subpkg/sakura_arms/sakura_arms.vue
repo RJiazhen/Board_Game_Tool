@@ -1,7 +1,8 @@
 <template>
   <view class="container">
     <!-- 使用说明弹窗 -->
-    <uni-popup ref="popup" type="top" mask-background-color="rgba(35, 35, 35, 0.8)">
+    <!-- FIXME 后续制作自己的使用说明弹出层 -->
+    <!-- <uni-popup ref="popup" type="top" mask-background-color="rgba(35, 35, 35, 0.8)">
       <view class="help-container">
         <view class="help">
           <view><text class="bold" style="font-size: 20px;">【长按重置按钮</text>
@@ -23,9 +24,9 @@
           <view class="close-tip"><text class="bold">点击空白区域关闭说明</text></view>
         </view>
       </view>
-    </uni-popup>
+    </uni-popup> -->
     <!-- 重置按钮 -->
-    <uni-icons class="reset" type="loop" @click="reset" @longpress="showHelp" size="50px"></uni-icons>
+    <uni-icons class="reset" type="loop" @longpress="showHelp" size="50px"></uni-icons>
     <!-- 菜单 -->
     <view class="menu"></view>
     <!-- 游戏版图 -->
@@ -35,67 +36,64 @@
         <SA_player TopAreaName="player1"></SA_player>
       </view>
       <!-- 公共区域 -->
-      <SA_shared TopAreaName="shared"></SA_shared>
+      <!-- <SA_shared TopAreaName="shared"></SA_shared> -->
       <!-- 玩家一 -->
-      <SA_player TopAreaName="player2"></SA_player>
+      <!-- <SA_player TopAreaName="player2"></SA_player> -->
     </view>
   </view>
 </template>
 
-<script>
+<script setup lang="ts">
   import {
-    mapState,
-    mapMutations
-  } from 'vuex'
-  // 导入并混入添加分享功能
+    onMounted,
+  } from "vue";
   import {
-    showShareMenu
-  } from '@/common/showShareMenu.js'
-  export default {
-    mixins: [showShareMenu],
-    data() {
-      return {
-        toShowHelp: true
-      };
-    },
-    computed: {},
-    methods: {
-      ...mapMutations('m_sa', ['resetState', 'getFromStorage']),
-      // 显示帮助
-      showHelp() {
-        this.$refs.popup.open()
-      },
-      // 重置相关数值
-      reset() {
-        uni.showModal({
-          content: '是否重置所有数值？',
-          success: (res) => { // success是只要接口调用成功都会执行
-            if (res.confirm) { // res.confirm才是点击确认才执行
-              this.resetState()
-            }
-          }
-        })
-      }
-    },
-    // 加载时从本地存储获取数据
-    onLoad() {
-      // 获取游戏面板数据
-      this.getFromStorage()
-      // 获取是否显示帮助参数
-      this.toShowHelp = uni.getStorageSync('sa_toShowHelp').length != 0 ?
-        JSON.parse(uni.getStorageSync('sa_toShowHelp')) :
-        this.toShowHelp
-      // 判断是否显示帮助
-      if (this.toShowHelp) {
-        this.showHelp()
-        uni.setStorageSync('sa_toShowHelp', JSON.stringify(false))
-      }
-    },
-    // 点击分享按钮时的事件
-    onShareAppMessage(res) {
+    useSakuraArms
+  } from '@/store/sakura_arms.js'
+  const sakuraArms = useSakuraArms()
+  // 开启分享功能
+  onMounted(() => {
+    uni.showShareMenu({})
+  })
 
-    }
+  // 显示帮助菜单
+  let toShowHelp = true
+
+  // 显示帮助
+  const showHelp = () => {
+    // const popup = ref(null)
+    // console.log(popup);
+    // popup.open()
+    // console.log($refs);
+    // app.$refs.popup.open()
   }
+
+  // 重置相关数值
+  const reset = () => {
+    uni.showModal({
+      content: '是否重置所有数值？',
+      success: (res) => { // success是只要接口调用成功都会执行
+        if (res.confirm) { // res.confirm才是点击确认才执行
+          sakuraArms.resetState()
+        }
+      }
+    })
+  }
+
+  // 加载时从本地存储获取数据
+  onMounted(() => {
+    // 获取游戏面板数据
+    sakuraArms.getFromStorage()
+    // 获取是否显示帮助参数
+    toShowHelp = uni.getStorageSync('sa_toShowHelp').length != 0 ?
+      JSON.parse(uni.getStorageSync('sa_toShowHelp')) :
+      toShowHelp
+    // 判断是否显示帮助
+    if (toShowHelp) {
+      showHelp()
+      uni.setStorageSync('sa_toShowHelp', JSON.stringify(false))
+    }
+  })
 </script>
 
 <style lang="scss">

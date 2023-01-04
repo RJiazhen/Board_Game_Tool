@@ -19,19 +19,15 @@
   </view>
 </template>
 
-<script>
-  // 导入并混入添加分享功能
+<script setup lang="ts">
   import {
-    showShareMenu
-  } from '@/common/showShareMenu.js'
-  export default {
-    mixins: [showShareMenu],
-    data() {
-      return {};
-    },
+    onMounted
+  } from "vue";
 
-
-  }
+  // 开启分享功能
+  onMounted(() => {
+    uni.showShareMenu({})
+  })
 </script>
 
 <style lang="scss">

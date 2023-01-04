@@ -1,6 +1,10 @@
+import {
+  defineStore
+} from 'pinia';
 import _ from "lodash"
-export default {
-  namespaced: true,
+
+export const useSakuraArms = defineStore('sakuraArms', {
+  // namespaced: true,
   state: () => ({
     // 初始状态数据
     initialState: {
@@ -96,7 +100,7 @@ export default {
   }),
 
 
-  mutations: {
+  actions: {
     // 恢复初始状态
     resetState(state) {
       uni.removeStorage({
@@ -266,4 +270,4 @@ export default {
 
     }
   }
-}
+})

@@ -14,21 +14,7 @@
   </view>
 </template>
 
-<script>
-  export default {
-    name: "test_shared_area",
-    data() {
-      return {
-        // name: 'shadow'
-      };
-    },
-    props: {
-      name: String
-    },
-    mounted() {
-      console.log(this.name);
-    }
-  }
+<script setup lang="ts">
 </script>
 
 <style lang="scss">
@@ -36,7 +22,8 @@
     position: relative;
     height: 100%;
     display: flex;
-    background: url("../../static/sakura_arms/shadow_icon.png") no-repeat center/contain;
+    background: #F7F8FC;
+    border-radius: 12px;
 
     .name {
       position: absolute;

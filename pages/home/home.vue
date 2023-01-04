@@ -13,26 +13,20 @@
   </view>
 </template>
 
-<script>
-  // 导入并混入添加分享功能
+<script setup lang="ts">
   import {
-    showShareMenu
-  } from '@/common/showShareMenu.js'
+    onMounted
+  } from "vue";
 
-  export default {
-    mixins: [showShareMenu],
-    data() {
-      return {
-        href: 'https://uniapp.dcloud.io/component/README?id=uniui'
-      }
-    },
-    methods: {
-      gotoTool(pagename) {
-        uni.navigateTo({
-          url: `/subpkg/${pagename}/${pagename}`
-        })
-      }
-    },
+  // 开启分享功能
+  onMounted(() => {
+    uni.showShareMenu({})
+  })
+
+  const gotoTool = (pagename) => {
+    uni.navigateTo({
+      url: `/subpkg/${pagename}/${pagename}`
+    })
   }
 </script>
 
