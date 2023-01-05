@@ -1,122 +1,219 @@
 <template>
-  <view class="personal-area">
-    <view class="name">装</view>
-    <view class="token">
-      <view class="token-count">10</view>
-      <view class="token-limit">/ 10</view>
+    <view class="personal-area">
+        <!-- 背景层 -->
+        <view class="bg">
+            <view class="bg-left">
+            </view>
+            <view class="bg-right">
+            </view>
+        </view>
+        <!-- 信息展示层 -->
+        <view class="info">
+            <view class="name">{{areaName}}</view>
+            <view class="icon">
+                <image class="icon-img" :src="iconSrc" mode="aspectFit"></image>
+            </view>
+            <view class="token token-count">10</view>
+            <view class="token token-limit">/ ∞</view>
+            <!-- 减号 -->
+            <view class="minus">
+                <image class="sign" src="../../static/minus.svg" mode="aspectFit"></image>
+            </view>
+            <!-- 加号 -->
+            <view class="add">
+                <image class="sign" src="../../static/add.svg" mode="aspectFit"></image>
+            </view>
+        </view>
     </view>
-    <view class="click-area">
-      <view class="sub">
-        -
-      </view>
+
+    <!-- 触摸层 -->
+    <view class="touch">
+        <view class="touch-left" @click="minus">
+
+        </view>
+        <view class="touch-right" @click="add">
+
+        </view>
     </view>
-    <view class="click-area">
-      <view class="add">+</view>
-    </view>
-  </view>
 </template>
 
-<script>
-  export default {
-    name: "sa-personal-area",
-    data() {
-      return {
+<script setup lang="ts">
+    import {
+        computed
+    } from "vue";
+    import _ from 'lodash'
 
-      };
+    const props = defineProps < {
+        name: string,
+    } > ()
+
+    // 区域名称
+    const areaNames = {
+        'aura': '装',
+        'flare': '气',
+        'life': '命'
     }
-  }
+    // 根据传入的参数设置区域名称
+    const areaName = computed((): string => {
+        return _.get(areaNames, props.name)
+    })
+
+    // 区域图标
+    const iconSrcs = {
+        'aura': '../../static/sakura_arms/shadow_icon.png',
+        'flare': '../../static/sakura_arms/shadow_icon.png',
+        'life': '../../static/sakura_arms/shadow_icon.png'
+    }
+    const iconSrc = computed((): string => {
+        return _.get(iconSrcs, props.name)
+    })
+
+    // 减少token
+    const minus = () => {
+        console.log('minus');
+    }
+
+    // 增加token
+    const add = () => {
+        console.log('add');
+    }
 </script>
 
 <style scoped lang="scss">
-  .personal-area {
-    position: relative;
-    height: 100%;
-    display: flex;
-    background: url("../../static/sakura_arms/aura_icon.png") no-repeat center/60%;
-    // border: solid 1px #000;
+    .personal-area {
+        height: 100%;
+        border-radius: 12px;
+        overflow: hidden;
 
-    .name {
-      position: absolute;
-      left: 10px;
-      bottom: 15px;
+        position: relative;
 
-      z-index: 1;
+        // 背景层
+        .bg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
 
-      font-family: 'Inter';
-      font-style: normal;
-      font-weight: 400;
-      font-size: 20px;
-      line-height: 24px;
-      display: flex;
-      align-items: baseline;
-      text-align: center;
+            display: flex;
 
-      color: #DDD8D7;
+            .bg-left {
+                width: 50%;
+                height: 100%;
+                background: #F7F8FC;
+            }
+
+            .bg-right {
+                width: 50%;
+                height: 100%;
+                background: #F7F8FC;
+
+            }
+        }
+
+        // 信息展示层
+        .info {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+
+            .name {
+                position: absolute;
+                left: 11px;
+                top: 11px;
+
+                font-family: 'Inter';
+                font-style: normal;
+                font-weight: 400;
+                font-size: 20px;
+                line-height: 24px;
+                display: flex;
+                align-items: baseline;
+                text-align: center;
+
+                color: #DDD8D7;
+            }
+
+            .icon {
+
+                position: absolute;
+                left: 30px;
+                top: 9px;
+
+                .icon-img {
+                    width: 35px;
+                    height: 35px;
+                }
+            }
+
+            .token {
+                font-family: 'Inter';
+                font-style: normal;
+                font-weight: 400;
+                color: #000000;
+            }
+
+            .token-count {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                font-size: 63px;
+            }
+
+            .token-limit {
+                position: absolute;
+                right: calc(50% - 50px);
+                bottom: calc(50% - 30px);
+                font-size: 10px;
+                color: #b0c1d9;
+            }
+
+            // 减号
+            .minus {
+                position: absolute;
+                left: 14%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            // 加号
+            .add {
+                position: absolute;
+                right: 12%;
+                top: 50%;
+                transform: translate(50%, -50%);
+            }
+
+            // 加减号共用样式
+            .sign {
+                width: 36x;
+                height: 36px;
+            }
+
+        }
+
+        // 触摸层
+        .touch {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+
+            display: flex;
+
+            .touch-left {
+                width: 50%;
+                height: 100%;
+            }
+
+            .touch-right {
+                width: 50%;
+                height: 100%;
+            }
+        }
     }
-
-    .token {
-      z-index: 1;
-
-      font-family: 'Inter';
-      font-style: normal;
-      font-weight: 400;
-      color: #000000;
-
-      .token-count {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translateX(-60%) translateY(-50%);
-
-        font-size: 63px;
-
-      }
-
-      .token-limit {
-        position: absolute;
-        right: 10%;
-        bottom: 30%;
-
-        font-size: 10px;
-      }
-    }
-
-    .click-area {
-      position: relative;
-      width: 50%;
-      height: 100%;
-      text-align: center;
-      line-height: 100%;
-
-      font-weight: 200;
-      font-size: 40px;
-      font-family: 'Inter';
-
-      z-index: 2;
-
-      transition: 50ms;
-
-      &:active {
-        z-index: 0;
-
-        color: #8100FF;
-        background-color: rgba(232, 234, 148, .6);
-        transition: 50ms;
-      }
-
-      .sub {
-        position: absolute;
-        top: 50%;
-        left: 12%;
-        transform: translateY(-50%);
-      }
-
-      .add {
-        position: absolute;
-        top: 50%;
-        right: 15%;
-        transform: translateY(-50%);
-      }
-    }
-  }
 </style>
