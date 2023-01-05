@@ -15,15 +15,13 @@
             </view>
             <view class="token token-count">10</view>
             <view class="token token-limit">/ ∞</view>
+            <!-- 减号 -->
             <view class="minus">
-                <view class="rect">
-                </view>
+                <image class="sign" src="../../static/minus.svg" mode="aspectFit"></image>
             </view>
+            <!-- 加号 -->
             <view class="add">
-                <view class="rect rect-1">
-                </view>
-                <view class="rect rect-2">
-                </view>
+                <image class="sign" src="../../static/add.svg" mode="aspectFit"></image>
             </view>
         </view>
 
@@ -43,22 +41,31 @@
     import {
         computed
     } from "vue";
+    import _ from 'lodash'
 
     const props = defineProps < {
         name: string,
     } > ()
 
     // 区域名称
+    const areaNames = {
+        'shadow': '虚',
+        'distance': '距'
+    }
+    // 根据传入的参数设置区域名称
     const areaName = computed((): string => {
-        return props.name === 'distance' ? '距' : '虚'
+        return _.get(areaNames, props.name)
     })
 
     // 区域图标
+    const iconSrcs = {
+        'shadow': '../../static/sakura_arms/shadow_icon.png',
+        'distance': '../../static/sakura_arms/shadow_icon.png'
+    }
     const iconSrc = computed((): string => {
-        return props.name === 'distance' ?
-            '../../static/sakura_arms/shadow_icon.png' :
-            '../../static/sakura_arms/shadow_icon.png'
+        return _.get(iconSrcs, props.name)
     })
+
 
     // 减少token
     const minus = () => {
@@ -157,9 +164,10 @@
 
             .token-limit {
                 position: absolute;
-                right: calc(50% - 60px);
+                right: calc(50% - 50px);
                 bottom: calc(50% - 30px);
                 font-size: 10px;
+                color: #b0c1d9;
             }
 
             .minus {
@@ -167,14 +175,6 @@
                 left: 18%;
                 top: 50%;
                 transform: translate(-50%, -50%);
-
-                .rect {
-                    box-sizing: border-box;
-                    border-radius: 2px;
-                    height: 4px;
-                    width: 26px;
-                    background-color: #1c1c1e;
-                }
             }
 
             .add {
@@ -183,24 +183,13 @@
                 right: 18%;
                 top: 50%;
                 transform: translate(50%, -50%);
-
-                .rect {
-                    // position: absolute;
-
-                    box-sizing: border-box;
-                    border-radius: 2px;
-                    height: 4px;
-                    width: 26px;
-                    background-color: #1c1c1e;
-                }
-
-                .rect-1 {
-                    position: absolute;
-
-                    transform: rotate(90deg);
-                }
             }
 
+            // 加减号共用样式
+            .sign {
+                width: 36x;
+                height: 36px;
+            }
         }
 
         // 触摸层
