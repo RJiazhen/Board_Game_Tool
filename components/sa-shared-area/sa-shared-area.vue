@@ -1,90 +1,227 @@
 <template>
-  <view class="shared-area">
-    <view class="name">虚</view>
-    <view class="token">
-      <div class="token-count">10</div>
-      <div class="token-limit">/ ∞</div>
+    <view class="shared-area">
+        <!-- 背景层 -->
+        <view class="bg">
+            <view class="bg-left">
+            </view>
+            <view class="bg-right">
+            </view>
+        </view>
+        <!-- 信息展示层 -->
+        <view class="info">
+            <view class="name">{{areaName}}</view>
+            <view class="icon">
+                <image class="icon-img" :src="iconSrc" mode="aspectFit"></image>
+            </view>
+            <view class="token token-count">10</view>
+            <view class="token token-limit">/ ∞</view>
+            <view class="minus">
+                <view class="rect">
+                </view>
+            </view>
+            <view class="add">
+                <view class="rect rect-1">
+                </view>
+                <view class="rect rect-2">
+                </view>
+            </view>
+        </view>
+
+        <!-- 触摸层 -->
+        <view class="touch">
+            <view class="touch-left" @click="minus">
+
+            </view>
+            <view class="touch-right" @click="add">
+
+            </view>
+        </view>
     </view>
-    <view class="click-area sub">
-      -
-    </view>
-    <view class="click-area add">
-      +
-    </view>
-  </view>
 </template>
 
 <script setup lang="ts">
+    import {
+        computed
+    } from "vue";
+
+    const props = defineProps < {
+        name: string,
+    } > ()
+
+    // 区域名称
+    const areaName = computed((): string => {
+        return props.name === 'distance' ? '距' : '虚'
+    })
+
+    // 区域图标
+    const iconSrc = computed((): string => {
+        return props.name === 'distance' ?
+            '../../static/sakura_arms/shadow_icon.png' :
+            '../../static/sakura_arms/shadow_icon.png'
+    })
+
+    // 减少token
+    const minus = () => {
+        console.log('minus');
+    }
+
+    // 增加token
+    const add = () => {
+        console.log('add');
+    }
 </script>
 
 <style lang="scss">
-  .shared-area {
-    position: relative;
-    height: 100%;
-    display: flex;
-    background: #F7F8FC;
-    border-radius: 12px;
+    .shared-area {
+        height: 100%;
+        border-radius: 12px;
+        overflow: hidden;
 
-    .name {
-      position: absolute;
-      left: 11px;
-      top: 11px;
+        position: relative;
 
-      font-family: 'Inter';
-      font-style: normal;
-      font-weight: 400;
-      font-size: 20px;
-      line-height: 24px;
-      display: flex;
-      align-items: baseline;
-      text-align: center;
+        // 背景层
+        .bg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
 
-      color: #DDD8D7;
+            display: flex;
+
+            .bg-left {
+                width: 50%;
+                height: 100%;
+                background: #F7F8FC;
+            }
+
+            .bg-right {
+                width: 50%;
+                height: 100%;
+                background: #F7F8FC;
+
+            }
+        }
+
+        // 信息展示层
+        .info {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+
+            .name {
+                position: absolute;
+                left: 11px;
+                top: 11px;
+
+                font-family: 'Inter';
+                font-style: normal;
+                font-weight: 400;
+                font-size: 20px;
+                line-height: 24px;
+                display: flex;
+                align-items: baseline;
+                text-align: center;
+
+                color: #DDD8D7;
+            }
+
+            .icon {
+
+                position: absolute;
+                left: 30px;
+                top: 9px;
+
+                .icon-img {
+                    width: 35px;
+                    height: 35px;
+                }
+            }
+
+            .token {
+                font-family: 'Inter';
+                font-style: normal;
+                font-weight: 400;
+                color: #000000;
+            }
+
+            .token-count {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                font-size: 63px;
+            }
+
+            .token-limit {
+                position: absolute;
+                right: calc(50% - 60px);
+                bottom: calc(50% - 30px);
+                font-size: 10px;
+            }
+
+            .minus {
+                position: absolute;
+                left: 18%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+
+                .rect {
+                    box-sizing: border-box;
+                    border-radius: 2px;
+                    height: 4px;
+                    width: 26px;
+                    background-color: #1c1c1e;
+                }
+            }
+
+            .add {
+
+                position: absolute;
+                right: 18%;
+                top: 50%;
+                transform: translate(50%, -50%);
+
+                .rect {
+                    // position: absolute;
+
+                    box-sizing: border-box;
+                    border-radius: 2px;
+                    height: 4px;
+                    width: 26px;
+                    background-color: #1c1c1e;
+                }
+
+                .rect-1 {
+                    position: absolute;
+
+                    transform: rotate(90deg);
+                }
+            }
+
+        }
+
+        // 触摸层
+        .touch {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+
+            display: flex;
+
+            .touch-left {
+                width: 50%;
+                height: 100%;
+            }
+
+            .touch-right {
+                width: 50%;
+                height: 100%;
+            }
+        }
     }
-
-    .token {
-      font-family: 'Inter';
-      font-style: normal;
-      font-weight: 400;
-      color: #000000;
-
-      .token-count {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translateX(-50%) translateY(-50%);
-
-        font-size: 63px;
-
-      }
-
-      .token-limit {
-        position: absolute;
-        right: 25%;
-        bottom: 10px;
-
-        font-size: 10px;
-      }
-    }
-
-    .click-area {
-      width: 50%;
-      height: 100%;
-      text-align: center;
-      line-height: 84px;
-
-      font-weight: 200;
-      font-size: 40px;
-      font-family: 'Inter';
-
-      transition: 50ms;
-
-      &:active {
-        color: #8100FF;
-        background-color: rgba(232, 234, 148, .6);
-        transition: 50ms;
-      }
-    }
-
-  }
 </style>
