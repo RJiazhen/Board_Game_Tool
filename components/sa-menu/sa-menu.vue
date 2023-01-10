@@ -5,6 +5,7 @@
         <view class="circle-menu" :class="isActive?'activated':'unactivated'">
             <!-- 菜单边框 -->
             <view class="menu-border"> </view>
+            <!-- 按钮轮盘 -->
             <view class="btn-wheel">
                 <view class="btn" v-for="(btn, index) in btnList" :key="index" @click="btn.func()">
                     <image class="btn-icon" :src="btn.icon" mode="aspectFit"></image>
@@ -28,16 +29,39 @@
                 <view class="rect"></view>
             </view>
         </view>
+        <!-- 重置按钮弹窗 -->
+        <uni-popup ref="resetPopup" type="dialog">
+            <uni-popup-dialog type="warn" mode="base" content="确认重置吗？" :before-close="true" @close="closeReset"
+                @confirm="confirmReset"></uni-popup-dialog>
+        </uni-popup>
+
+        <!-- 帮助按钮弹窗 -->
+        <uni-popup ref="helpPopup" type="bottom" background-color="#fff">
+            <uni-popup-dialog type="warn" mode="base" content="" :before-close="true" @close="closeHelp"
+                @confirm="nextHelp">
+                <view class="helpInfo">
+                    帮助信息
+                </view>
+            </uni-popup-dialog>
+        </uni-popup>
+
     </view>
 </template>
 
 <script setup lang="ts">
     import {
+        getCurrentInstance,
         ref
     } from "vue";
+    import {
+        useSakuraArms
+    } from '@/store/sakuraArms'
+
+    const sakuraArms = useSakuraArms()
+    const cur = getCurrentInstance()
 
     // 当前激活状态
-    const isActive = ref(true)
+    const isActive = ref(false)
 
     // 改变激活状态
     const changeActive = () => {
@@ -49,17 +73,41 @@
             name: '重置',
             icon: '../../static/sakura_arms/reset_icon.svg',
             func: () => {
-                console.log('reset');
+                cur.refs.resetPopup.open()
             }
         },
         {
-            name: '重置',
+            name: '帮助',
             icon: '../../static/sakura_arms/reset_icon.svg',
             func: () => {
-                console.log('reset');
+                cur.refs.helpPopup.open()
             }
         }
     ]
+
+    // 重置按钮相关函数
+    const closeReset = () => {
+        cur.refs.resetPopup.close()
+    }
+    const confirmReset = () => {
+        sakuraArms.resetState()
+        cur.refs.resetPopup.close()
+    }
+
+    // 帮助按钮相关函数
+    const closeHelp = () => {
+        cur.refs.helpPopup.close()
+    }
+    let helpInfoCount = 0
+    const nextHelp = () => {
+        if (helpInfoCount == 3) {
+            cur.refs.helpPopup.close()
+            helpInfoCount = 0
+        } else {
+            helpInfoCount += 1
+            console.log(helpInfoCount);
+        }
+    }
 </script>
 
 <style scoped lang="scss">
