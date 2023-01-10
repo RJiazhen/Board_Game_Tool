@@ -1,44 +1,73 @@
 <template>
-    <view class="player">
+    <view class="player" id="player">
         <view class="boards">
-            <!-- 面板一 -->
-            <view class="board board-1">
-                <!-- 公共区域 -->
-                <view class="shared">
-                    <!-- 虚 -->
-                    <sa-shared-area name="shadow" style="width: 50%"></sa-shared-area>
-                    <!-- 距 -->
-                    <sa-shared-area name="distance" style="width: 50%"></sa-shared-area>
-                </view>
-                <!-- 个人区域 -->
-                <view class="personal">
-                    <!-- 装 -->
-                    <sa-personal-area name="aura" style="width: 33%"></sa-personal-area>
-                    <!-- 气 -->
-                    <sa-personal-area name="aura" style="width: 33%"></sa-personal-area>
-                    <!-- 命 -->
-                    <sa-personal-area name="aura" style="width: 33%"></sa-personal-area>
-                </view>
-                <!-- 樱花数量提示区域 -->
-                <sa-token-tip class="token-tip"></sa-token-tip>
-            </view>
-            <!-- 面板二 -->
-            <view class="board board-2">
-                <!-- 付与牌区域 -->
-                <sa-enhan-card class="enhan-card" v-for="(card, index) in enhans" :key="index" :order="card.order">
-                </sa-enhan-card>
-                <!-- 添加付与牌按钮 -->
-                <sa-enhan-btn-add class="enhan-btn-add"></sa-enhan-btn-add>
-                <!-- 全部付与牌减一按钮 -->
-                <sa-enhan-btn-remove-all class="enhan-btn-remove-all"></sa-enhan-btn-remove-all>
-                <!-- token数量提示 -->
-                <sa-token-tip class="token-tip"></sa-token-tip>
-            </view>
+            <swiper class="swiper">
+                <swiper-item>
+                    <view class="swiper-item">
+                        <!-- 面板一 -->
+                        <view class="board board-1">
+                            <!-- 公共区域 -->
+                            <view class="shared">
+                                <!-- 虚 -->
+                                <sa-shared-area name="shadow" style="width: 50%"></sa-shared-area>
+                                <!-- 距 -->
+                                <sa-shared-area name="distance" style="width: 50%"></sa-shared-area>
+                            </view>
+                            <!-- 个人区域 -->
+                            <view class="personal">
+                                <!-- 装 -->
+                                <sa-personal-area name="aura" style="width: 33%"></sa-personal-area>
+                                <!-- 气 -->
+                                <sa-personal-area name="aura" style="width: 33%"></sa-personal-area>
+                                <!-- 命 -->
+                                <sa-personal-area name="aura" style="width: 33%"></sa-personal-area>
+                            </view>
+                            <!-- 樱花数量提示区域 -->
+                            <sa-token-tip class="token-tip"></sa-token-tip>
+                        </view>
+                    </view>
+                </swiper-item>
+                <swiper-item>
+                    <view class="swiper-item">
+                        <!-- 面板二 -->
+                        <view class="board board-2" :style="`transform: translateY(${translateY}px);` "
+                            @touchmove="moveBoard2($event)" @touchstart="touchStart($event)" @touchend="endTouch">
+                            <!-- 付与牌区域 -->
+                            <sa-enhan-card class="enhan-card" v-for="(card, index) in enhans" :key="index"
+                                :order="card.order">
+                            </sa-enhan-card>
+                            <!-- 添加付与牌按钮 -->
+                            <sa-enhan-btn-add class="enhan-btn-add"></sa-enhan-btn-add>
+                            <!-- 全部付与牌减一按钮 -->
+                            <sa-enhan-btn-remove-all class="enhan-btn-remove-all"></sa-enhan-btn-remove-all>
+                            <!-- token数量提示 -->
+                            <sa-token-tip class="token-tip"></sa-token-tip>
+                        </view>
+                    </view>
+                </swiper-item>
+            </swiper>
+
         </view>
     </view>
 </template>
 
 <script setup lang="ts">
+    import {
+        computed,
+        getCurrentInstance,
+        onMounted,
+        ref
+    } from 'vue'
+    import {
+        onReady
+    } from '@dcloudio/uni-app'
+
+    // 面板高度变量（用于style部分）
+    const playerHeight = `calc(44.25vh + 3px)`
+
+    // 当前组件实例
+    let cur = getCurrentInstance()
+
     // 付与牌列表
     const enhans = [{
         order: 'A',
@@ -51,33 +80,88 @@
     }, {
         order: 'C',
         tokenCount: 1,
-        isShow: false
+        isShow: true
     }, {
         order: 'C',
         tokenCount: 1,
-        isShow: false
+        isShow: true
     }]
+
+    // region 面板二沿Y轴移动功能
+
+    // player节点实际高度
+    let playerHeighttpx = 0
+    // board2节点实际高度
+    let board2Heightpx = 0
+    // 最大向上偏移量
+    let maxTranslateY = 0
+    // 渲染好画面后获取player和board2的实际高度
+    onReady(() => {
+        let query = uni.createSelectorQuery().in(cur);
+        let player = query.select('#player')
+        let board2 = query.select('.board-2')
+        player.boundingClientRect(data => {
+            playerHeighttpx = data.height
+        }).exec();
+        board2.boundingClientRect(data => {
+            board2Heightpx = data.height
+            // 计算最大向上偏移量（负数，考虑10px的冗余）
+            // 因为获取高度的这个函数是异步的，所以进行计算的步骤也要放在这里面，不然会使用默认值进行计算
+            maxTranslateY = playerHeighttpx - board2Heightpx - 10
+        }).exec()
+    })
+
+    // 面板二Y轴偏移量
+    const translateY = ref(0)
+    // 开始移动时的Y轴偏移量
+    let startTranslateY = 0
+    // 开始移动时的Y坐标
+    let startY = 0
+
+    // 开始移动面板二时存储其坐标
+    const touchStart = (e) => {
+        const touch = e.touches[0] || e.changeTouches[0]
+        startY = touch.clientY
+        startTranslateY = translateY.value
+    }
+
+    // 移动面板二
+    const moveBoard2 = (e) => {
+        const touch = e.touches[0] || e.changeTouches[0]
+        let nowY = touch.clientY
+        translateY.value = startTranslateY + (nowY - startY)
+    }
+
+    // 不再移动面板二时，判断是否超过设定范围
+    const endTouch = () => {
+        // 如果向下偏移了，则复原
+        translateY.value = translateY.value > 0 ? 0 : translateY.value
+        // 如果向上偏移，判断是否超过设定的最大向上偏移量，如果是，则设定为该偏移量
+        translateY.value = translateY.value < maxTranslateY ? maxTranslateY : translateY.value
+    }
+    // endregion 
 </script>
 
 <style scoped lang="scss">
     .player {
         width: 100vw;
-        height: calc(44.25vh + 3px);
-        // overflow: hidden;
+        height: v-bind(playerHeight);
 
         position: relative;
 
         .boards {
+            width: 100%;
+            height: 100%;
             position: absolute;
-            left: -100vw;
             top: 0;
 
-            display: flex;
-            align-items: center;
+            .swiper {
+                height: 100%;
+                width: 100%;
+            }
 
             .board {
                 width: 100vw;
-                height: calc(44.25vh + 3px);
                 padding: 0px 10px 0;
             }
 
@@ -116,10 +200,11 @@
 
             // 面板二
             .board-2 {
-                position: relative;
+                position: absolute;
                 display: flex;
                 flex-wrap: wrap;
 
+                overflow: hidden;
 
                 // 单张付与牌
                 .enhan-card {
@@ -156,7 +241,7 @@
                 // token数量提示区域
                 .token-tip {
                     position: absolute;
-                    top: calc(50% - 20px);
+                    top: 24vh;
                     left: 50%;
                     transform: translate(-50%, -50%);
                 }
