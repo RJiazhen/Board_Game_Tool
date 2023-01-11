@@ -41,36 +41,34 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
                 limit: null,
             },
             // 付与牌
-            enhancement: {
-                A: {
-                    count: 0,
-                    show: false,
-                },
-                B: {
-                    count: 0,
-                    show: false,
-                },
-                C: {
-                    count: 0,
-                    show: false,
-                },
-                D: {
-                    count: 0,
-                    show: false,
-                },
-                E: {
-                    count: 0,
-                    show: false,
-                },
-                F: {
-                    count: 0,
-                    show: false,
-                },
-                G: {
-                    count: 0,
-                    show: false,
-                },
-            }
+            enhancementA: {
+                count: 0,
+                show: false,
+            },
+            enhancementB: {
+                count: 0,
+                show: false,
+            },
+            enhancementC: {
+                count: 0,
+                show: false,
+            },
+            enhancementD: {
+                count: 0,
+                show: false,
+            },
+            enhancementE: {
+                count: 0,
+                show: false,
+            },
+            enhancementF: {
+                count: 0,
+                show: false,
+            },
+            enhancementG: {
+                count: 0,
+                show: false,
+            },
         },
         // 玩家二
         player2: {
@@ -90,36 +88,41 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
                 limit: null,
             },
             // 付与牌
-            enhancement: {
-                A: {
-                    count: 0,
-                    show: false,
-                },
-                B: {
-                    count: 0,
-                    show: false,
-                },
-                C: {
-                    count: 0,
-                    show: false,
-                },
-                D: {
-                    count: 0,
-                    show: false,
-                },
-                E: {
-                    count: 0,
-                    show: false,
-                },
-                F: {
-                    count: 0,
-                    show: false,
-                },
-                G: {
-                    count: 0,
-                    show: false,
-                },
-            }
+            enhancementA: {
+                count: 0,
+                show: false,
+                limit: null,
+            },
+            enhancementB: {
+                count: 0,
+                show: false,
+                limit: null,
+            },
+            enhancementC: {
+                count: 0,
+                show: false,
+                limit: null,
+            },
+            enhancementD: {
+                count: 0,
+                show: false,
+                limit: null,
+            },
+            enhancementE: {
+                count: 0,
+                show: false,
+                limit: null,
+            },
+            enhancementF: {
+                count: 0,
+                show: false,
+                limit: null,
+            },
+            enhancementG: {
+                count: 0,
+                show: false,
+                limit: null,
+            },
         }
     }
 
@@ -128,6 +131,7 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
 
     // 恢复初始状态
     const resetState = () => {
+        console.log('reset');
         // 清除本地存储数据
         uni.removeStorage({
             key: 'sakuraArms',
@@ -136,5 +140,28 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
         // 将当前状态重置回初始状态
         currentState.value = JSON.parse(JSON.stringify(initialState))
     }
-    return { resetState }
+
+    // 减token数量
+    const minusToken = (primaryIndex: string, areaName: string) => {
+        // 如果当前token数量小于等于零，则不修改
+        if (_.get(currentState.value, `${primaryIndex}.${areaName}.count`) <= 0) {
+            return
+        }
+        _.update(currentState.value, `${primaryIndex}.${areaName}.count`, (n) => n - 1)
+    }
+
+    // 加token数量
+    const addToken = (primaryIndex: string, areaName: string) => {
+        let limit = _.get(currentState.value, `${primaryIndex}.${areaName}.limit`)
+        // 如果有上限且当前token数量已达/超过上限，则不变化
+        if (limit != null) {
+            if (_.get(currentState.value, `${primaryIndex}.${areaName}.count`) >= limit) {
+                return
+            }
+        }
+        _.update(currentState.value, `${primaryIndex}.${areaName}.count`, (n) => n + 1)
+    }
+
+
+    return { resetState, currentState, minusToken, addToken }
 })

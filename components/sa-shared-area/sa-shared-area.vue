@@ -2,19 +2,19 @@
     <view class="shared-area">
         <!-- 背景层 -->
         <view class="bg">
-            <view class="bg-left">
+            <view class="bg-left" :class="minusActivate?'activated':''">
             </view>
-            <view class="bg-right">
+            <view class="bg-right" :class="addActivate?'activated':''">
             </view>
         </view>
         <!-- 信息展示层 -->
         <view class="info">
-            <view class="name">{{areaName}}</view>
+            <view class="name">{{areaNameZh}}</view>
             <view class="icon">
                 <image class="icon-img" :src="iconSrc" mode="aspectFit"></image>
             </view>
-            <view class="token token-count">10</view>
-            <view class="token token-limit">/ ∞</view>
+            <view class="token token-count">{{tokenCount}}</view>
+            <view class="token token-limit">/ {{tokenLimit===null?'∞':tokenLimit}}</view>
             <!-- 减号 -->
             <view class="minus">
                 <image class="sign" src="../../static/minus.svg" mode="aspectFit"></image>
@@ -39,42 +39,79 @@
 
 <script setup lang="ts">
     import {
-        computed
+        computed,
+        ref
     } from "vue";
+    import {
+        useSakuraArms
+    } from "@/store/sakuraArms"
     import _ from 'lodash'
 
+    const sakuraArms = useSakuraArms()
+
     const props = defineProps < {
-        name: string,
+        areaName: string,
+        // playerName: string
     } > ()
 
-    // 区域名称
+    // 区域名称列表
     const areaNames = {
         'shadow': '虚',
         'distance': '距'
     }
-    // 根据传入的参数设置区域名称
-    const areaName = computed((): string => {
-        return _.get(areaNames, props.name)
+    // 本区域名称
+    const areaNameZh = computed((): string => {
+        return _.get(areaNames, props.areaName)
     })
 
-    // 区域图标
+    // 区域图标列表
     const iconSrcs = {
         'shadow': '../../static/sakura_arms/shadow_icon.png',
         'distance': '../../static/sakura_arms/shadow_icon.png'
     }
+    // 本区域图标
     const iconSrc = computed((): string => {
-        return _.get(iconSrcs, props.name)
+        return _.get(iconSrcs, props.areaName)
     })
 
+    // 本区域token数量
+    const tokenCount = computed(() => {
+        return _.get(sakuraArms.currentState, `shared.${props.areaName}.count`)
+    })
+    // 本区域token上限
+    const tokenLimit = computed(() => {
+        return _.get(sakuraArms.currentState, `shared.${props.areaName}.limit`)
+    })
+
+    // 控制按下按钮时的样式变化
+    const minusActivate = ref(false)
+    const addActivate = ref(false)
+
+    // 恢复左半部分（减）为未激活
+    const inactivateMinus = _.debounce(() => {
+        minusActivate.value = false
+    }, 500)
+    // 修改右半部分（加）样式
+    const inactivateAdd = _.debounce(() => {
+        addActivate.value = false
+    }, 500)
 
     // 减少token
     const minus = () => {
-        console.log('minus');
+        sakuraArms.minusToken('shared', props.areaName)
+        // 修改样式
+        minusActivate.value = true
+        // 然后恢复为未激活状态（500s延迟）
+        inactivateMinus()
     }
 
     // 增加token
     const add = () => {
-        console.log('add');
+        sakuraArms.addToken('shared', props.areaName)
+        // 修改样式
+        addActivate.value = true
+        // 然后恢复为未激活状态（500s延迟）
+        inactivateAdd()
     }
 </script>
 
@@ -100,13 +137,20 @@
                 width: 50%;
                 height: 100%;
                 background: #F7F8FC;
+                transition: .1s all;
             }
 
             .bg-right {
                 width: 50%;
                 height: 100%;
                 background: #F7F8FC;
+                transition: .5s all;
+            }
 
+            // 激活时的背景
+            .activated {
+                background: rgba(0, 0, 0, 0.2);
+                transition: .25s all;
             }
         }
 

@@ -9,9 +9,11 @@
                             <!-- 公共区域 -->
                             <view class="shared">
                                 <!-- 虚 -->
-                                <sa-shared-area name="shadow" style="width: 50%"></sa-shared-area>
+                                <sa-shared-area areaName="shadow" style="width: 50%">
+                                </sa-shared-area>
                                 <!-- 距 -->
-                                <sa-shared-area name="distance" style="width: 50%"></sa-shared-area>
+                                <sa-shared-area areaName="distance" style="width: 50%">
+                                </sa-shared-area>
                             </view>
                             <!-- 个人区域 -->
                             <view class="personal">
@@ -62,6 +64,9 @@
         onReady
     } from '@dcloudio/uni-app'
 
+    const props = defineProps < {
+        playerName: String
+    } > ()
     // 面板高度变量（用于style部分）
     const playerHeight = `calc(44.25vh + 3px)`
 

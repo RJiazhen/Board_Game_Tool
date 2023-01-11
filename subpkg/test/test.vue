@@ -1,8 +1,8 @@
 <template>
     <view class="container">
         <view class="game-board">
-            <test-player class="player player1" plyaerName="player1"></test-player>
-            <test-player class="player player2" plyaerName="player2"></test-player>
+            <test-player class="player player1" playerName="player1"></test-player>
+            <test-player class="player player2" playerName="player2"></test-player>
             <!-- 中心菜单 -->
             <sa-menu class="menu"></sa-menu>
         </view>
@@ -10,59 +10,18 @@
 </template>
 
 <script setup lang="ts">
-    // import {
-    //   mapState,
-    //   mapMutations
-    // } from 'vuex'
-    // // 导入并混入添加分享功能 
-    // import {
-    //   showShareMenu
-    // } from '@/common/showShareMenu.js'
-    // export default {
-    //   mixins: [showShareMenu],
-    //   data() {
-    //     return {
-    //       toShowHelp: true
-    //     };
-    //   },
-    //   computed: {},
-    //   methods: {
-    //     ...mapMutations('m_sa', ['resetState', 'getFromStorage']),
-    //     // 显示帮助
-    //     showHelp() {
-    //       this.$refs.popup.open()
-    //     },
-    //     // 重置相关数值
-    //     reset() {
-    //       uni.showModal({
-    //         content: '是否重置所有数值？',
-    //         success: (res) => { // success是只要接口调用成功都会执行
-    //           if (res.confirm) { // res.confirm才是点击确认才执行
-    //             this.resetState()
-    //           }
-    //         }
-    //       })
-    //     }
-    //   },
-    //   // 加载时从本地存储获取数据
-    //   onLoad() {
-    //     // 获取游戏面板数据
-    //     this.getFromStorage()
-    //     // 获取是否显示帮助参数
-    //     this.toShowHelp = uni.getStorageSync('sa_toShowHelp').length != 0 ?
-    //       JSON.parse(uni.getStorageSync('sa_toShowHelp')) :
-    //       this.toShowHelp
-    //     // 判断是否显示帮助
-    //     if (this.toShowHelp) {
-    //       this.showHelp()
-    //       uni.setStorageSync('sa_toShowHelp', JSON.stringify(false))
-    //     }
-    //   },
-    //   // 点击分享按钮时的事件
-    //   onShareAppMessage(res) {
+    import {
+        useSakuraArms
+    } from "@/store/sakuraArms"
 
-    //   }
-    // }
+    import {
+        onReady
+    } from '@dcloudio/uni-app'
+
+    const sakuraArms = useSakuraArms()
+    onReady(() => {
+        sakuraArms.resetState()
+    })
 </script>
 
 <style scoped lang="scss">
