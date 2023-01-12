@@ -269,13 +269,13 @@
                     // token减少时
                     &.minus-count {
                         translate: 0 0;
-                        color: rgba(35, 195, 219, 1);
+                        color: #23c3db;
                     }
 
                     // token增加时
                     &.add-count {
                         translate: 0 0;
-                        color: rgba(207, 99, 121, 1);
+                        color: #cf6379;
 
                     }
                 }
