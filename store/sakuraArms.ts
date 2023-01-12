@@ -131,7 +131,6 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
 
     // 恢复初始状态
     const resetState = () => {
-        console.log('reset');
         // 清除本地存储数据
         uni.removeStorage({
             key: 'sakuraArms',
@@ -141,25 +140,27 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
         currentState.value = JSON.parse(JSON.stringify(initialState))
     }
 
-    // 减token数量
+    // 减token数量，无法再减则返回false，否则返回true
     const minusToken = (primaryIndex: string, areaName: string) => {
         // 如果当前token数量小于等于零，则不修改
         if (_.get(currentState.value, `${primaryIndex}.${areaName}.count`) <= 0) {
-            return
+            return false
         }
         _.update(currentState.value, `${primaryIndex}.${areaName}.count`, (n) => n - 1)
+        return true
     }
 
-    // 加token数量
+    // 加token数量，无法再添加则返回false，否则返回true
     const addToken = (primaryIndex: string, areaName: string) => {
         let limit = _.get(currentState.value, `${primaryIndex}.${areaName}.limit`)
         // 如果有上限且当前token数量已达/超过上限，则不变化
         if (limit != null) {
             if (_.get(currentState.value, `${primaryIndex}.${areaName}.count`) >= limit) {
-                return
+                return false
             }
         }
         _.update(currentState.value, `${primaryIndex}.${areaName}.count`, (n) => n + 1)
+        return true
     }
 
 

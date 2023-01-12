@@ -13,6 +13,13 @@
             <view class="icon">
                 <image class="icon-img" :src="iconSrc" mode="aspectFit"></image>
             </view>
+            <!-- 变化数字弹出 -->
+            <view class="change-count-area">
+                <view class="change-count" :class="changeCountStyle">
+                    <text v-if="changeCount>0">+</text>
+                    <text> {{changeCount}} </text>
+                </view>
+            </view>
             <view class="token token-count">{{tokenCount}}</view>
             <view class="token token-limit">/ {{tokenLimit===null?'∞':tokenLimit}}</view>
             <!-- 减号 -->
@@ -83,22 +90,48 @@
         return _.get(sakuraArms.currentState, `shared.${props.areaName}.limit`)
     })
 
+
     // 控制按下按钮时的样式变化
     const minusActivate = ref(false)
     const addActivate = ref(false)
 
-    // 恢复左半部分（减）为未激活
+    // 恢复减token相关的样式为未激活
     const inactivateMinus = _.debounce(() => {
         minusActivate.value = false
-    }, 500)
-    // 修改右半部分（加）样式
+    }, 700)
+    // 修改加token相关的样式为未激活
     const inactivateAdd = _.debounce(() => {
         addActivate.value = false
-    }, 500)
+    }, 700)
+
+
+    // 变化的量
+    const changeCount = ref(0)
+    // 对应的样式
+    const changeCountStyle = computed(() => {
+        if (changeCount.value === 0) {
+            return 'no-change'
+        }
+        if (changeCount.value < 0) {
+            return 'minus-count'
+        }
+        if (changeCount.value > 0) {
+            return 'add-count'
+        }
+    })
+    // 恢复changeCount为0
+    const resetChangeCount = _.debounce(() => {
+        changeCount.value = 0
+    }, 1000)
 
     // 减少token
     const minus = () => {
-        sakuraArms.minusToken('shared', props.areaName)
+        // 成功减少则修改changeCount
+        if (sakuraArms.minusToken('shared', props.areaName)) {
+            changeCount.value -= 1
+            // 将changeCount重置为0 （1s延迟）
+            resetChangeCount()
+        }
         // 修改样式
         minusActivate.value = true
         // 然后恢复为未激活状态（500s延迟）
@@ -107,7 +140,11 @@
 
     // 增加token
     const add = () => {
-        sakuraArms.addToken('shared', props.areaName)
+        if (sakuraArms.addToken('shared', props.areaName)) {
+            changeCount.value += 1
+            // 将changeCount重置为0 （1s延迟）
+            resetChangeCount()
+        }
         // 修改样式
         addActivate.value = true
         // 然后恢复为未激活状态（500s延迟）
@@ -179,6 +216,7 @@
                 color: #DDD8D7;
             }
 
+            // 图标
             .icon {
 
                 position: absolute;
@@ -191,6 +229,53 @@
                 }
             }
 
+            // 弹出变化的数字
+            .change-count-area {
+                width: 50px;
+                height: 30px;
+                position: absolute;
+                left: 50%;
+                top: calc(50% - 35px);
+                translate: -50% -50%;
+
+                overflow: hidden;
+
+                // box-sizing: border-box;
+                // border: 1px solid;
+
+                .change-count {
+                    // position: absolute;
+                    // left: 50%;
+                    // top: 50%;
+                    translate: -50% 100%;
+
+                    line-height: 25px;
+                    font-size: 25px;
+                    text-align: center;
+
+
+                    // 变化值为0时
+                    &.no-change {
+                        display: none;
+                        color: rgba(0, 0, 0, 0);
+                    }
+
+                    // token减少时
+                    &.minus-count {
+                        translate: 0 0;
+                        color: rgba(35, 195, 219, 1);
+                    }
+
+                    // token增加时
+                    &.add-count {
+                        translate: 0 0;
+                        color: rgba(207, 99, 121, 1);
+
+                    }
+                }
+            }
+
+            // token数量及限制
             .token {
                 font-family: 'Inter';
                 font-style: normal;
@@ -204,6 +289,7 @@
                 top: 50%;
                 transform: translateX(-50%) translateY(-50%);
                 font-size: 63px;
+                line-height: 63px;
             }
 
             .token-limit {
