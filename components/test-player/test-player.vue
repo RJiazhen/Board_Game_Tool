@@ -9,20 +9,23 @@
                             <!-- 公共区域 -->
                             <view class="shared">
                                 <!-- 虚 -->
-                                <sa-shared-area areaName="shadow" style="width: 50%">
-                                </sa-shared-area>
+                                <sa-area primaryAreaName="shared" areaName="shadow" style="width: 50%">
+                                </sa-area>
                                 <!-- 距 -->
-                                <sa-shared-area areaName="distance" style="width: 50%">
-                                </sa-shared-area>
+                                <sa-area primaryAreaName="shared" areaName="distance" style="width: 50%">
+                                </sa-area>
                             </view>
                             <!-- 个人区域 -->
                             <view class="personal">
                                 <!-- 装 -->
-                                <sa-personal-area name="aura" style="width: 33%"></sa-personal-area>
+                                <sa-area :primaryAreaName="props.playerName" areaName="aura" style="width: 33%">
+                                </sa-area>
                                 <!-- 气 -->
-                                <sa-personal-area name="aura" style="width: 33%"></sa-personal-area>
+                                <sa-area :primaryAreaName="props.playerName" areaName="flare" style="width: 33%">
+                                </sa-area>
                                 <!-- 命 -->
-                                <sa-personal-area name="aura" style="width: 33%"></sa-personal-area>
+                                <sa-area :primaryAreaName="props.playerName" areaName="life" style="width: 33%">
+                                </sa-area>
                             </view>
                             <!-- 樱花数量提示区域 -->
                             <sa-token-tip class="token-tip"></sa-token-tip>
@@ -185,7 +188,7 @@
                     height: 20.33vh;
                     display: flex;
 
-                    sa-shared-area:nth-child(1) {
+                    sa-area:nth-child(1) {
                         margin-right: 3px;
                     }
                 }
@@ -197,7 +200,7 @@
 
                     margin-top: 3px;
 
-                    sa-personal-area:nth-child(-n+2) {
+                    sa-area:nth-child(-n+2) {
                         margin-right: 3px;
                     }
                 }

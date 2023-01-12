@@ -1,5 +1,5 @@
 <template>
-    <view class="shared-area">
+    <view class="area">
         <!-- 背景层 -->
         <view class="bg">
             <view class="bg-left" :class="minusActivate?'activated':''">
@@ -57,14 +57,17 @@
     const sakuraArms = useSakuraArms()
 
     const props = defineProps < {
+        primaryAreaName: string,
         areaName: string,
-        // playerName: string
     } > ()
 
     // 区域名称列表
     const areaNames = {
         'shadow': '虚',
-        'distance': '距'
+        'distance': '距',
+        'aura': '装',
+        'flare': '气',
+        'life': '命'
     }
     // 本区域名称
     const areaNameZh = computed((): string => {
@@ -74,7 +77,10 @@
     // 区域图标列表
     const iconSrcs = {
         'shadow': '../../static/sakura_arms/shadow_icon.png',
-        'distance': '../../static/sakura_arms/shadow_icon.png'
+        'distance': '../../static/sakura_arms/shadow_icon.png',
+        'aura': '../../static/sakura_arms/shadow_icon.png',
+        'flare': '../../static/sakura_arms/shadow_icon.png',
+        'life': '../../static/sakura_arms/shadow_icon.png'
     }
     // 本区域图标
     const iconSrc = computed((): string => {
@@ -83,11 +89,11 @@
 
     // 本区域token数量
     const tokenCount = computed(() => {
-        return _.get(sakuraArms.currentState, `shared.${props.areaName}.count`)
+        return _.get(sakuraArms.currentState, `${props.primaryAreaName}.${props.areaName}.count`)
     })
     // 本区域token上限
     const tokenLimit = computed(() => {
-        return _.get(sakuraArms.currentState, `shared.${props.areaName}.limit`)
+        return _.get(sakuraArms.currentState, `${props.primaryAreaName}.${props.areaName}.limit`)
     })
 
 
@@ -127,7 +133,7 @@
     // 减少token
     const minus = () => {
         // 成功减少则修改changeCount
-        if (sakuraArms.minusToken('shared', props.areaName)) {
+        if (sakuraArms.minusToken(props.primaryAreaName, props.areaName)) {
             changeCount.value -= 1
             // 将changeCount重置为0 （1s延迟）
             resetChangeCount()
@@ -140,7 +146,7 @@
 
     // 增加token
     const add = () => {
-        if (sakuraArms.addToken('shared', props.areaName)) {
+        if (sakuraArms.addToken(props.primaryAreaName, props.areaName)) {
             changeCount.value += 1
             // 将changeCount重置为0 （1s延迟）
             resetChangeCount()
@@ -153,7 +159,7 @@
 </script>
 
 <style lang="scss">
-    .shared-area {
+    .area {
         height: 100%;
         border-radius: 12px;
         overflow: hidden;
