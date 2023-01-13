@@ -36,18 +36,19 @@
                         @touchmove="moveBoard2($event)" @touchstart="touchStart($event)" @touchend="endTouch">
                         <!-- 付与牌区域 -->
                         <sa-enhan-card class="enhan-card" v-for="(card, index) in enhans" :key="index"
-                            :primaryAreaName="props.playerName" :order="card.order">
+                            :primaryAreaName="props.playerName" :order="card.order"
+                            @updateMaxTranslateY="updateMaxTranslateY()">
                         </sa-enhan-card>
                         <!-- 添加付与牌按钮 -->
-                        <sa-enhan-btn-add class="enhan-btn-add"></sa-enhan-btn-add>
+                        <sa-enhan-btn-add class="enhan-btn-add" :primaryAreaName="props.playerName"></sa-enhan-btn-add>
                         <!-- 全部付与牌减一按钮 -->
-                        <sa-enhan-btn-remove-all class="enhan-btn-remove-all"></sa-enhan-btn-remove-all>
+                        <sa-enhan-btn-remove-all class="enhan-btn-remove-all" :primaryAreaName="props.playerName">
+                        </sa-enhan-btn-remove-all>
                         <!-- token数量提示 -->
                         <sa-token-tip class="token-tip"></sa-token-tip>
                     </view>
                 </swiper-item>
             </swiper>
-
         </view>
     </view>
 </template>
@@ -56,6 +57,7 @@
     import {
         computed,
         getCurrentInstance,
+        onUpdated,
         ref
     } from 'vue'
     import {
@@ -94,8 +96,9 @@
     let board2Heightpx = 0
     // 最大向上偏移量
     let maxTranslateY = 0
-    // 渲染好画面后获取player和board2的实际高度
-    onReady(() => {
+
+    // 更新最大偏移值事件，让enhan-card组件在挂载后更新
+    const updateMaxTranslateY = () => {
         let query = uni.createSelectorQuery().in(cur);
         let player = query.select('#player')
         let board2 = query.select('.board-2')
@@ -108,7 +111,7 @@
             // 因为获取高度的这个函数是异步的，所以进行计算的步骤也要放在这里面，不然会使用默认值进行计算
             maxTranslateY = playerHeighttpx - board2Heightpx - 10
         }).exec()
-    })
+    }
 
     // 面板二Y轴偏移量
     const translateY = ref(0)
@@ -226,7 +229,6 @@
                 .enhan-btn-add {
                     width: calc((100vw - 26px) / 3);
                     height: 24vh;
-                    margin-right: 3px;
                     margin-top: 3px;
                 }
 
@@ -234,6 +236,7 @@
                 .enhan-btn-remove-all {
                     width: calc((100vw - 26px) / 3);
                     height: 24vh;
+                    margin-left: 3px;
                     margin-top: 3px;
                 }
 
