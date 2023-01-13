@@ -42,32 +42,46 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
             },
             // 付与牌
             enhancementA: {
+                order: "A",
                 count: 0,
-                show: false,
+                show: true,
+                limit: null,
             },
             enhancementB: {
+                order: "B",
                 count: 0,
-                show: false,
+                show: true,
+                limit: null,
             },
             enhancementC: {
+                order: "C",
                 count: 0,
-                show: false,
+                show: true,
+                limit: null,
             },
             enhancementD: {
+                order: "D",
                 count: 0,
                 show: false,
+                limit: null,
             },
             enhancementE: {
+                order: "E",
                 count: 0,
                 show: false,
+                limit: null,
             },
             enhancementF: {
+                order: "F",
                 count: 0,
                 show: false,
+                limit: null,
             },
             enhancementG: {
+                order: "G",
                 count: 0,
                 show: false,
+                limit: null,
             },
         },
         // 玩家二
@@ -89,36 +103,43 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
             },
             // 付与牌
             enhancementA: {
+                order: "A",
                 count: 0,
-                show: false,
+                show: true,
                 limit: null,
             },
             enhancementB: {
+                order: "B",
                 count: 0,
-                show: false,
+                show: true,
                 limit: null,
             },
             enhancementC: {
+                order: "C",
                 count: 0,
-                show: false,
+                show: true,
                 limit: null,
             },
             enhancementD: {
+                order: "D",
                 count: 0,
                 show: false,
                 limit: null,
             },
             enhancementE: {
+                order: "E",
                 count: 0,
                 show: false,
                 limit: null,
             },
             enhancementF: {
+                order: "F",
                 count: 0,
                 show: false,
                 limit: null,
             },
             enhancementG: {
+                order: "G",
                 count: 0,
                 show: false,
                 limit: null,
@@ -136,6 +157,7 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
             key: 'sakuraArms',
             success() { }
         })
+
         // 将当前状态重置回初始状态
         currentState.value = JSON.parse(JSON.stringify(initialState))
     }

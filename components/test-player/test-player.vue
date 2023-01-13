@@ -1,53 +1,49 @@
 <template>
     <view class="player" id="player">
         <view class="boards">
-            <swiper class="swiper">
+            <swiper class="swiper" current="1">
                 <swiper-item>
-                    <view class="swiper-item">
-                        <!-- 面板一 -->
-                        <view class="board board-1">
-                            <!-- 公共区域 -->
-                            <view class="shared">
-                                <!-- 虚 -->
-                                <sa-area primaryAreaName="shared" areaName="shadow" style="width: 50%">
-                                </sa-area>
-                                <!-- 距 -->
-                                <sa-area primaryAreaName="shared" areaName="distance" style="width: 50%">
-                                </sa-area>
-                            </view>
-                            <!-- 个人区域 -->
-                            <view class="personal">
-                                <!-- 装 -->
-                                <sa-area :primaryAreaName="props.playerName" areaName="aura" style="width: 33%">
-                                </sa-area>
-                                <!-- 气 -->
-                                <sa-area :primaryAreaName="props.playerName" areaName="flare" style="width: 33%">
-                                </sa-area>
-                                <!-- 命 -->
-                                <sa-area :primaryAreaName="props.playerName" areaName="life" style="width: 33%">
-                                </sa-area>
-                            </view>
-                            <!-- 樱花数量提示区域 -->
-                            <sa-token-tip class="token-tip"></sa-token-tip>
+                    <!-- 面板一 -->
+                    <view class="board board-1">
+                        <!-- 公共区域 -->
+                        <view class="shared">
+                            <!-- 虚 -->
+                            <sa-area primaryAreaName="shared" areaName="shadow" style="width: 50%">
+                            </sa-area>
+                            <!-- 距 -->
+                            <sa-area primaryAreaName="shared" areaName="distance" style="width: 50%">
+                            </sa-area>
                         </view>
+                        <!-- 个人区域 -->
+                        <view class="personal">
+                            <!-- 装 -->
+                            <sa-area :primaryAreaName="props.playerName" areaName="aura" style="width: 33%">
+                            </sa-area>
+                            <!-- 气 -->
+                            <sa-area :primaryAreaName="props.playerName" areaName="flare" style="width: 33%">
+                            </sa-area>
+                            <!-- 命 -->
+                            <sa-area :primaryAreaName="props.playerName" areaName="life" style="width: 33%">
+                            </sa-area>
+                        </view>
+                        <!-- 樱花数量提示区域 -->
+                        <sa-token-tip class="token-tip"></sa-token-tip>
                     </view>
                 </swiper-item>
                 <swiper-item>
-                    <view class="swiper-item">
-                        <!-- 面板二 -->
-                        <view class="board board-2" :style="`transform: translateY(${translateY}px);` "
-                            @touchmove="moveBoard2($event)" @touchstart="touchStart($event)" @touchend="endTouch">
-                            <!-- 付与牌区域 -->
-                            <sa-enhan-card class="enhan-card" v-for="(card, index) in enhans" :key="index"
-                                :order="card.order">
-                            </sa-enhan-card>
-                            <!-- 添加付与牌按钮 -->
-                            <sa-enhan-btn-add class="enhan-btn-add"></sa-enhan-btn-add>
-                            <!-- 全部付与牌减一按钮 -->
-                            <sa-enhan-btn-remove-all class="enhan-btn-remove-all"></sa-enhan-btn-remove-all>
-                            <!-- token数量提示 -->
-                            <sa-token-tip class="token-tip"></sa-token-tip>
-                        </view>
+                    <!-- 面板二 -->
+                    <view class="board board-2" :style="`transform: translateY(${translateY}px);` "
+                        @touchmove="moveBoard2($event)" @touchstart="touchStart($event)" @touchend="endTouch">
+                        <!-- 付与牌区域 -->
+                        <sa-enhan-card class="enhan-card" v-for="(card, index) in enhans" :key="index"
+                            :primaryAreaName="props.playerName" :order="card.order">
+                        </sa-enhan-card>
+                        <!-- 添加付与牌按钮 -->
+                        <sa-enhan-btn-add class="enhan-btn-add"></sa-enhan-btn-add>
+                        <!-- 全部付与牌减一按钮 -->
+                        <sa-enhan-btn-remove-all class="enhan-btn-remove-all"></sa-enhan-btn-remove-all>
+                        <!-- token数量提示 -->
+                        <sa-token-tip class="token-tip"></sa-token-tip>
                     </view>
                 </swiper-item>
             </swiper>
@@ -60,13 +56,16 @@
     import {
         computed,
         getCurrentInstance,
-        onMounted,
         ref
     } from 'vue'
     import {
         onReady
     } from '@dcloudio/uni-app'
+    import {
+        useSakuraArms
+    } from '@/store/sakuraArms'
 
+    const sakuraArms = useSakuraArms()
     const props = defineProps < {
         playerName: String
     } > ()
@@ -76,24 +75,16 @@
     // 当前组件实例
     let cur = getCurrentInstance()
 
-    // 付与牌列表
-    const enhans = [{
-        order: 'A',
-        tokenCount: 1,
-        isShow: true
-    }, {
-        order: 'B',
-        tokenCount: 1,
-        isShow: true
-    }, {
-        order: 'C',
-        tokenCount: 1,
-        isShow: true
-    }, {
-        order: 'C',
-        tokenCount: 1,
-        isShow: true
-    }]
+    // 当前要显示的付与牌列表
+    const enhans = computed(() => {
+        let enhans = []
+        for (let i in sakuraArms.currentState[props.playerName]) {
+            if (i.indexOf('enhancement') != -1 && sakuraArms.currentState[props.playerName][i]['show']) {
+                enhans.push(sakuraArms.currentState[props.playerName][i])
+            }
+        }
+        return enhans
+    })
 
     // region 面板二沿Y轴移动功能
 
