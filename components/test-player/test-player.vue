@@ -131,7 +131,9 @@
     const moveBoard2 = (e) => {
         const touch = e.touches[0] || e.changeTouches[0]
         let nowY = touch.clientY
-        translateY.value = startTranslateY + (nowY - startY)
+        // 如果是player1则translateY的值为负值（移动方向相反）
+        translateY.value = props.playerName === 'player1' ? -(startTranslateY + (nowY - startY)) : startTranslateY +
+            (nowY - startY)
     }
 
     // 不再移动面板二时，判断是否超过设定范围
