@@ -185,6 +185,16 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
         return true
     }
 
+    // 显示付与牌
+    const addEnhanCard = (primaryIndex: string) => {
+        for (let i in currentState.value[primaryIndex]) {
+            // 将编号最靠前的、show为false的付与牌设置为显示
+            if (i.indexOf('enhancement') != -1 && !currentState.value[primaryIndex][i]['show']) {
+                currentState.value[primaryIndex][i]['show'] = true
+                return
+            }
+        }
+    }
 
-    return { resetState, currentState, minusToken, addToken }
+    return { resetState, currentState, minusToken, addToken, addEnhanCard }
 })

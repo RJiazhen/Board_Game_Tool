@@ -14,8 +14,17 @@
 </template>
 
 <script setup lang="ts">
+    import {
+        useSakuraArms
+    } from "@/store/sakuraArms"
+    const sakuraArms = useSakuraArms()
+    const props = defineProps < {
+        primaryAreaName: String
+    } > ()
+
+    // 添加付与牌
     const addEnhanCard = () => {
-        console.log('addEnhanCard');
+        sakuraArms.addEnhanCard(props.primaryAreaName)
     }
 </script>
 
