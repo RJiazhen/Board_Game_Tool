@@ -57,12 +57,7 @@
         primaryAreaName: string,
         order: string,
     } > ()
-    const emits = defineEmits(['updateMaxTranslateY'])
 
-    // 挂载时更新player组件中的TranslateY
-    onMounted(() => {
-        emits('updateMaxTranslateY')
-    })
     // 区域名称
     const areaName = `enhancement${props.order}`
 
