@@ -196,5 +196,15 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
         }
     }
 
-    return { resetState, currentState, minusToken, addToken, addEnhanCard }
+    // 全部付与牌减一
+    const removeAllEnhanCardToken = (primaryIndex: string) => {
+        for (let i in currentState.value[primaryIndex]) {
+            // 全部count大于0、且show为true的付与牌的token数量减一
+            if (i.indexOf('enhancement') != -1 && currentState.value[primaryIndex][i]['show'] && currentState.value[primaryIndex][i]['count'] > 0) {
+                currentState.value[primaryIndex][i]['count'] -= 1
+            }
+        }
+    }
+
+    return { resetState, currentState, minusToken, addToken, addEnhanCard, removeAllEnhanCardToken }
 })

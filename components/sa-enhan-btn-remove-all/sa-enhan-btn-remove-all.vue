@@ -15,8 +15,16 @@
 </template>
 
 <script setup lang="ts">
+    import {
+        useSakuraArms
+    } from "@/store/sakuraArms"
+    const sakuraArms = useSakuraArms()
+    const props = defineProps < {
+        primaryAreaName: string,
+    } > ()
+    // 全部付与牌token数量减一
     const removeAll = () => {
-        console.log('removeAll');
+        sakuraArms.removeAllEnhanCardToken(props.primaryAreaName)
     }
 </script>
 
