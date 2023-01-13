@@ -246,13 +246,7 @@
 
                 overflow: hidden;
 
-                // box-sizing: border-box;
-                // border: 1px solid;
-
                 .change-count {
-                    // position: absolute;
-                    // left: 50%;
-                    // top: 50%;
                     translate: -50% 100%;
 
                     line-height: 25px;
