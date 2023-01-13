@@ -1,54 +1,50 @@
 <template>
     <view class="player" id="player">
-        <view class="boards">
-            <swiper class="swiper" current="1">
-                <swiper-item>
-                    <!-- 面板一 -->
-                    <view class="board board-1">
-                        <!-- 公共区域 -->
-                        <view class="shared">
-                            <!-- 虚 -->
-                            <sa-area primaryAreaName="shared" areaName="shadow" style="width: 50%">
-                            </sa-area>
-                            <!-- 距 -->
-                            <sa-area primaryAreaName="shared" areaName="distance" style="width: 50%">
-                            </sa-area>
-                        </view>
-                        <!-- 个人区域 -->
-                        <view class="personal">
-                            <!-- 装 -->
-                            <sa-area :primaryAreaName="props.playerName" areaName="aura" style="width: 33%">
-                            </sa-area>
-                            <!-- 气 -->
-                            <sa-area :primaryAreaName="props.playerName" areaName="flare" style="width: 33%">
-                            </sa-area>
-                            <!-- 命 -->
-                            <sa-area :primaryAreaName="props.playerName" areaName="life" style="width: 33%">
-                            </sa-area>
-                        </view>
-                        <!-- 樱花数量提示区域 -->
-                        <sa-token-tip class="token-tip"></sa-token-tip>
+        <view class="board-view">
+            <view class="boards">
+                <!-- 面板一 -->
+                <view class="board board-1">
+                    <!-- 公共区域 -->
+                    <view class="shared">
+                        <!-- 虚 -->
+                        <sa-area primaryAreaName="shared" areaName="shadow" style="width: 50%">
+                        </sa-area>
+                        <!-- 距 -->
+                        <sa-area primaryAreaName="shared" areaName="distance" style="width: 50%">
+                        </sa-area>
                     </view>
-                </swiper-item>
-                <swiper-item>
-                    <!-- 面板二 -->
-                    <view class="board board-2" :style="`transform: translateY(${translateY}px);` "
-                        @touchmove="moveBoard2($event)" @touchstart="touchStart($event)" @touchend="endTouch">
-                        <!-- 付与牌区域 -->
-                        <sa-enhan-card class="enhan-card" v-for="(card, index) in enhans" :key="index"
-                            :primaryAreaName="props.playerName" :order="card.order"
-                            @updateMaxTranslateY="updateMaxTranslateY()">
-                        </sa-enhan-card>
-                        <!-- 添加付与牌按钮 -->
-                        <sa-enhan-btn-add class="enhan-btn-add" :primaryAreaName="props.playerName"></sa-enhan-btn-add>
-                        <!-- 全部付与牌减一按钮 -->
-                        <sa-enhan-btn-remove-all class="enhan-btn-remove-all" :primaryAreaName="props.playerName">
-                        </sa-enhan-btn-remove-all>
-                        <!-- token数量提示 -->
-                        <sa-token-tip class="token-tip"></sa-token-tip>
+                    <!-- 个人区域 -->
+                    <view class="personal">
+                        <!-- 装 -->
+                        <sa-area :primaryAreaName="props.playerName" areaName="aura" style="width: 33%">
+                        </sa-area>
+                        <!-- 气 -->
+                        <sa-area :primaryAreaName="props.playerName" areaName="flare" style="width: 33%">
+                        </sa-area>
+                        <!-- 命 -->
+                        <sa-area :primaryAreaName="props.playerName" areaName="life" style="width: 33%">
+                        </sa-area>
                     </view>
-                </swiper-item>
-            </swiper>
+                    <!-- 樱花数量提示区域 -->
+                    <sa-token-tip class="token-tip"></sa-token-tip>
+                </view>
+                <!-- 面板二 -->
+                <view class="board board-2" :style="`transform: translateY(${translateY}px);` "
+                    @touchmove="moveBoard2($event)" @touchstart="touchStart($event)" @touchend="endTouch">
+                    <!-- 付与牌区域 -->
+                    <sa-enhan-card class="enhan-card" v-for="(card, index) in enhans" :key="index"
+                        :primaryAreaName="props.playerName" :order="card.order"
+                        @updateMaxTranslateY="updateMaxTranslateY()">
+                    </sa-enhan-card>
+                    <!-- 添加付与牌按钮 -->
+                    <sa-enhan-btn-add class="enhan-btn-add" :primaryAreaName="props.playerName"></sa-enhan-btn-add>
+                    <!-- 全部付与牌减一按钮 -->
+                    <sa-enhan-btn-remove-all class="enhan-btn-remove-all" :primaryAreaName="props.playerName">
+                    </sa-enhan-btn-remove-all>
+                    <!-- token数量提示 -->
+                    <sa-token-tip class="token-tip"></sa-token-tip>
+                </view>
+            </view>
         </view>
     </view>
 </template>
@@ -153,101 +149,107 @@
 
         position: relative;
 
-        .boards {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
+        .board-view {
+            overflow: scroll;
 
-            .swiper {
+            .boards {
+                width: 200%;
                 height: 100%;
-                width: 100%;
-            }
-
-            .board {
-                width: 100vw;
-                padding: 0px 10px 0;
-            }
-
-            // 面板一
-            .board-1 {
-                position: relative;
-
-                .token-tip {
-                    position: absolute;
-                    top: calc(50% - 20px);
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                }
-
-                .shared {
-                    height: 20.33vh;
-                    display: flex;
-
-                    sa-area:nth-child(1) {
-                        margin-right: 3px;
-                    }
-                }
-
-
-                .personal {
-                    height: 23.92vh;
-                    display: flex;
-
-                    margin-top: 3px;
-
-                    sa-area:nth-child(-n+2) {
-                        margin-right: 3px;
-                    }
-                }
-            }
-
-            // 面板二
-            .board-2 {
-                position: absolute;
                 display: flex;
-                flex-wrap: wrap;
+                top: 0;
 
-                overflow: hidden;
+                .swiper {
+                    height: 100%;
+                    width: 100%;
+                }
 
-                // 单张付与牌
-                .enhan-card {
-                    // 宽度是扣除外侧盒子的padding以及.enhan-card自己的margin-righ再除3
-                    // 从而保证每行3个付与牌区域，且各间距固定，还能左对齐
-                    width: calc((100vw - 26px) / 3);
-                    height: 24vh;
-                    margin-right: 3px;
+                .board {
+                    width: 100vw;
+                    padding: 0px 10px 0;
+                }
 
-                    &:nth-child(3n) {
-                        margin-right: 0;
+                // 面板一
+                .board-1 {
+                    height: calc(44.25vh + 3px);
+                    position: relative;
+
+                    .token-tip {
+                        position: absolute;
+                        top: calc(50% - 20px);
+                        left: 50%;
+                        transform: translate(-50%, -50%);
                     }
 
-                    &:nth-child(n+4) {
+                    .shared {
+                        height: 20.33vh;
+                        display: flex;
+
+                        sa-area:nth-child(1) {
+                            margin-right: 3px;
+                        }
+                    }
+
+
+                    .personal {
+                        height: 23.92vh;
+                        display: flex;
+
+                        margin-top: 3px;
+
+                        sa-area:nth-child(-n+2) {
+                            margin-right: 3px;
+
+                        }
+                    }
+                }
+
+                // 面板二
+                .board-2 {
+                    position: relative;
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    overflow: hidden;
+
+                    // 单张付与牌
+                    .enhan-card {
+                        // 宽度是扣除外侧盒子的padding以及.enhan-card自己的margin-righ再除3
+                        // 从而保证每行3个付与牌区域，且各间距固定，还能左对齐
+                        width: calc((100vw - 26px) / 3);
+                        height: 24vh;
+                        margin-right: 3px;
+
+                        &:nth-child(3n) {
+                            margin-right: 0;
+                        }
+
+                        &:nth-child(n+4) {
+                            margin-top: 3px;
+                        }
+                    }
+
+                    // 添加付与牌按钮
+                    .enhan-btn-add {
+                        width: calc((100vw - 26px) / 3);
+                        height: 24vh;
                         margin-top: 3px;
                     }
-                }
 
-                // 添加付与牌按钮
-                .enhan-btn-add {
-                    width: calc((100vw - 26px) / 3);
-                    height: 24vh;
-                    margin-top: 3px;
-                }
+                    // 全部付与牌减一按钮
+                    .enhan-btn-remove-all {
+                        width: calc((100vw - 26px) / 3);
+                        height: 24vh;
+                        margin-left: 3px;
+                        margin-top: 3px;
+                    }
 
-                // 全部付与牌减一按钮
-                .enhan-btn-remove-all {
-                    width: calc((100vw - 26px) / 3);
-                    height: 24vh;
-                    margin-left: 3px;
-                    margin-top: 3px;
-                }
-
-                // token数量提示区域
-                .token-tip {
-                    position: absolute;
-                    top: 24vh;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
+                    // token数量提示区域
+                    .token-tip {
+                        position: absolute;
+                        top: 24vh;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                    }
                 }
             }
         }
