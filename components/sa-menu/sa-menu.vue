@@ -74,6 +74,7 @@
             icon: '../../static/sakura_arms/reset_icon.svg',
             func: () => {
                 cur.refs.resetPopup.open()
+                changeActive()
             }
         },
         {
@@ -81,6 +82,7 @@
             icon: '../../static/sakura_arms/reset_icon.svg',
             func: () => {
                 cur.refs.helpPopup.open()
+                changeActive()
             }
         }
     ]
@@ -100,13 +102,14 @@
     }
     let helpInfoCount = 0
     const nextHelp = () => {
-        if (helpInfoCount == 3) {
-            cur.refs.helpPopup.close()
-            helpInfoCount = 0
-        } else {
-            helpInfoCount += 1
-            console.log(helpInfoCount);
-        }
+        cur.refs.helpPopup.close()
+        // if (helpInfoCount == 3) {
+        //     cur.refs.helpPopup.close()
+        //     helpInfoCount = 0
+        // } else {
+        //     helpInfoCount += 1
+        //     console.log(helpInfoCount);
+        // }
     }
 </script>
 
