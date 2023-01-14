@@ -1,10 +1,10 @@
 <template>
-    <view class="token-tip">
+    <view class="token-tip" @click="sakuraArms.offsetTokenDifference()">
         <image class="token-icon" src="../../static/sakura_token_icon.svg" mode=""></image>
         <view class="token-count" :class="tokenCountStyle">
-            <text v-if="tokenDifference>0">+</text>
-            <text v-if="tokenDifference==0">&nbsp;</text>
-            <text>{{tokenDifference}}</text>
+            <text v-if="sakuraArms.tokenDifference>0">+</text>
+            <text v-if="sakuraArms.tokenDifference===0">&nbsp;</text>
+            <text>{{sakuraArms.tokenDifference}}</text>
         </view>
     </view>
 </template>
@@ -22,31 +22,14 @@
     } from '@dcloudio/uni-app'
     const sakuraArms = useSakuraArms()
 
-    // 当前面板的token数量和理论数量（36）之间的差值
-    const tokenDifference = computed(() => {
-        let count = 0
-        // 公共区域token数量计算
-        for (let i in sakuraArms.currentState.shared) {
-            count += sakuraArms.currentState.shared[i].count
-        }
-        // player1区域token数量计算
-        for (let i in sakuraArms.currentState.player1) {
-            count += sakuraArms.currentState.player1[i].count
-        }
-        // player2区域token数量计算
-        for (let i in sakuraArms.currentState.player2) {
-            count += sakuraArms.currentState.player2[i].count
-        }
-        return count - 36
-    })
 
 
     // 数字样式
     const tokenCountStyle = computed(() => {
-        if (tokenDifference.value > 0) {
+        if (sakuraArms.tokenDifference > 0) {
             return 'add-count'
         }
-        if (tokenDifference.value < 0) {
+        if (sakuraArms.tokenDifference < 0) {
             return 'minus-count'
         }
         return ''

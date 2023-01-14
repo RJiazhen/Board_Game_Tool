@@ -1,7 +1,7 @@
 import {
     defineStore
 } from 'pinia';
-import { ref } from 'vue'
+import { computed, ref, toDisplayString } from 'vue'
 import _ from "lodash"
 
 export const useSakuraArms = defineStore('sakuraArms', () => {
@@ -225,7 +225,51 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
         // 修改数值后存储到本地
         saveToStorage()
     }
+    // 理论总的token数量
+    const totalTokenCount = ref(36)
+
+    // 当前token总数
+    const currentTotalTokenCount = computed(() => {
+        let count = 0
+        // 公共区域token数量计算
+        for (let i in currentState.value.shared) {
+            count += currentState.value.shared[i].count
+        }
+        // player1区域token数量计算
+        for (let i in currentState.value.player1) {
+            count += currentState.value.player1[i].count
+        }
+        // player2区域token数量计算
+        for (let i in currentState.value.player2) {
+            count += currentState.value.player2[i].count
+        }
+        return count
+    })
+
+    // 当前token差值
+    const tokenDifference = computed(() => {
+        return currentTotalTokenCount.value - totalTokenCount.value
+    })
+
+    // 使用「虚」token数量来抵消差值
+    const offsetTokenDifference = () => {
+        console.log(currentTotalTokenCount.value);
+        console.log(tokenDifference.value);
+
+        // 当差值为零时，不进行任何操作
+        if (tokenDifference.value === 0) {
+            return
+        }
+        // 当「虚」中token数量大于等于差值（无论正负数），虚中token数量直接减去差值
+        if (currentState.value.shared.shadow.count >= tokenDifference.value) {
+            currentState.value.shared.shadow.count -= tokenDifference.value
+        }
+        // 当「虚」中token数量小于差值（无论正负数），将虚中token清零
+        if (currentState.value.shared.shadow.count < tokenDifference.value) {
+            currentState.value.shared.shadow.count = 0
+        }
+    }
 
 
-    return { resetState, currentState, saveToStorage, getFromStorage, minusToken, addToken, addEnhanCard, removeAllEnhanCardToken }
+    return { resetState, currentState, saveToStorage, getFromStorage, minusToken, addToken, addEnhanCard, removeAllEnhanCardToken, tokenDifference, offsetTokenDifference }
 })
