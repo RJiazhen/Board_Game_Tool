@@ -37,7 +37,7 @@
         for (let i in sakuraArms.currentState.player2) {
             count += sakuraArms.currentState.player2[i].count
         }
-        return 36 - count
+        return count - 36
     })
 
 
