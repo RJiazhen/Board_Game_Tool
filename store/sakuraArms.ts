@@ -162,6 +162,16 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
         currentState.value = JSON.parse(JSON.stringify(initialState))
     }
 
+    // 把数据存储到本地
+    const saveToStorage = () => {
+        uni.setStorageSync('sakuraArms', JSON.stringify(currentState.value))
+    }
+
+    // 从本地获取数据，如果无则设定为默认值
+    const getFromStorage = () => {
+        currentState.value = uni.getStorageSync('sakuraArms').length != 0 ? JSON.parse(uni.getStorageSync('sakuraArms')) : JSON.parse(JSON.stringify(initialState))
+    }
+
     // 减token数量，无法再减则返回false，否则返回true
     const minusToken = (primaryIndex: string, areaName: string) => {
         // 如果当前token数量小于等于零，则不修改
@@ -169,6 +179,9 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
             return false
         }
         _.update(currentState.value, `${primaryIndex}.${areaName}.count`, (n) => n - 1)
+        // 修改数据后存储到本地
+        saveToStorage()
+
         return true
     }
 
@@ -182,6 +195,9 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
             }
         }
         _.update(currentState.value, `${primaryIndex}.${areaName}.count`, (n) => n + 1)
+        // 修改数据后存储到本地
+        saveToStorage()
+
         return true
     }
 
@@ -194,6 +210,8 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
                 return
             }
         }
+        // 修改数值后存储到本地
+        saveToStorage()
     }
 
     // 全部付与牌减一
@@ -204,7 +222,10 @@ export const useSakuraArms = defineStore('sakuraArms', () => {
                 currentState.value[primaryIndex][i]['count'] -= 1
             }
         }
+        // 修改数值后存储到本地
+        saveToStorage()
     }
 
-    return { resetState, currentState, minusToken, addToken, addEnhanCard, removeAllEnhanCardToken }
+
+    return { resetState, currentState, saveToStorage, getFromStorage, minusToken, addToken, addEnhanCard, removeAllEnhanCardToken }
 })

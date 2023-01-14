@@ -20,7 +20,7 @@
 
     const sakuraArms = useSakuraArms()
     onReady(() => {
-        sakuraArms.resetState()
+        sakuraArms.getFromStorage()
     })
 </script>
 
