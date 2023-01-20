@@ -19,6 +19,8 @@ $change-count-font-size: calcSize(25);
 
 // 普通区域的背景颜色
 $area-normal-bg-color: #f7f8fc;
+// 普通区域激活时的背景颜色
+$area-normal-activated-bg-color: rgba(0,0,0,0.2);
 // 区域名称颜色
 $area-name-color: #ddd8d7;
 // 付与牌区域背景颜色
@@ -83,7 +85,7 @@ $menu-btn-close-rect-height: calcSize(3.5);
     }
     // 激活时的背景
     .activated {
-        background: rgba(0, 0, 0, 0.2);
+        background: $area-normal-activated-bg-color;
         transition: 0.25s all;
     }
 }

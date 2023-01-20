@@ -1,5 +1,5 @@
 <template>
-  <view class="token-tip" @click="sakuraArms.offsetTokenDifference()">
+  <view class="token-tip" :class="activate?'activated':''" @click="clickTip()">
     <image class="token-icon" src="../../static/sakura_token_icon.svg" mode=""></image>
     <view class="token-count" :class="tokenCountStyle">
       <text v-if="sakuraArms.tokenDifference>0">+</text>
@@ -11,9 +11,10 @@
 
 <script setup lang="ts">
   import {
-    computed
+    computed,
+    ref
   } from "vue";
-
+  import _ from 'lodash';
   import {
     useSakuraArms
   } from "@/store/sakuraArms"
@@ -22,8 +23,18 @@
   } from '@dcloudio/uni-app'
   const sakuraArms = useSakuraArms()
 
-
-
+  // 控制按下时的样式变化
+  const activate = ref(false)
+  // 将样式改成未激活状态（700ms延迟）
+  const inactivate = _.debounce(() => {
+    activate.value = false
+  }, 700)
+  // 按下tip组件时
+  const clickTip = () => {
+    sakuraArms.offsetTokenDifference()
+    activate.value = true
+    inactivate()
+  }
   // 数字样式
   const tokenCountStyle = computed(() => {
     if (sakuraArms.tokenDifference > 0) {
@@ -48,6 +59,13 @@
 
     overflow: hidden;
     position: relative;
+
+    transition: .25s all;
+
+    &.activated {
+      background-color: #AAA3AE;
+      transition: .25s all;
+    }
 
     .token-icon {
       position: absolute;
