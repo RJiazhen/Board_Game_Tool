@@ -2,7 +2,7 @@
   <!-- 因为「虚」区域是使用外层容器的背景，所以当「虚」区域处于激活状态时改变外层容器的样式 -->
   <view class="shared" :class="shared.shadow.class">
     <!-- 左侧「虚」 -->
-    <view class="shadow-container" :class="shared.shadow.class" data-area="shadow" @click="areaClick">
+    <view class="shadow-container" :class="shared.shadow.class" data-area="shadow" @touchend="areaClick">
       <view class="left-shadow">
         <text class="sakura-token-count">{{shared.shadow.count}}</text>
         <text class="sakura-token-limit">/{{shared.shadow.limit?shared.shadow.limit:"∞"}}</text>
@@ -10,7 +10,7 @@
       </view>
     </view>
     <!-- 「距」 -->
-    <view class="distance" :class="shared.distance.class" data-area="distance" @click="areaClick">
+    <view class="distance" :class="shared.distance.class" data-area="distance" @touchend="areaClick">
       <view class="for-player1">
         <text class="sakura-token-count">{{shared.distance.count}}</text>
         <text class="sakura-token-limit">/{{shared.distance.limit}}</text>
