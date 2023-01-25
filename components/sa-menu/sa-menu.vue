@@ -19,9 +19,9 @@
       <view class="center-btn-bg"> </view>
       <!-- 打开按钮 -->
       <view class="btn-open">
-        <view class="rect"> </view>
-        <view class="rect"> </view>
-        <view class="rect"> </view>
+        <view class="rect" :class="isActive?'activated':'unactivated'"> </view>
+        <view class="rect" :class="isActive?'activated':'unactivated'"> </view>
+        <view class="rect" :class="isActive?'activated':'unactivated'"> </view>
       </view>
       <!-- 关闭按钮 -->
       <view class="btn-close">
@@ -240,6 +240,7 @@
 
     // 中心按钮
     .center-btn {
+      transition: 1s all;
 
       // 按钮背景
       .center-btn-bg {
@@ -253,27 +254,12 @@
 
       // 未激活状态
       &.unactivated {
+        transition: 1s all;
 
         // 打开菜单按钮
         .btn-open {
-          // z-index: 1;
-          width: $menu-btn-open-n-close-size;
-          height: $menu-btn-open-n-close-size;
-
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          translate: -50% -50%;
 
           .rect {
-            width: $menu-btn-open-rect-width;
-            height: $menu-btn-open-rect-height;
-            border-radius: $menu-btn-open-n-close-rect-border-radius;
-            background: #000000;
-
-            position: absolute;
-            left: calc(50% - $menu-btn-open-rect-width / 2);
-            top: calc(50% - $menu-btn-open-rect-height);
 
             &:nth-child(1) {
               translate: 0 $menu-btn-open-rect-translateY;
@@ -297,6 +283,8 @@
             width: 0;
             height: 0;
             rotate: 180deg;
+
+            transition: 1s all;
           }
         }
       }
@@ -306,16 +294,10 @@
 
         // 打开菜单按钮
         .btn-open {
-          display: none;
-
-          position: absolute;
-          left: 50%;
-          top: 50%;
+          animation: 1s linear reverse forwards btn-open;
 
           .rect {
-            width: 0;
-            height: 0;
-            rotate: 180deg;
+            animation: 1s linear reverse forwards btn-open-rect;
           }
         }
 
@@ -331,21 +313,27 @@
           translate: -50% -50%;
 
           .rect {
-            position: absolute;
-            width: $menu-btn-close-rect-width;
-            height: $menu-btn-close-rect-height;
-            border-radius: $menu-btn-open-n-close-rect-border-radius;
-            left: calc(50% - $menu-btn-close-rect-width/2);
-            top: calc(50% - $menu-btn-close-rect-height/2);
+            // position: absolute;
+            // width: $menu-btn-close-rect-width;
+            // height: $menu-btn-close-rect-height;
+            // border-radius: $menu-btn-open-n-close-rect-border-radius;
+            // left: calc(50% - $menu-btn-close-rect-width/2);
+            // top: calc(50% - $menu-btn-close-rect-height/2);
 
-            background: #000000;
+            // background: #000000;
+
+            // transition: 1s all;
+            // animation: show 1s linear infinite;
 
             &:nth-child(1) {
-              rotate: 45deg;
+
+              // rotate: 45deg;
+              animation: rotate1 1s linear forwards;
             }
 
             &:nth-child(2) {
-              rotate: -45deg;
+              // rotate: -45deg;
+              animation: rotate2 1s linear forwards;
             }
           }
         }
@@ -354,6 +342,90 @@
 
     .helpInfo {
       font-size: $popup-body-font-size;
+    }
+  }
+
+  // 
+  // 出现动画
+  @keyframes show {
+    100% {
+      width: $menu-btn-close-rect-width;
+      height: $menu-btn-close-rect-height;
+      border-radius: $menu-btn-open-n-close-rect-border-radius;
+      left: calc(50% - $menu-btn-close-rect-width/2);
+      top: calc(50% - $menu-btn-close-rect-height/2);
+    }
+  }
+
+  @keyframes rotate1 {
+    100% {
+
+      position: absolute;
+      width: $menu-btn-close-rect-width;
+      height: $menu-btn-close-rect-height;
+      border-radius: $menu-btn-open-n-close-rect-border-radius;
+      left: calc(50% - $menu-btn-close-rect-width/2);
+      top: calc(50% - $menu-btn-close-rect-height/2);
+
+      background: #000000;
+      rotate: 45deg;
+    }
+  }
+
+  @keyframes rotate2 {
+    100% {
+
+      position: absolute;
+      width: $menu-btn-close-rect-width;
+      height: $menu-btn-close-rect-height;
+      border-radius: $menu-btn-open-n-close-rect-border-radius;
+      left: calc(50% - $menu-btn-close-rect-width/2);
+      top: calc(50% - $menu-btn-close-rect-height/2);
+
+      background: #000000;
+      rotate: -45deg;
+    }
+  }
+
+  // 打开菜单按钮关键帧
+  @keyframes btn-open {
+    0% {
+      width: $menu-btn-open-n-close-size;
+      height: $menu-btn-open-n-close-size;
+
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      translate: -50% -50%;
+    }
+
+    100% {
+      display: none;
+
+      position: absolute;
+      left: 50%;
+      top: 50%;
+    }
+  }
+
+  // 打开菜单按钮矩形关键帧
+  @keyframes btn-open-rect {
+    0% {
+      width: $menu-btn-open-rect-width;
+      height: $menu-btn-open-rect-height;
+      border-radius: $menu-btn-open-n-close-rect-border-radius;
+      background: #000000;
+
+      position: absolute;
+      left: calc(50% - $menu-btn-open-rect-width / 2);
+      top: calc(50% - $menu-btn-open-rect-height);
+    }
+
+    100% {
+      width: 0;
+      height: 0;
+      rotate: 180deg;
+      transition: 1s all;
     }
   }
 </style>
