@@ -1,56 +1,49 @@
 <template>
-  <view class="token-tip" :class="activate?'activated':''" @click="clickTip()">
-    <image class="token-icon" src="../../static/sakura_token_icon.svg" mode=""></image>
-    <view class="token-count" :class="tokenCountStyle">
-      <text v-if="sakuraArms.tokenDifference>0">+</text>
-      <text v-if="sakuraArms.tokenDifference===0">&nbsp;</text>
-      <text>{{sakuraArms.tokenDifference}}</text>
+    <view class="token-tip" :class="activate ? 'activated' : ''" @click="clickTip()">
+        <image class="token-icon" src="../../static/sakura_token_icon.svg" mode=""></image>
+        <view class="token-count" :class="tokenCountStyle">
+            <text v-if="sakuraArms.tokenDifference > 0">+</text>
+            <text v-if="sakuraArms.tokenDifference === 0">&nbsp;</text>
+            <text>{{ sakuraArms.tokenDifference }}</text>
+        </view>
     </view>
-  </view>
 </template>
 
 <script setup lang="ts">
-  import {
-    computed,
-    ref
-  } from "vue";
-  import _ from 'lodash';
-  import {
-    useSakuraArms
-  } from "@/store/sakuraArms"
-  import {
-    onReady
-  } from '@dcloudio/uni-app'
-  const sakuraArms = useSakuraArms()
+import { computed, ref } from 'vue';
+import _ from 'lodash';
+import { useSakuraArms } from '@/store/sakuraArms';
+import { onReady } from '@dcloudio/uni-app';
+const sakuraArms = useSakuraArms();
 
-  // 控制按下时的样式变化
-  const activate = ref(false)
-  // 将样式改成未激活状态（700ms延迟）
-  const inactivate = _.debounce(() => {
-    activate.value = false
-  }, 700)
-  // 按下tip组件时
-  const clickTip = () => {
-    sakuraArms.offsetTokenDifference()
-    activate.value = true
-    inactivate()
-  }
-  // 数字样式
-  const tokenCountStyle = computed(() => {
+// 控制按下时的样式变化
+const activate = ref(false);
+// 将样式改成未激活状态（700ms延迟）
+const inactivate = _.debounce(() => {
+    activate.value = false;
+}, 700);
+// 按下tip组件时
+const clickTip = () => {
+    sakuraArms.offsetTokenDifference();
+    activate.value = true;
+    inactivate();
+};
+// 数字样式
+const tokenCountStyle = computed(() => {
     if (sakuraArms.tokenDifference > 0) {
-      return 'add-count'
+        return 'add-count';
     }
     if (sakuraArms.tokenDifference < 0) {
-      return 'minus-count'
+        return 'minus-count';
     }
-    return ''
-  })
+    return '';
+});
 </script>
 
 <style scoped lang="scss">
-  @import "@/common/sakuraArms.scss";
+@import '@/common/sakuraArms.scss';
 
-  .token-tip {
+.token-tip {
     width: $token-tip-width;
     height: $token-tip-height;
     background: $area-normal-bg-color;
@@ -60,44 +53,42 @@
     overflow: hidden;
     position: relative;
 
-    transition: .25s all;
+    transition: all $menu-animation-time;
 
     &.activated {
-      background-color: #AAA3AE;
-      transition: .25s all;
+        background-color: #aaa3ae;
     }
 
     .token-icon {
-      position: absolute;
-      width: $token-tip-icon-size;
-      height: $token-tip-icon-size;
-      left: -5px;
-      top: 50%;
+        position: absolute;
+        width: $token-tip-icon-size;
+        height: $token-tip-icon-size;
+        left: -5px;
+        top: 50%;
 
-      transform: translate(0, -50%) rotate(-52deg);
+        transform: translate(0, -50%) rotate(-52deg);
     }
 
     .token-count {
-      position: absolute;
-      width: calc($token-tip-token-count * 2);
-      height: $token-tip-token-count;
-      right: 8px;
-      top: calc(50% - $token-tip-token-count/2);
+        position: absolute;
+        width: calc($token-tip-token-count * 2);
+        height: $token-tip-token-count;
+        right: 8px;
+        top: calc(50% - $token-tip-token-count/2);
 
-      text-align: end;
-      font-size: $token-tip-token-count;
-      line-height: $token-tip-token-count;
+        text-align: end;
+        font-size: $token-tip-token-count;
+        line-height: $token-tip-token-count;
 
-      color: #C7CDD0;
+        color: #c7cdd0;
 
-      &.add-count {
-        color: #CF6379;
+        &.add-count {
+            color: #cf6379;
+        }
 
-      }
-
-      &.minus-count {
-        color: #23c3db;
-      }
+        &.minus-count {
+            color: #23c3db;
+        }
     }
-  }
+}
 </style>
