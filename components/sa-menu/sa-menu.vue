@@ -3,29 +3,29 @@
         <!-- 环型菜单 -->
         <view class="circle-menu" :class="isActive">
             <!-- 菜单边框 -->
-            <view class="menu-border"></view>
+            <view class="menu-border" :class="isActive"></view>
             <!-- 按钮轮盘 -->
-            <view class="btn-wheel">
-                <view class="btn" v-for="(btn, index) in btnList" :key="index" @click="btn.func()">
-                    <image class="btn-icon" :src="btn.icon" mode="aspectFit"></image>
-                    <text class="btn-name">{{ btn.name }}</text>
+            <view class="btn-wheel" :class="isActive">
+                <view class="btn" :class="isActive" v-for="(btn, index) in btnList" :key="index" @click="btn.func()">
+                    <image class="btn-icon" :class="isActive" :src="btn.icon" mode="aspectFit"></image>
+                    <text class="btn-name" :class="isActive">{{ btn.name }}</text>
                 </view>
             </view>
         </view>
         <!-- 中心按钮 -->
-        <view class="center-btn" :class="isActive" @click="changeActive">
+        <view class="center-btn" :class="isBtnAcitve" @click="changeActive">
             <!-- 按钮背景 -->
             <view class="center-btn-bg"></view>
             <!-- 打开按钮 -->
-            <view class="btn-open" :class="isActive">
-                <view class="rect" :class="isActive"></view>
-                <view class="rect" :class="isActive"></view>
-                <view class="rect" :class="isActive"></view>
+            <view class="btn-open" :class="isBtnAcitve">
+                <view class="rect" :class="isBtnAcitve"></view>
+                <view class="rect" :class="isBtnAcitve"></view>
+                <view class="rect" :class="isBtnAcitve"></view>
             </view>
             <!-- 关闭按钮 -->
-            <view class="btn-close" :class="isActive">
-                <view class="rect" :class="isActive"></view>
-                <view class="rect" :class="isActive"></view>
+            <view class="btn-close" :class="isBtnAcitve">
+                <view class="rect" :class="isBtnAcitve"></view>
+                <view class="rect" :class="isBtnAcitve"></view>
             </view>
         </view>
         <!-- 重置按钮弹窗 -->
@@ -51,22 +51,26 @@ const cur = getCurrentInstance();
 
 // 当前激活状态
 const isActive = ref('unactivated');
+// 控制按钮激活状态的变量
+const isBtnAcitve = ref('unactivated');
 
 // 改变激活状态
 const changeActive = () => {
     // 需要先设置样式为空，然后再切换样式，以保证动画能再次执行
     if (isActive.value === 'unactivated') {
-        isActive.value = '';
+        isActive.value = 'activated';
+        isBtnAcitve.value = '';
         const timer = setTimeout(() => {
-            isActive.value = 'activated';
+            isBtnAcitve.value = 'activated';
             clearTimeout(timer);
-        }, 30);
+        }, 10);
     } else {
-        isActive.value = '';
+        isActive.value = 'unactivated';
+        isBtnAcitve.value = '';
         const timer = setTimeout(() => {
-            isActive.value = 'unactivated';
+            isBtnAcitve.value = 'unactivated';
             clearTimeout(timer);
-        }, 30);
+        }, 10);
     }
 };
 
@@ -125,131 +129,135 @@ const nextHelp = () => {
 
     // 环型菜单
     .circle-menu {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        translate: -50% -50%;
+
+        transition: all $menu-animation-time;
+
+        // 未激活状态的circle-menu
         &.unactivated {
             width: 0;
             height: 0;
+        }
+        // 已激活状态的circle-menu
+        &.activated {
+            width: $menu-border-size;
+            height: $menu-border-size;
+        }
+
+        // 外圈边框
+        .menu-border {
+            border-radius: 50%;
+            background: conic-gradient(
+                from 180deg at 50% 50%,
+                #f0f1f2 -26.25deg,
+                #f2d5db 50.63deg,
+                rgba(102, 93, 115, 0.84375) 127.5deg,
+                rgba(120, 119, 140, 0.609447) 210deg,
+                #b0c1d9 279.38deg,
+                #f0f1f2 333.75deg,
+                #f2d5db 410.62deg
+            );
             position: absolute;
             left: 50%;
             top: 50%;
+            translate: -50% -50%;
+            transition: all $menu-animation-time;
 
-            // 外圈边框
-            .menu-border {
-                display: none;
+            // 未激活状态的menu-border
+            &.unactivated {
                 width: 0;
                 height: 0;
-                background: conic-gradient(
-                    from 180deg at 50% 50%,
-                    #f0f1f2 -26.25deg,
-                    #f2d5db 50.63deg,
-                    rgba(102, 93, 115, 0.84375) 127.5deg,
-                    rgba(120, 119, 140, 0.609447) 210deg,
-                    #b0c1d9 279.38deg,
-                    #f0f1f2 333.75deg,
-                    #f2d5db 410.62deg
-                );
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                translate: -50% -50%;
             }
-
-            // 按钮轮盘
-            .btn-wheel {
-                .btn {
-                    width: 0;
-                    height: 0;
-                    rotate: 180deg;
-
-                    position: absolute;
-                    left: 50%;
-                    top: 50%;
-                    translate: -50% -50%;
-
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-
-                    &:nth-child(1) {
-                        rotate: 0deg;
-                    }
-
-                    .btn-icon {
-                        width: 0px;
-                        height: 0px;
-                    }
-
-                    .btn-name {
-                        font-size: 0px;
-                        line-height: 0px;
-                    }
-                }
+            // 已激活状态的menu-border
+            &.activated {
+                width: $menu-border-size;
+                height: $menu-border-size;
             }
         }
 
-        // 激活时的环型菜单
-        &.activated {
-            // 外圈边框
-            .menu-border {
-                width: $menu-border-size;
-                height: $menu-border-size;
-                border-radius: 50%;
-                background: conic-gradient(
-                    from 180deg at 50% 50%,
-                    #f0f1f2 -26.25deg,
-                    #f2d5db 50.63deg,
-                    rgba(102, 93, 115, 0.84375) 127.5deg,
-                    rgba(120, 119, 140, 0.609447) 210deg,
-                    #b0c1d9 279.38deg,
-                    #f0f1f2 333.75deg,
-                    #f2d5db 410.62deg
-                );
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                translate: -50% -50%;
-            }
+        // 按钮轮盘
+        .btn-wheel {
+            background: #f7f8fc;
+            border-radius: 50%;
 
-            // 按钮轮盘
-            .btn-wheel {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            translate: -50% -50%;
+            transition: all $menu-animation-time;
+
+            // 未激活状态的btn-wheel
+            &.unactivated {
+                width: 0;
+                height: 0;
+            }
+            // 已激活状态的btn-wheel
+            &.activated {
                 width: $menu-btn-wheel-size;
                 height: $menu-btn-wheel-size;
-                background: #f7f8fc;
-                border-radius: 50%;
+            }
 
+            // 按钮
+            .btn {
                 position: absolute;
                 left: 50%;
                 top: 50%;
-                translate: -50% -50%;
+                translate: -50% 50px;
 
-                // 按钮
-                .btn {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                transition: all $menu-animation-time;
+
+                // 将其中一个按钮旋转到对侧
+                &:nth-child(1) {
+                    transform-origin: center -50px;
+                    rotate: 180deg;
+                }
+                // 未激活状态的btn
+                &.unactivated {
+                    width: 0;
+                    height: 0;
+                }
+                // 已激活状态的btn
+                &.activated {
                     width: $menu-btn-width;
                     height: $menu-btn-height;
+                }
 
-                    position: absolute;
-                    left: 50%;
-                    top: 50%;
-                    translate: -50% 50px;
+                // 按钮图标
+                .btn-icon {
+                    transition: all $menu-animation-time;
 
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-
-                    .btn-icon {
+                    // 未激活状态的btn-icon
+                    &.unactivated {
+                        width: 0;
+                        height: 0;
+                    }
+                    // 已激活状态的btn-icon
+                    &.activated {
                         width: $menu-btn-icon-size;
                         height: $menu-btn-icon-size;
                     }
+                }
 
-                    .btn-name {
+                // 按钮名称
+                .btn-name {
+                    transition: all $menu-animation-time;
+
+                    // 未激活状态的btn-name
+                    &.unactivated {
+                        font-size: 0;
+                        line-height: 0;
+                    }
+                    // 已激活状态的btn-name
+                    &.activated {
                         font-size: $menu-btn-name-font-size;
                         line-height: $menu-btn-name-font-size;
-                    }
-
-                    // 将其中一个按钮旋转到对侧
-                    &:nth-child(1) {
-                        transform-origin: center -50px;
-                        // translate: -50% -100px;
-                        rotate: 180deg;
                     }
                 }
             }
@@ -295,11 +303,11 @@ const nextHelp = () => {
 
             // 未激活状态
             &.unactivated {
-                animation: show-btn 0.2s forwards;
+                animation: show-btn $menu-animation-time forwards;
             }
             // 已激活状态
             &.activated {
-                animation: show-btn 0.2s reverse forwards;
+                animation: show-btn $menu-animation-time reverse forwards;
             }
             // 打开菜单按钮矩形
             .rect {
@@ -432,25 +440,25 @@ const nextHelp = () => {
                 // 未激活状态
                 &.unactivated {
                     &:nth-child(1) {
-                        animation: show-btn-open-rect-1 0.2s forwards;
+                        animation: show-btn-open-rect-1 $menu-animation-time forwards;
                     }
                     &:nth-child(2) {
-                        animation: show-btn-open-rect-2 0.2s forwards;
+                        animation: show-btn-open-rect-2 $menu-animation-time forwards;
                     }
                     &:nth-child(3) {
-                        animation: show-btn-open-rect-3 0.2s forwards;
+                        animation: show-btn-open-rect-3 $menu-animation-time forwards;
                     }
                 }
                 // 已激活状态
                 &.activated {
                     &:nth-child(1) {
-                        animation: show-btn-open-rect-1 0.2s reverse backwards;
+                        animation: show-btn-open-rect-1 $menu-animation-time reverse backwards;
                     }
                     &:nth-child(2) {
-                        animation: show-btn-open-rect-2 0.2s reverse backwards;
+                        animation: show-btn-open-rect-2 $menu-animation-time reverse backwards;
                     }
                     &:nth-child(3) {
-                        animation: show-btn-open-rect-3 0.2s reverse backwards;
+                        animation: show-btn-open-rect-3 $menu-animation-time reverse backwards;
                     }
                 }
             }
@@ -465,11 +473,11 @@ const nextHelp = () => {
 
             // 未激活状态
             &.unactivated {
-                animation: show-btn 0.2s reverse forwards;
+                animation: show-btn $menu-animation-time reverse forwards;
             }
             // 已激活状态
             &.activated {
-                animation: show-btn 0.2s forwards;
+                animation: show-btn $menu-animation-time forwards;
             }
             // 关闭菜单按钮矩形
             .rect {
@@ -529,19 +537,19 @@ const nextHelp = () => {
                 // 未激活状态
                 &.unactivated {
                     &:nth-child(1) {
-                        animation: show-btn-close-rect-1 0.2s reverse forwards;
+                        animation: show-btn-close-rect-1 $menu-animation-time reverse forwards;
                     }
                     &:nth-child(2) {
-                        animation: show-btn-close-rect-2 0.2s reverse forwards;
+                        animation: show-btn-close-rect-2 $menu-animation-time reverse forwards;
                     }
                 }
                 // 已激活状态
                 &.activated {
                     &:nth-child(1) {
-                        animation: show-btn-close-rect-1 0.2s forwards;
+                        animation: show-btn-close-rect-1 $menu-animation-time forwards;
                     }
                     &:nth-child(2) {
-                        animation: show-btn-close-rect-2 0.2s forwards;
+                        animation: show-btn-close-rect-2 $menu-animation-time forwards;
                     }
                 }
             }

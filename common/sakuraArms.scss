@@ -1,5 +1,5 @@
 // 散樱乱武页面通用样式
-@import "boardGameTool.scss";
+@import 'boardGameTool.scss';
 // 区域名称字号
 $area-name-font-size: calcSize(20);
 // 区域图标大小（宽高相同）
@@ -20,7 +20,7 @@ $change-count-font-size: calcSize(25);
 // 普通区域的背景颜色
 $area-normal-bg-color: #f7f8fc;
 // 普通区域激活时的背景颜色
-$area-normal-activated-bg-color: rgba(0,0,0,0.2);
+$area-normal-activated-bg-color: rgba(0, 0, 0, 0.2);
 // 区域名称颜色
 $area-name-color: #ddd8d7;
 // 付与牌区域背景颜色
@@ -29,7 +29,7 @@ $area-enhan-bg-color: #e6ffed;
 $area-enhan-name-color: #8a7975;
 
 // token数量提示组件边框颜色
-$token-tip-boader-color: #F0F1F2;
+$token-tip-boader-color: #f0f1f2;
 // token数量提示组件尺寸
 $token-tip-width: calcSize(80);
 $token-tip-height: calcSize(35);
@@ -65,6 +65,8 @@ $menu-btn-open-rect-translateY: calcSize(6);
 // 中心关闭菜单按钮距型尺寸
 $menu-btn-close-rect-width: calcSize(23);
 $menu-btn-close-rect-height: calcSize(3.5);
+// 中心菜单动画时间
+$menu-animation-time: 0.2s;
 
 .bg {
     width: 100%;
