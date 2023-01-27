@@ -77,18 +77,17 @@ $menu-animation-time: 0.2s;
         width: 50%;
         height: 100%;
         background: $area-normal-bg-color;
-        transition: 0.1s all;
+        transition: 0.2s all ease-out;
     }
     .bg-right {
         width: 50%;
         height: 100%;
         background: $area-normal-bg-color;
-        transition: 0.5s all;
+        transition: 0.2s all ease-out;
     }
     // 激活时的背景
     .activated {
         background: $area-normal-activated-bg-color;
-        transition: 0.25s all;
     }
 }
 // area的信息展示层
@@ -145,6 +144,10 @@ $menu-animation-time: 0.2s;
             line-height: $change-count-font-size;
             font-size: $change-count-font-size;
             text-align: center;
+
+            // 文字描边
+            -webkit-text-stroke: 0.3px #000;
+
             // 变化值为0时
             &.no-change {
                 display: none;
@@ -173,6 +176,8 @@ $menu-animation-time: 0.2s;
         transform: translateX(-50%) translateY(-50%);
         font-size: $area-count-font-size;
         line-height: $area-count-font-size;
+        // 文字描边
+        -webkit-text-stroke: 0.3px;
 
         -webkit-text-fill-color: transparent;
         text-fill-color: transparent;

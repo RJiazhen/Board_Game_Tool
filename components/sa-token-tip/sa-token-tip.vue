@@ -81,6 +81,7 @@ const tokenCountStyle = computed(() => {
         line-height: $token-tip-token-count;
 
         color: #c7cdd0;
+        -webkit-text-stroke: 0.2px #bfc3c6;
 
         &.add-count {
             color: #cf6379;
