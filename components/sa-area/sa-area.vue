@@ -61,11 +61,11 @@ const areaNameZh = computed(
 
 // 区域图标列表
 const iconSrcs = {
-    shadow: '../../static/sakura_arms/shadow_icon.png',
-    distance: '../../static/sakura_arms/shadow_icon.png',
-    aura: '../../static/sakura_arms/shadow_icon.png',
-    flare: '../../static/sakura_arms/shadow_icon.png',
-    life: '../../static/sakura_arms/shadow_icon.png'
+    shadow: '../../static/sakura_arms/shadow_icon.svg',
+    distance: '../../static/sakura_arms/distance_icon.svg',
+    aura: '../../static/sakura_arms/aura_icon.svg',
+    flare: '../../static/sakura_arms/flare_icon.svg',
+    life: '../../static/sakura_arms/life_icon.svg'
 };
 // 本区域图标
 const iconSrc = computed(
