@@ -87,7 +87,7 @@ $menu-animation-time: 0.2s;
     }
     // 激活时的背景
     .activated {
-        background: $area-normal-activated-bg-color;
+        background: $area-normal-activated-bg-color !important;
     }
 }
 // area的信息展示层

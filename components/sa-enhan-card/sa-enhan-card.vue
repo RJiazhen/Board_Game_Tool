@@ -11,7 +11,7 @@
             <!-- 序号 -->
             <view class="name">付{{ order }}</view>
             <!-- 图标 -->
-            <view class="icon"><image class="icon-img" src="../../static/sakura_arms/shadow_icon.png" mode="aspectFit"></image></view>
+            <view class="icon"><image class="icon-img" src="../../static/sakura_arms/enhan_icon.svg" mode="aspectFit"></image></view>
             <!-- 变化数字弹出 -->
             <view class="change-count-area">
                 <view class="change-count" :class="changeCountStyle">
@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useSakuraArms } from '@/store/sakuraArms';
 import _ from 'lodash';
 
@@ -144,6 +144,12 @@ const add = () => {
         // 图标
         .icon {
             left: calc($area-name-font-size * 2);
+        }
+        .token-count {
+            font-weight: 1000;
+            background: linear-gradient(180deg, #f2ffd8 0%, #001d07 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
         }
 
         .minus {
