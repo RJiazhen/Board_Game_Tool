@@ -11,7 +11,7 @@ $area-info-text-font-size: calcSize(25);
 // 按钮图标字号
 $area-info-icon-size: calcSize(30);
 // 区域token数量字号
-$area-count-font-size: calcSize(63);
+$area-count-font-size: calcSize(70);
 // 区域token上限字号
 $area-limit-font-size: calcSize(10);
 // 变化数字提示字号
@@ -22,7 +22,7 @@ $area-normal-bg-color: #f7f8fc;
 // 普通区域激活时的背景颜色
 $area-normal-activated-bg-color: rgba(0, 0, 0, 0.2);
 // 区域名称颜色
-$area-name-color: #ddd8d7;
+$area-name-color: #8a7975;
 // 付与牌区域背景颜色
 $area-enhan-bg-color: #e6ffed;
 // 付与牌区域名称颜色
@@ -101,11 +101,7 @@ $menu-animation-time: 0.2s;
     .name {
         position: absolute;
         left: 11px;
-
         top: 11px;
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 400;
         font-size: $area-name-font-size;
         line-height: $area-name-font-size;
         display: flex;
@@ -168,9 +164,7 @@ $menu-animation-time: 0.2s;
     }
     // token数量及限制
     .token {
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 400;
+        font-weight: 1000;
     }
     .token-count {
         position: absolute;
@@ -179,10 +173,44 @@ $menu-animation-time: 0.2s;
         transform: translateX(-50%) translateY(-50%);
         font-size: $area-count-font-size;
         line-height: $area-count-font-size;
+
+        -webkit-text-fill-color: transparent;
+        text-fill-color: transparent;
+        // 虚的文字样式
+        &.token-count-shadow {
+            background: linear-gradient(179.39deg, #d2d7d9 10%, rgba(30, 31, 31, 0.5) 90%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        // 距的文字样式
+        &.token-count-distance {
+            background: linear-gradient(180deg, #ffc5e7 20%, #302b34);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        // 装的文字样式
+        &.token-count-aura {
+            background: linear-gradient(90deg, #b4b4b4 34.78%, rgba(213, 210, 210, 0.85) 51.07%, #bebebe 63.48%),
+                linear-gradient(180.23deg, #fafafa 35.78%, #d9d9d9 44.24%, #ebebec 52.07%, #d3d3d3 65.85%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        // 气的文字样式
+        &.token-count-flare {
+            background: linear-gradient(180deg, #ffb774 10%, #f39789 66.21%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        // 命的文字样式
+        &.token-count-life {
+            background: linear-gradient(180deg, rgba(219, 46, 27, 0.5) 10%, #b31928 66.21%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
     }
     .token-limit {
         position: absolute;
-        right: calc(50% - calc(5.5 * $area-limit-font-size));
+        right: calc(50% - calc(6 * $area-limit-font-size));
         bottom: calc(50% - 30px);
         font-size: $area-limit-font-size;
         color: #b0c1d9;
