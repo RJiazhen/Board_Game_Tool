@@ -34,16 +34,34 @@
         </uni-popup>
 
         <!-- 帮助按钮弹窗 -->
-        <uni-popup ref="helpPopup" type="bottom" background-color="#fff">
-            <uni-popup-dialog type="warn" mode="base" content="" :before-close="true" @close="closeHelp" @confirm="nextHelp">
-                <view class="helpInfo">帮助信息</view>
-            </uni-popup-dialog>
+        <uni-popup ref="helpPopup" background-color="#fff">
+            <view class="helpInfo">
+                <h1 class="help-title">帮助说明</h1>
+                <ul>
+                    <li class="help-text">
+                        <image class="help-text-img" src="./images/center_btn.svg" mode="aspectFit"></image>
+                        <text>：打开菜单</text>
+                    </li>
+                    <li class="help-text">
+                        <image class="help-text-img" src="./images/sakura_token_tip.svg" mode="aspectFit"></image>
+                        <text>：指示物数量提示。</text>
+                        <text class="help-text-highlight">点击</text>
+                        <text>则将指示物放入「虚」或从「虚」中尽可能取走指示物</text>
+                    </li>
+                    <li class="help-text">
+                        <image class="help-text-img" src="./images/help_tip.png" mode="aspectFit"></image>
+                        <text class="help-text-highlight">左划</text>
+                        <text>切换至「付与牌」面板</text>
+                    </li>
+                </ul>
+                <button @click="closeHelp">确定</button>
+            </view>
         </uni-popup>
     </view>
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, ref } from 'vue';
+import { getCurrentInstance, onMounted, ref } from 'vue';
 import { useSakuraArms } from '@/store/sakuraArms';
 
 const sakuraArms = useSakuraArms();
@@ -73,7 +91,6 @@ const changeActive = () => {
         }, 10);
     }
 };
-
 // 环型菜单列表
 const btnList = [
     {
@@ -86,7 +103,7 @@ const btnList = [
     },
     {
         name: '帮助',
-        icon: '../../static/sakura_arms/reset_icon.svg',
+        icon: '../../static/sakura_arms/help_icon.svg',
         func: () => {
             cur.refs.helpPopup.open();
             changeActive();
@@ -107,17 +124,19 @@ const confirmReset = () => {
 const closeHelp = () => {
     cur.refs.helpPopup.close();
 };
-let helpInfoCount = 0;
-const nextHelp = () => {
-    cur.refs.helpPopup.close();
-    // if (helpInfoCount == 3) {
-    //     cur.refs.helpPopup.close()
-    //     helpInfoCount = 0
-    // } else {
-    //     helpInfoCount += 1
-    //     console.log(helpInfoCount);
-    // }
-};
+// 首次打开时自动打开帮助说明
+onMounted(() => {
+    // 获取本次存储的数据判断是否是首次打开
+    const isFirst = uni.getStorageSync('isFirst').length != 0 ? false : true;
+    // 如果是首次打开则显示帮助信息
+    if (isFirst) {
+        const timer = setTimeout(() => {
+            cur.refs.helpPopup.open();
+            clearTimeout(timer);
+        }, 500);
+    }
+    uni.setStorageSync('isFirst', false);
+});
 </script>
 
 <style scoped lang="scss">
@@ -555,9 +574,59 @@ const nextHelp = () => {
             }
         }
     }
+    .uni-popup__wrapper {
+        border-radius: 15px;
+    }
 
     .helpInfo {
-        font-size: $popup-body-font-size;
+        width: 80vw;
+        padding: 10px 15px;
+        .help-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+
+            position: relative;
+            // 分割线
+            &::after {
+                position: absolute;
+                left: 50%;
+                top: calc(100% + 2px);
+                translate: -50% -50%;
+
+                content: '';
+                width: 100%;
+                height: 0.5px;
+                border-radius: 50%;
+                background-color: #757575;
+            }
+        }
+        // 单段说明文本
+        .help-text {
+            width: 100%;
+            margin: 0 auto 10px;
+            text-align: justify;
+
+            .help-text-img {
+                width: 50px;
+                height: 30px;
+                vertical-align: middle;
+            }
+
+            .help-text-highlight {
+                font-weight: 600;
+            }
+
+            // 最后那张说明图片
+            &:nth-child(3) {
+                .help-text-img {
+                    display: block;
+                    width: 90%;
+                    height: 52vw;
+                }
+            }
+        }
     }
 }
 </style>
