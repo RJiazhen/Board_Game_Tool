@@ -1,6 +1,10 @@
+import {
+  defineStore
+} from 'pinia';
 import _ from "lodash"
-export default {
-  namespaced: true,
+
+export const useSakuraArms = defineStore('sakuraArms', {
+  // namespaced: true,
   state: () => ({
     // 初始状态数据
     initialState: {
@@ -28,7 +32,7 @@ export default {
         // 命
         life: {
           count: 10,
-          limit: 10,
+          limit: null,
           class: '',
         },
         // 气
@@ -96,7 +100,7 @@ export default {
   }),
 
 
-  mutations: {
+  actions: {
     // 恢复初始状态
     resetState(state) {
       uni.removeStorage({
@@ -171,7 +175,7 @@ export default {
           icon: "error"
         })
       }
-      // 如果移动后是否超过目标区域的token上限
+      // 如果移动后超过目标区域的token上限
       else if (toAreaTokenLimit != null && toAreaTokenLimit < (toAreaTokenCount + moveTokenAmout)) {
         uni.showToast({
           title: 'token超过上限',
@@ -266,4 +270,4 @@ export default {
 
     }
   }
-}
+})

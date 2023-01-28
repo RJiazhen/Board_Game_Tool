@@ -1,0 +1,18 @@
+// 根据界面宽度或高度中小的那个尺寸，以及最小尺寸计算当前尺寸或字号
+@function calcSize($minSize) {
+    // 最小尺寸时对应的界面宽度
+    $viewWidth: 375;
+    // 最小尺寸时对应的界面高度
+    $viewHeight: 723;
+    // 最小尺寸对应的vw
+    $vwSize: calc($minSize / $viewWidth * 100);
+    // 最小尺寸对应的vh
+    $vhSize: calc($minSize / $viewHeight * 100);
+    @return max(min(#{$vwSize}vw, #{$vhSize}vh), #{$minSize}px);
+}
+// 弹窗尺寸
+$popup-width: calcSize(290);
+// 弹窗标题字体大小
+$popup-title-font-size: calcSize(16);
+// 弹窗正文字体大小 
+$popup-body-font-size: calcSize(14);
