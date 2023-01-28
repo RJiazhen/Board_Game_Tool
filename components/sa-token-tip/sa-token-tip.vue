@@ -1,6 +1,6 @@
 <template>
     <view class="token-tip" :class="activate ? 'activated' : ''" @click="clickTip()">
-        <image class="token-icon" src="../../static/sakura_token_icon.svg" mode=""></image>
+        <image class="token-icon" src="./images/sakura_token_icon.svg" mode=""></image>
         <view class="token-count" :class="tokenCountStyle">
             <text v-if="sakuraArms.tokenDifference > 0">+</text>
             <text v-if="sakuraArms.tokenDifference === 0">&nbsp;</text>

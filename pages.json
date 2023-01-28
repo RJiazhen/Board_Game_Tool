@@ -1,68 +1,55 @@
 {
-    "pages" : [
-        {
-            "path" : "pages/home/home",
-            "style" : {
-                "navigationBarTitleText" : "桌游小工具"
+    "pages": [{
+            "path": "pages/home/home",
+            "style": {
+                "navigationBarTitleText": "桌游小工具"
             }
         },
         {
-            "path" : "pages/about/about",
-            "style" : {
-                "navigationBarTitleText" : "",
-                "enablePullDownRefresh" : false
+            "path": "pages/about/about",
+            "style": {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
             }
         }
     ],
-    "subPackages" : [
-        {
-            "root" : "subpkg",
-            "pages" : [
-                {
-                    "path" : "sakura_arms/sakura_arms",
-                    "style" : {
-                        "enablePullDownRefresh" : false
-                    }
-                },
-                {
-                    "path" : "test/test",
-                    "style" : {
-                        "enablePullDownRefresh" : false
-                    }
-                }
-            ]
-        }
-    ],
-    "globalStyle" : {
-        "navigationBarTextStyle" : "black",
-        "navigationBarTitleText" : "桌游小工具",
-        "navigationBarBackgroundColor" : "#F8F8F8",
-        "backgroundColor" : "#F8F8F8",
-        "app-plus" : {
-            "background" : "#efeff4"
+    "subPackages": [{
+        "root": "subpkg",
+        "pages": [{
+            "path": "sakura_arms/sakura_arms",
+            "style": {
+                "enablePullDownRefresh": false
+            }
+        }]
+    }],
+    "globalStyle": {
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "桌游小工具",
+        "navigationBarBackgroundColor": "#F8F8F8",
+        "backgroundColor": "#F8F8F8",
+        "app-plus": {
+            "background": "#efeff4"
         }
     },
-    "tabBar" : {
-        "selectedColor" : "#9a0000",
-        "list" : [
-            {
-                "pagePath" : "pages/home/home",
-                "text" : "首页",
-                "iconPath" : "static/tab_icons/home.png",
-                "selectedIconPath" : "static/tab_icons/home-active.png"
+    "tabBar": {
+        "selectedColor": "#9a0000",
+        "list": [{
+                "pagePath": "pages/home/home",
+                "text": "首页",
+                "iconPath": "static/tab_icons/home.png",
+                "selectedIconPath": "static/tab_icons/home-active.png"
             },
             {
-                "pagePath" : "pages/about/about",
-                "text" : "关于",
-                "iconPath" : "static/tab_icons/my.png",
-                "selectedIconPath" : "static/tab_icons/my-active.png"
+                "pagePath": "pages/about/about",
+                "text": "关于",
+                "iconPath": "static/tab_icons/my.png",
+                "selectedIconPath": "static/tab_icons/my-active.png"
             }
         ]
     },
-    "condition" : {
+    "condition": {
         //模式配置，仅开发期间生效
-        "current" : 0, //当前激活的模式(list 的索引项)
-        "list" : [
-        ]
+        "current": 0, //当前激活的模式(list 的索引项)
+        "list": []
     }
 }

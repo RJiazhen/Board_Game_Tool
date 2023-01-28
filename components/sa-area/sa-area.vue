@@ -19,9 +19,9 @@
             <view class="token token-count" :class="fontClass">{{ tokenCount }}</view>
             <view class="token token-limit">/ {{ tokenLimit === null ? '∞' : tokenLimit }}</view>
             <!-- 减号 -->
-            <view class="minus"><image class="sign" src="../../static/minus.svg" mode="aspectFit"></image></view>
+            <view class="minus"><image class="sign" src="../../static/sakura_arms/minus.svg" mode="aspectFit"></image></view>
             <!-- 加号 -->
-            <view class="add"><image class="sign" src="../../static/add.svg" mode="aspectFit"></image></view>
+            <view class="add"><image class="sign" src="../../static/sakura_arms/add.svg" mode="aspectFit"></image></view>
         </view>
 
         <!-- 触摸层 -->

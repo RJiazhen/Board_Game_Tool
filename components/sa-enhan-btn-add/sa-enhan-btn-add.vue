@@ -10,7 +10,7 @@
                 <br />
                 付与牌
             </view>
-            <image class="info-icon" src="../../static/sakura_arms/add_square_icon.svg" mode="aspectFit"></image>
+            <image class="info-icon" src="./images/add_square_icon.svg" mode="aspectFit"></image>
         </view>
         <!-- 触摸层 -->
         <view class="touch" @click="addEnhanCard"></view>
