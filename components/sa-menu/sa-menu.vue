@@ -13,20 +13,12 @@
             </view>
         </view>
         <!-- 中心按钮 -->
-        <view class="center-btn" :class="isBtnAcitve" @click="changeActive">
+        <view class="center-btn" :class="isActive" @click="changeActive">
             <!-- 按钮背景 -->
             <view class="center-btn-bg"></view>
-            <!-- 打开按钮 -->
-            <view class="btn-open" :class="isBtnAcitve">
-                <view class="rect" :class="isBtnAcitve"></view>
-                <view class="rect" :class="isBtnAcitve"></view>
-                <view class="rect" :class="isBtnAcitve"></view>
-            </view>
-            <!-- 关闭按钮 -->
-            <view class="btn-close" :class="isBtnAcitve">
-                <view class="rect" :class="isBtnAcitve"></view>
-                <view class="rect" :class="isBtnAcitve"></view>
-            </view>
+            <!-- 按钮图案 -->
+            <image class="center-btn-img center-btn-open-img" :class="isActive" :src="centerBtnOpenImg" mode="aspectFit"></image>
+            <image class="center-btn-img center-btn-close-img" :class="isActive" :src="centerBtnCloseImg" mode="aspectFit"></image>
         </view>
         <!-- 重置按钮弹窗 -->
         <uni-popup ref="resetPopup" type="dialog">
@@ -61,8 +53,12 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, onMounted, ref } from 'vue';
+import { computed, getCurrentInstance, onMounted, ref } from 'vue';
 import { useSakuraArms } from '@/store/sakuraArms';
+
+// 图片素材
+import centerBtnOpenImg from './images/center_btn_open.svg';
+import centerBtnCloseImg from './images/center_btn_close.svg';
 
 const sakuraArms = useSakuraArms();
 const cur = getCurrentInstance();
@@ -70,27 +66,18 @@ const cur = getCurrentInstance();
 // 当前激活状态
 const isActive = ref('unactivated');
 // 控制按钮激活状态的变量
-const isBtnAcitve = ref('unactivated');
+// const isBtnAcitve = ref('unactivated');
 
 // 改变激活状态
 const changeActive = () => {
     // 需要先设置样式为空，然后再切换样式，以保证动画能再次执行
     if (isActive.value === 'unactivated') {
         isActive.value = 'activated';
-        isBtnAcitve.value = '';
-        const timer = setTimeout(() => {
-            isBtnAcitve.value = 'activated';
-            clearTimeout(timer);
-        }, 10);
     } else {
         isActive.value = 'unactivated';
-        isBtnAcitve.value = '';
-        const timer = setTimeout(() => {
-            isBtnAcitve.value = 'unactivated';
-            clearTimeout(timer);
-        }, 10);
     }
 };
+
 // 环型菜单列表
 const btnList = [
     {
@@ -151,7 +138,7 @@ onMounted(() => {
         position: absolute;
         left: 50%;
         top: 50%;
-        translate: -50% -50%;
+        transform: translate(-50%, -50%);
 
         transition: all $menu-animation-time;
 
@@ -182,7 +169,7 @@ onMounted(() => {
             position: absolute;
             left: 50%;
             top: 50%;
-            translate: -50% -50%;
+            transform: translate(-50%, -50%);
             transition: all $menu-animation-time;
 
             // 未激活状态的menu-border
@@ -199,20 +186,17 @@ onMounted(() => {
 
         // 按钮轮盘
         .btn-wheel {
+            width: 0;
+            height: 0;
             background: #f7f8fc;
             border-radius: 50%;
 
             position: absolute;
             left: 50%;
             top: 50%;
-            translate: -50% -50%;
+            transform: translate(-50%, -50%);
             transition: all $menu-animation-time;
 
-            // 未激活状态的btn-wheel
-            &.unactivated {
-                width: 0;
-                height: 0;
-            }
             // 已激活状态的btn-wheel
             &.activated {
                 width: $menu-btn-wheel-size;
@@ -221,42 +205,42 @@ onMounted(() => {
 
             // 按钮
             .btn {
-                position: absolute;
+                width: 0;
+                height: 0;
                 left: 50%;
                 top: 50%;
-                translate: -50% 50px;
+                transform: translateY(0);
+
+                position: absolute;
 
                 display: flex;
                 flex-direction: column;
                 align-items: center;
 
                 transition: all $menu-animation-time;
-
-                // 将其中一个按钮旋转到对侧
                 &:nth-child(1) {
-                    transform-origin: center -50px;
-                    rotate: 180deg;
-                }
-                // 未激活状态的btn
-                &.unactivated {
-                    width: 0;
-                    height: 0;
+                    transform: rotate(180deg);
                 }
                 // 已激活状态的btn
                 &.activated {
                     width: $menu-btn-width;
                     height: $menu-btn-height;
+                    left: calc(50% - $menu-btn-width/2);
+                    top: calc(50% - $menu-btn-height/2);
+                    // 将按钮偏离中心一个按钮的距离
+                    transform: translateY(calc($menu-btn-height));
+                    // 将第一个按钮旋转到对侧
+                    &:nth-child(1) {
+                        transform: rotate(180deg) translateY(calc($menu-btn-height));
+                    }
                 }
 
                 // 按钮图标
                 .btn-icon {
+                    width: 0;
+                    height: 0;
                     transition: all $menu-animation-time;
 
-                    // 未激活状态的btn-icon
-                    &.unactivated {
-                        width: 0;
-                        height: 0;
-                    }
                     // 已激活状态的btn-icon
                     &.activated {
                         width: $menu-btn-icon-size;
@@ -266,13 +250,10 @@ onMounted(() => {
 
                 // 按钮名称
                 .btn-name {
+                    font-size: 0;
+                    line-height: 0;
                     transition: all $menu-animation-time;
 
-                    // 未激活状态的btn-name
-                    &.unactivated {
-                        font-size: 0;
-                        line-height: 0;
-                    }
                     // 已激活状态的btn-name
                     &.activated {
                         font-size: $menu-btn-name-font-size;
@@ -285,7 +266,6 @@ onMounted(() => {
 
     // 中心按钮
     .center-btn {
-        // transition: 1s all;
         position: relative;
 
         // 按钮背景
@@ -297,287 +277,37 @@ onMounted(() => {
             border-radius: $menu-center-btn-bg-border-size;
             transform: rotate(-45deg);
         }
-
-        // 打开菜单按钮关键帧
-        @keyframes show-btn {
-            0% {
-                display: none;
-            }
-            1% {
+        // 打开菜单按钮图片
+        .center-btn-img {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: all $menu-animation-time;
+        }
+        .center-btn-open-img {
+            width: $menu-center-btn-open-img-size;
+            height: $menu-center-btn-open-img-size;
+            &.activated {
                 width: 0;
-                height: 0;
-            }
-            100% {
-                width: $menu-btn-open-n-close-size;
-                height: $menu-btn-open-n-close-size;
             }
         }
-
-        // 打开菜单按钮
-        .btn-open {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            translate: -50% -50%;
-
-            // 未激活状态
-            &.unactivated {
-                animation: show-btn $menu-animation-time forwards;
-            }
-            // 已激活状态
+        // 关闭菜单按钮图片
+        .center-btn-close-img {
+            width: 0;
+            height: 0;
             &.activated {
-                animation: show-btn $menu-animation-time reverse forwards;
-            }
-            // 打开菜单按钮矩形
-            .rect {
-                position: absolute;
-                // 矩形动画关键帧
-
-                // 打开菜单按钮矩形关键帧-1
-                @keyframes show-btn-open-rect-1 {
-                    0% {
-                        display: none;
-                    }
-                    1% {
-                        width: 0;
-                        height: 0;
-
-                        transform-origin: center;
-                        left: 50%;
-                        top: 50%;
-                        translate: -50% -50%;
-                        rotate: 50deg;
-                    }
-
-                    90% {
-                        width: $menu-btn-open-rect-width;
-                        height: $menu-btn-open-rect-height;
-                        border-radius: $menu-btn-open-n-close-rect-border-radius;
-                        background: #000000;
-
-                        transform-origin: center;
-                        left: calc(50% - $menu-btn-open-rect-width / 2);
-                        top: calc(50% - $menu-btn-open-rect-height);
-                        rotate: -5deg;
-
-                        translate: 0 $menu-btn-open-rect-translateY;
-                    }
-
-                    100% {
-                        width: $menu-btn-open-rect-width;
-                        height: $menu-btn-open-rect-height;
-                        border-radius: $menu-btn-open-n-close-rect-border-radius;
-                        background: #000000;
-
-                        transform-origin: center;
-                        left: calc(50% - $menu-btn-open-rect-width / 2);
-                        top: calc(50% - $menu-btn-open-rect-height);
-
-                        translate: 0 $menu-btn-open-rect-translateY;
-                    }
-                }
-                // 打开菜单按钮矩形关键帧-2
-                @keyframes show-btn-open-rect-2 {
-                    0% {
-                        display: none;
-                    }
-                    1% {
-                        width: 0;
-                        height: 0;
-
-                        // transform-origin: center;
-                        left: 50%;
-                        top: 50%;
-                        translate: -50% -50%;
-                        rotate: 50deg;
-                    }
-
-                    90% {
-                        width: $menu-btn-open-rect-width;
-                        height: $menu-btn-open-rect-height;
-                        border-radius: $menu-btn-open-n-close-rect-border-radius;
-                        background: #000000;
-
-                        transform-origin: center;
-                        left: calc(50% - $menu-btn-open-rect-width / 2);
-                        top: calc(50% - $menu-btn-open-rect-height);
-                        rotate: -5deg;
-                    }
-
-                    100% {
-                        width: $menu-btn-open-rect-width;
-                        height: $menu-btn-open-rect-height;
-                        border-radius: $menu-btn-open-n-close-rect-border-radius;
-                        background: #000000;
-
-                        transform-origin: center;
-                        left: calc(50% - $menu-btn-open-rect-width / 2);
-                        top: calc(50% - $menu-btn-open-rect-height);
-                    }
-                }
-                // 打开菜单按钮矩形关键帧-3
-                @keyframes show-btn-open-rect-3 {
-                    0% {
-                        display: none;
-                    }
-                    1% {
-                        width: 0;
-                        height: 0;
-
-                        // transform-origin: center;
-                        left: 50%;
-                        top: 50%;
-                        translate: -50% -50%;
-                        rotate: 50deg;
-                    }
-
-                    90% {
-                        width: $menu-btn-open-rect-width;
-                        height: $menu-btn-open-rect-height;
-                        border-radius: $menu-btn-open-n-close-rect-border-radius;
-                        background: #000000;
-
-                        transform-origin: center;
-                        left: calc(50% - $menu-btn-open-rect-width / 2);
-                        top: calc(50% - $menu-btn-open-rect-height);
-                        translate: 0 calc(0px - $menu-btn-open-rect-translateY);
-                        rotate: -5deg;
-                    }
-
-                    100% {
-                        width: $menu-btn-open-rect-width;
-                        height: $menu-btn-open-rect-height;
-                        border-radius: $menu-btn-open-n-close-rect-border-radius;
-                        background: #000000;
-
-                        transform-origin: center;
-                        left: calc(50% - $menu-btn-open-rect-width / 2);
-                        top: calc(50% - $menu-btn-open-rect-height);
-                        translate: 0 calc(0px - $menu-btn-open-rect-translateY);
-                    }
-                }
-                // 未激活状态
-                &.unactivated {
-                    &:nth-child(1) {
-                        animation: show-btn-open-rect-1 $menu-animation-time forwards;
-                    }
-                    &:nth-child(2) {
-                        animation: show-btn-open-rect-2 $menu-animation-time forwards;
-                    }
-                    &:nth-child(3) {
-                        animation: show-btn-open-rect-3 $menu-animation-time forwards;
-                    }
-                }
-                // 已激活状态
-                &.activated {
-                    &:nth-child(1) {
-                        animation: show-btn-open-rect-1 $menu-animation-time reverse backwards;
-                    }
-                    &:nth-child(2) {
-                        animation: show-btn-open-rect-2 $menu-animation-time reverse backwards;
-                    }
-                    &:nth-child(3) {
-                        animation: show-btn-open-rect-3 $menu-animation-time reverse backwards;
-                    }
-                }
-            }
-        }
-
-        // 关闭菜单按钮
-        .btn-close {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            translate: -50% -50%;
-
-            // 未激活状态
-            &.unactivated {
-                animation: show-btn $menu-animation-time reverse forwards;
-            }
-            // 已激活状态
-            &.activated {
-                animation: show-btn $menu-animation-time forwards;
-            }
-            // 关闭菜单按钮矩形
-            .rect {
-                position: absolute;
-                // 关闭菜单按钮矩形关键帧-1
-                @keyframes show-btn-close-rect-1 {
-                    0% {
-                        display: none;
-                    }
-                    1% {
-                        width: 0;
-                        height: 0;
-                        left: 50%;
-                        top: 50%;
-                        translate: -50% -50%;
-                        rotate: -45deg;
-                    }
-                    100% {
-                        width: $menu-btn-close-rect-width;
-                        height: $menu-btn-close-rect-height;
-                        border-radius: $menu-btn-open-n-close-rect-border-radius;
-                        background: #000000;
-
-                        left: 50%;
-                        top: 50%;
-                        translate: -50% -50%;
-                        rotate: -45deg;
-                    }
-                }
-
-                // 关闭菜单按钮矩形关键帧-2
-                @keyframes show-btn-close-rect-2 {
-                    0% {
-                        display: none;
-                    }
-                    1% {
-                        width: 0;
-                        height: 0;
-                        left: 50%;
-                        top: 50%;
-                        translate: -50% -50%;
-                        rotate: 45deg;
-                    }
-                    100% {
-                        width: $menu-btn-close-rect-width;
-                        height: $menu-btn-close-rect-height;
-                        border-radius: $menu-btn-open-n-close-rect-border-radius;
-                        background: #000000;
-
-                        left: 50%;
-                        top: 50%;
-                        translate: -50% -50%;
-                        rotate: 45deg;
-                    }
-                }
-
-                // 未激活状态
-                &.unactivated {
-                    &:nth-child(1) {
-                        animation: show-btn-close-rect-1 $menu-animation-time reverse forwards;
-                    }
-                    &:nth-child(2) {
-                        animation: show-btn-close-rect-2 $menu-animation-time reverse forwards;
-                    }
-                }
-                // 已激活状态
-                &.activated {
-                    &:nth-child(1) {
-                        animation: show-btn-close-rect-1 $menu-animation-time forwards;
-                    }
-                    &:nth-child(2) {
-                        animation: show-btn-close-rect-2 $menu-animation-time forwards;
-                    }
-                }
+                width: $menu-center-btn-close-img-size;
+                height: $menu-center-btn-close-img-size;
             }
         }
     }
+
     .uni-popup__wrapper {
         border-radius: 15px;
     }
 
+    // 帮助弹窗
     .helpInfo {
         width: 80vw;
         padding: 10px 15px;
@@ -593,7 +323,7 @@ onMounted(() => {
                 position: absolute;
                 left: 50%;
                 top: calc(100% + 2px);
-                translate: -50% -50%;
+                transform: translate(-50%, -50%);
 
                 content: '';
                 width: 100%;

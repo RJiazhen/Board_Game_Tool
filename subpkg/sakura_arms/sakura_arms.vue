@@ -20,6 +20,18 @@ onReady(() => {
 });
 </script>
 <style scoped lang="scss">
+@import '@/common/sakuraArms.scss';
+@import '@/common/boardGameTool.scss';
+
+.test-rect {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background-color: red;
+    transform: translateX(-50%) translateY(-50%);
+}
 .container {
     height: 100vh;
     width: 100vw;
@@ -55,9 +67,8 @@ onReady(() => {
     // 中心菜单
     .menu {
         position: absolute;
-        left: 50%;
-        top: 50%;
-        translate: -50% -50%;
+        left: calc(50% - calc($menu-center-btn-bg-size / 2));
+        top: calc(50% - calc($menu-center-btn-bg-size / 2));
     }
 }
 </style>
