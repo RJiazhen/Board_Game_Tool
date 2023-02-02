@@ -23,26 +23,28 @@ clone项目到本地后，运行`npm install`安装依赖包
 项目结构如下：
 ```
 Board_Game_Tool:
-├─common
-│      saAreaClick.js // 散樱乱武区域点击mixin文件
-├─components
-│  ├─SA_player
-│  │      SA_player.vue // 散樱乱武玩家区域组件
-│  └─SA_shared
-│          SA_shared.vue // 散樱乱武公共区域组件
-├─pages
-│  ├─about
-│  │      about.vue  // 关于页面
-│  └─home
-│          home.vue  // 主页页面
-├─static  // 一些静态资源
-├─store
-│      index.js  // store入口文件
-│      sakura_arms.js // 散樱乱武store文件
-└─subpkg
-   └─sakura_arms
-           sakura_arms.vue  // 散樱乱武页面
-
+.
+├── common // 公共文件目录
+│   ├── boardGameTool.scss // 桌游小工具通用样式文件
+│   ├── sakuraArms.scss // 散樱乱武工具通用样式文件
+│   └── showShareMenu.js // 显示分享菜单功能
+├── components // 组件目录
+│   ├── sa-area // 散樱乱武-单个区域组件
+│   ├── sa-enhan-btn-add // 散樱乱武-添加付与牌按钮组件
+│   ├── sa-enhan-btn-remove-all // 散樱乱武-全部付与牌-1按钮组件
+│   ├── sa-enhan-card // 散樱乱武-付与牌组件
+│   ├── sa-menu // 散樱乱武-中心菜单组件
+│   ├── sa-player // 散樱乱武-单个玩家组件
+│   └── sa-token-tip // 散樱乱武-token数量提示组件
+├── pages // 一级页面目录
+│   ├── about // 关于页面
+│   └── home // 主页
+├── static // 静态资源目录 包括各类公用图标
+│   └── sakura_arms // 散樱乱武的各种公用图片、图标
+├── store // store文件目录
+│   └── sakuraArms.ts // 散樱乱武store文件
+└── subpkg // 分包目录
+    └── sakura_arms // 散樱乱武分包
 ```
 
 ## TODO
@@ -50,11 +52,10 @@ Board_Game_Tool:
 
 - 散樱乱武token计数工具
   - [ ] 撤销操作功能；
-  - [ ] 美化样式；
-  - [ ] 单独添加扣血、扣装、扣气的功能按钮；
-  - [ ] 优化回合切换的逻辑，使用执行基本行动也会切换回合；
   - [ ] 历史记录、查看与导出功能；
   - [ ] 针对不同女神特性添加额外功能（当前仅进行过基础包的测试）；
+  - [x] 美化样式；
+  - [x] 单独添加扣血、扣装、扣气的功能按钮；
 
 - 四季物语辅助工具
   - [ ] 投季节骰子功能
